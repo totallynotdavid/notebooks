@@ -14,7 +14,10 @@
     "@fontsource-variable/red-hat-mono": "^5.3.0",
     "@fontsource/libre-baskerville": "^5.3.0",
     "@observablehq/plot": "^0.6.19",
-    "katex": "^0.16.47"
+    "katex": "^0.19.1"
+  },
+  "overrides": {
+    "katex": "$katex"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^4.0.1",
