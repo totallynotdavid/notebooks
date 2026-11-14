@@ -51,7 +51,7 @@ summary = "The exact period from the complete elliptic integral against small os
 [[topics.notebooks]]
 id = "three-springs"
 title = "Two masses and three springs"
-file = "tres_resortes.py"
+file = "tres_resortes.md"
 summary = "Normal modes from an eigenvalue decomposition, and the RK4 time series that shows them."
 
 [[topics.notebooks]]

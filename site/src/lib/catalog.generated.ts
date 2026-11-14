@@ -101,10 +101,10 @@ export const topics: Topic[] = [
         "title": "Two masses and three springs",
         "summary": "Normal modes from an eigenvalue decomposition, and the RK4 time series that shows them.",
         "slug": "dynamics/three-springs",
-        "path": "packages/dynamics/tres_resortes.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.py",
+        "path": "packages/dynamics/tres_resortes.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.md",
         "assetPath": "/notebooks/dynamics/three-springs/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Double pendulum",
