@@ -16,9 +16,6 @@
     "@observablehq/plot": "^0.6.19",
     "katex": "^0.19.1"
   },
-  "overrides": {
-    "katex": "$katex"
-  },
   "devDependencies": {
     "@sveltejs/adapter-static": "^4.0.1",
     "@sveltejs/kit": "^3.2.0",
@@ -36,5 +33,8 @@
     "typescript": "^6.0.3",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"
+  },
+  "overrides": {
+    "katex": "$katex"
   }
 }
