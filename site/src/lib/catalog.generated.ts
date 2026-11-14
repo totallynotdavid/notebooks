@@ -119,10 +119,10 @@ export const topics: Topic[] = [
         "title": "Lorenz attractor",
         "summary": "The Lorenz system integrated with RK4: the attractor, its largest Lyapunov exponent, the map of z maxima, and the bifurcation in rho.",
         "slug": "dynamics/lorenz-attractor",
-        "path": "packages/dynamics/atractor_de_lorenz.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.py",
+        "path": "packages/dynamics/atractor_de_lorenz.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.md",
         "assetPath": "/notebooks/dynamics/lorenz-attractor/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "The heat equation in one dimension",

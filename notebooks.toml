@@ -63,7 +63,7 @@ summary = "A chaotic double pendulum with Euler and RK4, the energy drift of eac
 [[topics.notebooks]]
 id = "lorenz-attractor"
 title = "Lorenz attractor"
-file = "atractor_de_lorenz.py"
+file = "atractor_de_lorenz.md"
 summary = "The Lorenz system integrated with RK4: the attractor, its largest Lyapunov exponent, the map of z maxima, and the bifurcation in rho."
 
 [[topics.notebooks]]

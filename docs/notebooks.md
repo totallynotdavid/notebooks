@@ -5,13 +5,13 @@ package of a topic owns the dependencies of its notebooks. Open a marimo
 notebook with its package:
 
 ```sh
-uv run --package dynamics marimo edit packages/dynamics/atractor_de_lorenz.py
+uv run --package dynamics marimo edit packages/dynamics/edp_calor.py
 ```
 
 Check the same notebook without opening the editor:
 
 ```sh
-uv run --package dynamics marimo check packages/dynamics/atractor_de_lorenz.py
+uv run --package dynamics marimo check packages/dynamics/edp_calor.py
 ```
 
 The repository-wide check reads [`notebooks.toml`](../notebooks.toml), validates
