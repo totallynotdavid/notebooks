@@ -27,7 +27,15 @@ const topics: Topic[] = [
 ];
 
 function nb(title: string, summary: string, path: string) {
-  return { title, summary, slug: path, path, sourceUrl: "", assetPath: "" };
+  return {
+    title,
+    summary,
+    slug: path,
+    path,
+    sourceUrl: "",
+    assetPath: "",
+    kind: "marimo" as const,
+  };
 }
 
 function count(result: Topic[]): number {

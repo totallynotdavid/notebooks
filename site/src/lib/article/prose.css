@@ -1,0 +1,60 @@
+/*
+ * Prose in an article: the Markdown between fences and the Markdown a fence
+ * outputs. Both render as `.prose` inside `.article`, in different components.
+ */
+
+.article .prose h1 {
+  margin-bottom: 1.5rem;
+  text-wrap: balance;
+}
+.article .prose h2 {
+  margin-top: 2.5rem;
+  text-wrap: balance;
+}
+
+/* Tailwind's preflight removes list markers. */
+.article .prose ul,
+.article .prose ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+.article .prose ol {
+  list-style: decimal;
+}
+.article .prose li {
+  margin-bottom: 0.4rem;
+}
+
+.article .prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+.article .prose table {
+  display: block;
+  overflow-x: auto;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 1.5rem;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+}
+.article .prose th,
+.article .prose td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+/* Headers wrap so a long label does not push the table past the column. */
+.article .prose th {
+  min-width: 6ch;
+  vertical-align: bottom;
+  white-space: normal;
+  text-wrap: balance;
+  font-weight: 600;
+  border-bottom-color: var(--content-secondary);
+}

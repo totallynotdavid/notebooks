@@ -1,18 +1,30 @@
 <script lang="ts">
-	import { asset } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import type { AssetPath } from '$app/types';
 	import type { Notebook } from '#lib/catalog.generated.js';
 
 	let { notebook }: { notebook: Notebook } = $props();
+
+	const [topic, id] = $derived(notebook.slug.split('/'));
 </script>
 
-<a class="card" href={asset(notebook.assetPath as AssetPath)} target="_blank" rel="external noopener">
+{#if notebook.kind === 'article'}
+	<a class="card" href={resolve('/notebooks/[topic]/[id]', { topic, id })}>
+		{@render body()}
+	</a>
+{:else}
+	<a class="card" href={asset(notebook.assetPath as AssetPath)} target="_blank" rel="external noopener">
+		{@render body()}
+	</a>
+{/if}
+
+{#snippet body()}
 	<div class="card__body">
 		<h4 class="card__title">{notebook.title}</h4>
 		<p class="card__summary">{notebook.summary}</p>
 	</div>
 	<span class="card__path" title={notebook.path}>{notebook.path}</span>
-</a>
+{/snippet}
 
 <style>
 	.card {

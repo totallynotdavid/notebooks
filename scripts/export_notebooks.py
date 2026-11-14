@@ -22,6 +22,8 @@ from notebooks_manifest import (
 TMP_ROOT = Path(tempfile.gettempdir()).resolve()
 MARIMO_RUN = ["uv", "run", "--locked"]
 STATIC_NOTEBOOKS_DIR = SITE_DIR / "static" / "notebooks"
+# The site's article route reads these documents at prerender time.
+ARTICLES_DIR = SITE_DIR / ".articles"
 
 # Figures are embedded in the page as base64 PNG, so the page grows with every
 # figure. marimo's frontend and fonts load from a shared CDN and do not count.
@@ -129,15 +131,27 @@ def export_results(notebook: Notebook, output_dir: Path) -> None:
     page_path.write_text(page, encoding="utf-8")
 
 
+def build_article(notebook: Notebook) -> None:
+    """Run a quire article and write its document for the site."""
+    output = ARTICLES_DIR / f"{notebook.slug}.json"
+    command = [*MARIMO_RUN, "--package", notebook.package, "quire", "build"]
+    if run([*command, notebook.path, "-o", str(output)]):
+        raise SystemExit(f"Build failed for {notebook.path}")
+
+
 def export_notebooks(clean: bool) -> None:
     _, notebooks = load_manifest()
     validate_manifest(notebooks)
 
     if clean:
         clean_output_dir(STATIC_NOTEBOOKS_DIR)
+        clean_output_dir(ARTICLES_DIR)
 
     STATIC_NOTEBOOKS_DIR.mkdir(parents=True, exist_ok=True)
     for notebook in notebooks:
+        if notebook.kind == "article":
+            build_article(notebook)
+            continue
         if run(marimo_command("check", notebook)):
             raise SystemExit(f"Check failed for {notebook.path}")
         export_results(notebook, STATIC_NOTEBOOKS_DIR / notebook.slug)

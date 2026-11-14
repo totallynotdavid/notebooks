@@ -1,0 +1,85 @@
+<script lang="ts">
+	import 'katex/dist/katex.min.css';
+	import '#lib/article/prose.css';
+
+	import { resolve } from '$app/paths';
+
+	import Navbar from '#lib/components/Navbar.svelte';
+	import CodeBlock from '#lib/components/article/CodeBlock.svelte';
+	import Output from '#lib/components/article/Output.svelte';
+	import { site } from '#lib/catalog.generated.js';
+
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
+</script>
+
+<svelte:head>
+	<title>{data.notebook.title} · {site.title}</title>
+	<meta name="description" content={data.notebook.summary} />
+</svelte:head>
+
+<Navbar title={site.title} />
+
+<main class="article" lang="es">
+	<p class="eyebrow" lang="en">
+		<a href="{resolve('/')}?topic={data.topic.id}">{data.topic.title}</a>
+	</p>
+	{#each data.blocks as block, i (i)}
+		{#if block.type === 'html'}
+			<!-- Rendered at build time from the article's own Markdown. -->
+			<div class="prose">{@html block.html}</div>
+		{:else}
+			{#if block.html}
+				<CodeBlock html={block.html} />
+			{/if}
+			{#each block.outputs as output, j (j)}
+				<Output {output} />
+			{/each}
+		{/if}
+	{/each}
+	<footer class="source" lang="en">
+		<a href={data.notebook.sourceUrl}>Article source on GitHub</a>
+		<a href={resolve('/')}>All notebooks</a>
+	</footer>
+</main>
+
+<style>
+	.article {
+		--content-width: 42rem;
+		--wide-width: 64rem;
+
+		display: grid;
+		grid-template-columns:
+			[full-start] minmax(var(--gutter), 1fr)
+			[wide-start] minmax(0, calc((var(--wide-width) - var(--content-width)) / 2))
+			[content-start] min(var(--content-width), 100% - 2 * var(--gutter))
+			[content-end] minmax(0, calc((var(--wide-width) - var(--content-width)) / 2))
+			[wide-end] minmax(var(--gutter), 1fr) [full-end];
+		padding: 2.5rem 0 4rem;
+	}
+	.article > :global(*) {
+		grid-column: content;
+	}
+	.article > :global(.wide) {
+		grid-column: wide;
+	}
+	.eyebrow {
+		margin: 0 0 0.75rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+	.source {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+		margin-top: 2rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--line);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+	}
+
+</style>

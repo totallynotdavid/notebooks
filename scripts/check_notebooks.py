@@ -11,6 +11,8 @@ def main() -> int:
     validate_manifest(notebooks)
     failures = 0
 
+    # quire articles have no static check; `quire build` runs them in the export.
+    notebooks = [notebook for notebook in notebooks if notebook.kind == "marimo"]
     for notebook in notebooks:
         command = ["uv", "run", "--locked", "--package", notebook.package]
         command.extend(["marimo", "check", notebook.path])

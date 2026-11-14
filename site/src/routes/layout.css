@@ -20,6 +20,14 @@
   --code-bg: #f6f7f8;
   --card-border: transparent;
 
+  /* Categorical series colours for article figures, in order of use. */
+  --chart-1: #584e62;
+  --chart-2: #c0763a;
+  --chart-3: #3f7f8c;
+  --chart-4: #b0435a;
+  --chart-5: #6b8f3c;
+  --chart-6: #8a8f98;
+
   --navbar-height: 3.75rem;
   --layout-width: 1200px;
   --gutter: 2rem;
@@ -46,6 +54,13 @@
     --field-border: #7a7a7a;
     --code-bg: #2b2b2e;
     --card-border: var(--line);
+
+    --chart-1: #c3b4d1;
+    --chart-2: #e8a066;
+    --chart-3: #6fb6c4;
+    --chart-4: #e07a90;
+    --chart-5: #9cc26a;
+    --chart-6: #a9adb5;
   }
 }
 

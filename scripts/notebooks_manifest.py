@@ -38,6 +38,11 @@ class Notebook:
     def package(self) -> str:
         return self.topic_id
 
+    @property
+    def kind(self) -> str:
+        """Markdown files are quire articles; Python files are marimo notebooks."""
+        return "article" if self.path.endswith(".md") else "marimo"
+
 
 def load_manifest() -> tuple[SiteConfig, list[Notebook]]:
     with MANIFEST.open("rb") as file:
@@ -115,6 +120,7 @@ export interface Notebook {
   path: string;
   sourceUrl: string;
   assetPath: string;
+  kind: 'article' | 'marimo';
 }
 
 export interface Topic {
@@ -183,6 +189,7 @@ def notebook_data(site: SiteConfig, notebook: Notebook) -> dict:
         "path": notebook.path,
         "sourceUrl": source_url(site, notebook),
         "assetPath": f"/notebooks/{notebook.slug}/",
+        "kind": notebook.kind,
     }
 
 
