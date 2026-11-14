@@ -21,7 +21,7 @@ generating the catalog data and exported notebook assets as described in
 bun run --cwd site dev
 ```
 
-Run the export command before opening an exported notebook in the development
-server. `NotebookCard` uses the generated asset path for exported entries. The
-generated files in `site/static/notebooks` are gitignored rather than checked
-in.
+Run the export command before opening a notebook in the development server. An
+article page reads `site/.articles`, and a marimo page is a file in
+`site/static/notebooks`; both are gitignored. To preview one article while you
+edit it, see [articles](articles.md).

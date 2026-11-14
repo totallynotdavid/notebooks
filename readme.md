@@ -2,13 +2,14 @@
 
 Notebooks is a collection of computational physics notebooks, written in
 Spanish. Each one works through a physics or geoscience problem in Python, and
-readers can run and inspect every computation. Set up the workspace and open the
-simple pendulum notebook:
+readers can run and inspect every computation. Set up the workspace and run the
+simple pendulum article:
 
 ```sh
 mise install -y
 mise run install
-uv run --package dynamics marimo edit packages/dynamics/pendulo_simple.py
+uv run --package dynamics quire build packages/dynamics/pendulo_simple.md \
+  -o site/.articles/dynamics/simple-pendulum.json
 ```
 
 The notebooks are grouped by topic. Each topic is a package under `packages/`:

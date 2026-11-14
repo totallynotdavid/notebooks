@@ -7,9 +7,20 @@ it as a dependency with `{ workspace = true }` in `[tool.uv.sources]`. The root
 `pyproject.toml` defines the workspace and shared development tools. The
 workspace lockfile is `uv.lock`.
 
+[`lib/quire`](../lib/quire/src/quire) runs a Markdown article. It splits the
+file into prose and `python` fences
+([`document.py`](../lib/quire/src/quire/document.py)), runs the fences in one
+namespace and captures what each prints and returns
+([`execute.py`](../lib/quire/src/quire/execute.py)), and encodes the values as
+markdown, text or chart specs
+([`outputs.py`](../lib/quire/src/quire/outputs.py),
+[`plot.py`](../lib/quire/src/quire/plot.py)). It writes one JSON document per
+article; see [articles](articles.md).
+
 `lib/animation` builds the Plotly figures whose frames play in the browser, so
-an exported page animates without a Python kernel. `figura_animada` adds the
-play and pause buttons and the slider; see [notebooks](notebooks.md#animations).
+an exported marimo page animates without a Python kernel. `figura_animada` adds
+the play and pause buttons and the slider; see
+[notebooks](notebooks.md#animations).
 
 ## Notebook sources
 
@@ -23,8 +34,8 @@ publishes every notebook in the catalog.
 [`scripts/notebooks_manifest.py`](../scripts/notebooks_manifest.py) reads the
 catalog, checks ids, paths and packages, and writes the typed frontend data to
 [`site/src/lib/catalog.generated.ts`](../site/src/lib/catalog.generated.ts).
-Each notebook receives a source URL to the repository and the path of its
-published page.
+Each notebook receives a source URL to the repository, the path of its published
+page, and a `kind`: `article` for a `.md` file and `marimo` for a `.py` file.
 
 ## Export pipeline
 
@@ -32,13 +43,15 @@ published page.
 catalog generation, and notebook export. The `validate` command checks only the
 manifest. The `data` command regenerates the frontend catalog, and
 `data --check` fails when the committed catalog is out of date without writing
-it. The `export` command does not touch the catalog. It checks each notebook,
-runs it with `marimo export html`, and writes its results as one static page. A
-notebook whose check or export fails fails the command, and its page is not
-written. So does a page over 1,000,000 bytes (`MAX_PAGE_BYTES`), because marimo
-embeds every figure in the page: a Matplotlib figure as a base64 PNG and a
-Plotly figure as JSON escaped twice, about 2.7 times its raw size. Lower the
-figure resolution, plot fewer points or use fewer frames to fit.
+it. The `export` command does not touch the catalog. It runs each article with
+`quire build` and writes its document to `site/.articles/<slug>.json`. It checks
+each marimo notebook, runs it with `marimo export html`, and writes its results
+as one static page. A notebook whose check or export fails fails the command,
+and its page is not written. So does a page over 1,000,000 bytes
+(`MAX_PAGE_BYTES`), because marimo embeds every figure in the page: a Matplotlib
+figure as a base64 PNG and a Plotly figure as JSON escaped twice, about 2.7
+times its raw size. Lower the figure resolution, plot fewer points or use fewer
+frames to fit.
 
 The export rewrites the page shell that marimo generates: the catalog title and
 summary replace the title and description, the language is `es` because the
@@ -58,6 +71,8 @@ notebooks_manifest.py ----> catalog.generated.ts ----> Svelte components
       |
       v
 export_notebooks.py ------> site/static/notebooks ----> static site build
+      |                                                   ^
+      +-------------------> site/.articles -----> article route
 ```
 
 ## Site
@@ -66,6 +81,18 @@ export_notebooks.py ------> site/static/notebooks ----> static site build
 catalog. It loads the generated site data, applies the search and topic filters
 from [`site/src/lib/filters.ts`](../site/src/lib/filters.ts), and groups the
 notebooks by topic. Each card links to the notebook's published page.
+
+The route
+[`notebooks/[topic]/[id]`](../site/src/routes/notebooks/[topic]/[id]/+page.server.ts)
+prerenders one page per article. At build time,
+[`site/src/lib/server/article.ts`](../site/src/lib/server/article.ts) reads the
+article's document, renders prose with markdown-it and KaTeX, and highlights
+code with Shiki. The page ships no Python and no markdown parser. In the
+browser,
+[`PlotFigure.svelte`](../site/src/lib/components/article/PlotFigure.svelte)
+draws each chart spec with Observable Plot
+([`plot.ts`](../site/src/lib/article/plot.ts)), with the colors of the site
+theme, and plays its frames.
 
 [`site/src/routes/+layout.ts`](../site/src/routes/+layout.ts) enables
 prerendering. The SvelteKit adapter produces a static site in `site/build`. The

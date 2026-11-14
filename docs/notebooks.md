@@ -1,16 +1,17 @@
 # Notebooks
 
-Notebooks are Python files managed by marimo. The package of a topic owns the
-dependencies of its notebooks. Open a notebook with its package:
+A notebook is a marimo Python file or a Markdown [article](articles.md). The
+package of a topic owns the dependencies of its notebooks. Open a marimo
+notebook with its package:
 
 ```sh
-uv run --package dynamics marimo edit packages/dynamics/pendulo_simple.py
+uv run --package dynamics marimo edit packages/dynamics/tres_resortes.py
 ```
 
 Check the same notebook without opening the editor:
 
 ```sh
-uv run --package dynamics marimo check packages/dynamics/pendulo_simple.py
+uv run --package dynamics marimo check packages/dynamics/tres_resortes.py
 ```
 
 The repository-wide check reads [`notebooks.toml`](../notebooks.toml), validates
