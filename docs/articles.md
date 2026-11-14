@@ -102,6 +102,28 @@ P.figure(
 
 Every frame is stored in the page, so keep frames few and rounded.
 
+## Cache
+
+`quire.cache` keeps a slow function's results between builds, so `quire watch`
+reruns only what changed.
+
+```python
+from quire import cache
+
+
+@cache
+def simulate(size, temperature, sweeps):
+    return ising.run(size, temperature, sweeps)
+```
+
+A result is stored in `.quire-cache/` beside the article, keyed by the
+function's arguments and its source. For a function defined in a fence, the
+source is its own lines; for a function imported from a module, it is the whole
+module file. Globals the function reads and helpers in other modules are not
+part of the key: pass a value as an argument, or build with `--no-cache` to run
+every function again. Arguments and results must pickle. Outside a quire build,
+a cached function runs as usual.
+
 ## Publish
 
 Add the article to the catalog with its `.md` file, as in

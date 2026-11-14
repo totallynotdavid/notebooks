@@ -10,22 +10,25 @@ import sys
 import traceback
 from pathlib import Path
 
+from quire.cache import caching_in
 from quire.document import Code, Prose, parse
 from quire.outputs import to_output
 
 VERSION = 1
+CACHE_DIR = ".quire-cache"
 
 
 class ArticleError(Exception):
     """A fence raised; the message is the traceback against article lines."""
 
 
-def run_article(path: Path) -> dict:
+def run_article(path: Path, *, use_cache: bool = True) -> dict:
     path = path.resolve()
     blocks = parse(path.read_text(encoding="utf-8"))
     namespace: dict[str, object] = {"__name__": "__quire__", "__file__": str(path)}
     rendered: list[dict] = []
-    with _article_context(path.parent):
+    cache_dir = path.parent / CACHE_DIR if use_cache else None
+    with _article_context(path.parent), caching_in(cache_dir):
         for block in blocks:
             if isinstance(block, Prose):
                 rendered.append({"type": "prose", "text": block.text})
