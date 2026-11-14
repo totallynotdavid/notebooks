@@ -110,10 +110,10 @@ export const topics: Topic[] = [
         "title": "Double pendulum",
         "summary": "A chaotic double pendulum with Euler and RK4, the energy drift of each method, and a Lyapunov exponent from two nearby trajectories.",
         "slug": "dynamics/double-pendulum",
-        "path": "packages/dynamics/pendulo_doble.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.py",
+        "path": "packages/dynamics/pendulo_doble.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.md",
         "assetPath": "/notebooks/dynamics/double-pendulum/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Lorenz attractor",

@@ -57,7 +57,7 @@ summary = "Normal modes from an eigenvalue decomposition, and the RK4 time serie
 [[topics.notebooks]]
 id = "double-pendulum"
 title = "Double pendulum"
-file = "pendulo_doble.py"
+file = "pendulo_doble.md"
 summary = "A chaotic double pendulum with Euler and RK4, the energy drift of each method, and a Lyapunov exponent from two nearby trajectories."
 
 [[topics.notebooks]]
