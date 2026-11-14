@@ -10,14 +10,16 @@
 			<h3 class="footer__title">{site.title}</h3>
 			<p>
 				Each notebook is written in Spanish and published as a page of its results. Your browser
-				runs no Python. To change the parameters and rerun a notebook, clone the repository:
+				runs no Python. To change the parameters and rerun a notebook, clone the repository and
+				rebuild it:
 			</p>
 			<pre class="footer__code"><code
 					>git clone {site.repository}
 cd notebooks
 mise install -y && mise run install
-uv run --package dynamics marimo edit \
-  packages/dynamics/pendulo_simple.py</code
+uv run --package dynamics quire build \
+  packages/dynamics/pendulo_simple.md \
+  -o site/.articles/dynamics/simple-pendulum.json</code
 				></pre>
 		</div>
 

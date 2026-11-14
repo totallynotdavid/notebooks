@@ -14,6 +14,7 @@ members = [
     "geophysics",
     "notebooks",
     "numerical-methods",
+    "quire",
     "remote-sensing",
     "statistical-physics",
 ]
@@ -325,6 +326,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "plotly" },
+    { name = "quire" },
 ]
 
 [package.metadata]
@@ -333,6 +335,7 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "plotly", specifier = ">=7.1.0" },
+    { name = "quire", editable = "lib/quire" },
 ]
 
 [[package]]
@@ -1325,6 +1328,17 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/7a/1d/0bee73e1e8ab1c26eecba13a4725dfbe0405b53f451a91671dd515effe00/pyzmq-27.3.0-cp314-cp314t-win_amd64.whl", hash = "sha256:8a3d02fc710302a23c9a67b287bc13f2992067d398c3192b50eb0e30d44ed885", size = 685132, upload-time = "2026-11-04T00:30:01.144Z" },
     { url = "https://files.pythonhosted.org/packages/cd/23/13a768f9a8e66a999250abd216e50e1961a1cd4a8708749f656f5c0c2aea/pyzmq-27.3.0-cp314-cp314t-win_arm64.whl", hash = "sha256:2b9f08778b608fe4f6250e2d132f41b4f99fa8d03051cf2809b1c0420def81b4", size = 595549, upload-time = "2026-11-04T00:30:02.693Z" },
 ]
+
+[[package]]
+name = "quire"
+version = "0.1.0"
+source = { editable = "lib/quire" }
+dependencies = [
+    { name = "numpy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "numpy", specifier = ">=2.5.4" }]
 
 [[package]]
 name = "rasterio"

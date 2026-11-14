@@ -45,7 +45,7 @@ title = "Dynamics and differential equations"
 [[topics.notebooks]]
 id = "simple-pendulum"
 title = "Simple pendulum"
-file = "pendulo_simple.py"
+file = "pendulo_simple.md"
 summary = "The exact period from the complete elliptic integral against small oscillations, and energy drift under velocity Verlet and RK4."
 
 [[topics.notebooks]]

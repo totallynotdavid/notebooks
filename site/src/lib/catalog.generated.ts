@@ -8,6 +8,7 @@ export interface Notebook {
   path: string;
   sourceUrl: string;
   assetPath: string;
+  kind: 'article' | 'marimo';
 }
 
 export interface Topic {
@@ -41,7 +42,8 @@ export const topics: Topic[] = [
         "slug": "numerical-methods/floating-point",
         "path": "packages/numerical-methods/punto_flotante.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.py",
-        "assetPath": "/notebooks/numerical-methods/floating-point/"
+        "assetPath": "/notebooks/numerical-methods/floating-point/",
+        "kind": "marimo"
       },
       {
         "title": "Numerical differentiation",
@@ -49,7 +51,8 @@ export const topics: Topic[] = [
         "slug": "numerical-methods/numerical-differentiation",
         "path": "packages/numerical-methods/derivacion_numerica.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.py",
-        "assetPath": "/notebooks/numerical-methods/numerical-differentiation/"
+        "assetPath": "/notebooks/numerical-methods/numerical-differentiation/",
+        "kind": "marimo"
       },
       {
         "title": "Solving nonlinear equations",
@@ -57,7 +60,8 @@ export const topics: Topic[] = [
         "slug": "numerical-methods/root-finding",
         "path": "packages/numerical-methods/raices.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.py",
-        "assetPath": "/notebooks/numerical-methods/root-finding/"
+        "assetPath": "/notebooks/numerical-methods/root-finding/",
+        "kind": "marimo"
       },
       {
         "title": "Polynomial interpolation",
@@ -65,7 +69,8 @@ export const topics: Topic[] = [
         "slug": "numerical-methods/interpolation",
         "path": "packages/numerical-methods/interpolacion.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.py",
-        "assetPath": "/notebooks/numerical-methods/interpolation/"
+        "assetPath": "/notebooks/numerical-methods/interpolation/",
+        "kind": "marimo"
       },
       {
         "title": "Monte Carlo integration",
@@ -73,7 +78,8 @@ export const topics: Topic[] = [
         "slug": "numerical-methods/monte-carlo",
         "path": "packages/numerical-methods/monte_carlo.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.py",
-        "assetPath": "/notebooks/numerical-methods/monte-carlo/"
+        "assetPath": "/notebooks/numerical-methods/monte-carlo/",
+        "kind": "marimo"
       }
     ]
   },
@@ -86,9 +92,10 @@ export const topics: Topic[] = [
         "title": "Simple pendulum",
         "summary": "The exact period from the complete elliptic integral against small oscillations, and energy drift under velocity Verlet and RK4.",
         "slug": "dynamics/simple-pendulum",
-        "path": "packages/dynamics/pendulo_simple.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_simple.py",
-        "assetPath": "/notebooks/dynamics/simple-pendulum/"
+        "path": "packages/dynamics/pendulo_simple.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_simple.md",
+        "assetPath": "/notebooks/dynamics/simple-pendulum/",
+        "kind": "article"
       },
       {
         "title": "Two masses and three springs",
@@ -96,7 +103,8 @@ export const topics: Topic[] = [
         "slug": "dynamics/three-springs",
         "path": "packages/dynamics/tres_resortes.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.py",
-        "assetPath": "/notebooks/dynamics/three-springs/"
+        "assetPath": "/notebooks/dynamics/three-springs/",
+        "kind": "marimo"
       },
       {
         "title": "Double pendulum",
@@ -104,7 +112,8 @@ export const topics: Topic[] = [
         "slug": "dynamics/double-pendulum",
         "path": "packages/dynamics/pendulo_doble.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.py",
-        "assetPath": "/notebooks/dynamics/double-pendulum/"
+        "assetPath": "/notebooks/dynamics/double-pendulum/",
+        "kind": "marimo"
       },
       {
         "title": "Lorenz attractor",
@@ -112,7 +121,8 @@ export const topics: Topic[] = [
         "slug": "dynamics/lorenz-attractor",
         "path": "packages/dynamics/atractor_de_lorenz.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.py",
-        "assetPath": "/notebooks/dynamics/lorenz-attractor/"
+        "assetPath": "/notebooks/dynamics/lorenz-attractor/",
+        "kind": "marimo"
       },
       {
         "title": "The heat equation in one dimension",
@@ -120,7 +130,8 @@ export const topics: Topic[] = [
         "slug": "dynamics/heat-equation",
         "path": "packages/dynamics/edp_calor.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.py",
-        "assetPath": "/notebooks/dynamics/heat-equation/"
+        "assetPath": "/notebooks/dynamics/heat-equation/",
+        "kind": "marimo"
       }
     ]
   },
@@ -135,7 +146,8 @@ export const topics: Topic[] = [
         "slug": "statistical-physics/hypersphere-volume",
         "path": "packages/statistical-physics/volumen_hiperesfera.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.py",
-        "assetPath": "/notebooks/statistical-physics/hypersphere-volume/"
+        "assetPath": "/notebooks/statistical-physics/hypersphere-volume/",
+        "kind": "marimo"
       },
       {
         "title": "3D Ising model",
@@ -143,7 +155,8 @@ export const topics: Topic[] = [
         "slug": "statistical-physics/ising-model",
         "path": "packages/statistical-physics/modelo_de_ising.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.py",
-        "assetPath": "/notebooks/statistical-physics/ising-model/"
+        "assetPath": "/notebooks/statistical-physics/ising-model/",
+        "kind": "marimo"
       },
       {
         "title": "Liquid argon and potassium clusters",
@@ -151,7 +164,8 @@ export const topics: Topic[] = [
         "slug": "statistical-physics/argon-and-potassium",
         "path": "packages/statistical-physics/argon_y_potasio.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.py",
-        "assetPath": "/notebooks/statistical-physics/argon-and-potassium/"
+        "assetPath": "/notebooks/statistical-physics/argon-and-potassium/",
+        "kind": "marimo"
       }
     ]
   },
@@ -166,7 +180,8 @@ export const topics: Topic[] = [
         "slug": "remote-sensing/planck-curve",
         "path": "packages/remote-sensing/curva_de_planck.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.py",
-        "assetPath": "/notebooks/remote-sensing/planck-curve/"
+        "assetPath": "/notebooks/remote-sensing/planck-curve/",
+        "kind": "marimo"
       },
       {
         "title": "Radiative transfer with 6S",
@@ -174,7 +189,8 @@ export const topics: Topic[] = [
         "slug": "remote-sensing/radiative-transfer-6s",
         "path": "packages/remote-sensing/transferencia_radiativa_6s.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.py",
-        "assetPath": "/notebooks/remote-sensing/radiative-transfer-6s/"
+        "assetPath": "/notebooks/remote-sensing/radiative-transfer-6s/",
+        "kind": "marimo"
       },
       {
         "title": "Earth Engine over Peru",
@@ -182,7 +198,8 @@ export const topics: Topic[] = [
         "slug": "remote-sensing/earth-engine-peru",
         "path": "packages/remote-sensing/earth_engine_peru.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.py",
-        "assetPath": "/notebooks/remote-sensing/earth-engine-peru/"
+        "assetPath": "/notebooks/remote-sensing/earth-engine-peru/",
+        "kind": "marimo"
       },
       {
         "title": "Landsat rasters with rasterio",
@@ -190,7 +207,8 @@ export const topics: Topic[] = [
         "slug": "remote-sensing/landsat-rasterio",
         "path": "packages/remote-sensing/landsat_rasterio.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.py",
-        "assetPath": "/notebooks/remote-sensing/landsat-rasterio/"
+        "assetPath": "/notebooks/remote-sensing/landsat-rasterio/",
+        "kind": "marimo"
       },
       {
         "title": "GaoFen-1 atmospheric correction",
@@ -198,7 +216,8 @@ export const topics: Topic[] = [
         "slug": "remote-sensing/gaofen1-atmospheric-correction",
         "path": "packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.py",
-        "assetPath": "/notebooks/remote-sensing/gaofen1-atmospheric-correction/"
+        "assetPath": "/notebooks/remote-sensing/gaofen1-atmospheric-correction/",
+        "kind": "marimo"
       }
     ]
   },
@@ -213,7 +232,8 @@ export const topics: Topic[] = [
         "slug": "geophysics/sac-processing",
         "path": "packages/geophysics/procesamiento_sac.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.py",
-        "assetPath": "/notebooks/geophysics/sac-processing/"
+        "assetPath": "/notebooks/geophysics/sac-processing/",
+        "kind": "marimo"
       },
       {
         "title": "From fault to tsunami",
@@ -221,7 +241,8 @@ export const topics: Topic[] = [
         "slug": "geophysics/fault-to-tsunami",
         "path": "packages/geophysics/deformacion_tsunami.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.py",
-        "assetPath": "/notebooks/geophysics/fault-to-tsunami/"
+        "assetPath": "/notebooks/geophysics/fault-to-tsunami/",
+        "kind": "marimo"
       },
       {
         "title": "Mass movements in Ancash",
@@ -229,7 +250,8 @@ export const topics: Topic[] = [
         "slug": "geophysics/ancash-landslides",
         "path": "packages/geophysics/peligros_geologicos_ancash.py",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.py",
-        "assetPath": "/notebooks/geophysics/ancash-landslides/"
+        "assetPath": "/notebooks/geophysics/ancash-landslides/",
+        "kind": "marimo"
       }
     ]
   }
