@@ -5,13 +5,13 @@ package of a topic owns the dependencies of its notebooks. Open a marimo
 notebook with its package:
 
 ```sh
-uv run --package dynamics marimo edit packages/dynamics/edp_calor.py
+uv run --package numerical-methods marimo edit packages/numerical-methods/punto_flotante.py
 ```
 
 Check the same notebook without opening the editor:
 
 ```sh
-uv run --package dynamics marimo check packages/dynamics/edp_calor.py
+uv run --package numerical-methods marimo check packages/numerical-methods/punto_flotante.py
 ```
 
 The repository-wide check reads [`notebooks.toml`](../notebooks.toml), validates
@@ -74,8 +74,6 @@ Every frame repeats its data in the page, so keep frames small:
 - Round coordinates to the precision the plot shows.
 - Draw points that accumulate as one trace per batch and change only
   `marker.opacity` in the frames; see `monte_carlo.py`.
-- Plotly hides a text trace outside its axis range. Put a label above the plot
-  on a hidden second axis; see `edp_calor.py`.
 
 ## Tests
 

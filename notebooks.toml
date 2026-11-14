@@ -69,7 +69,7 @@ summary = "The Lorenz system integrated with RK4: the attractor, its largest Lya
 [[topics.notebooks]]
 id = "heat-equation"
 title = "The heat equation in one dimension"
-file = "edp_calor.py"
+file = "edp_calor.md"
 summary = "The 1D heat equation with finite differences: the explicit scheme at r = 0.4, 0.5 and 0.6 (unstable), Crank-Nicolson, and the Fourier solution."
 
 [[topics]]

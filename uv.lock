@@ -322,19 +322,13 @@ name = "dynamics"
 version = "0.1.0"
 source = { virtual = "packages/dynamics" }
 dependencies = [
-    { name = "animation" },
-    { name = "matplotlib" },
     { name = "numpy" },
-    { name = "plotly" },
     { name = "quire" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "animation", editable = "lib/animation" },
-    { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },
-    { name = "plotly", specifier = ">=7.1.0" },
     { name = "quire", editable = "lib/quire" },
 ]
 

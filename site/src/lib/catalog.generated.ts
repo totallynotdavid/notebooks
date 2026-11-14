@@ -128,10 +128,10 @@ export const topics: Topic[] = [
         "title": "The heat equation in one dimension",
         "summary": "The 1D heat equation with finite differences: the explicit scheme at r = 0.4, 0.5 and 0.6 (unstable), Crank-Nicolson, and the Fourier solution.",
         "slug": "dynamics/heat-equation",
-        "path": "packages/dynamics/edp_calor.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.py",
+        "path": "packages/dynamics/edp_calor.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.md",
         "assetPath": "/notebooks/dynamics/heat-equation/",
-        "kind": "marimo"
+        "kind": "article"
       }
     ]
   },

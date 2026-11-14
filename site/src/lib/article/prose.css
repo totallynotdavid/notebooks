@@ -45,7 +45,7 @@
 }
 .article .prose th,
 .article .prose td {
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.5rem;
   border-bottom: 1px solid var(--line);
   white-space: nowrap;
 }
