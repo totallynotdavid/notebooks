@@ -40,10 +40,10 @@ export const topics: Topic[] = [
         "title": "Floating-point error",
         "summary": "Binary representation with float.hex, machine epsilon from numpy.finfo, and how float32 and float64 differ when adding, subtracting and accumulating.",
         "slug": "numerical-methods/floating-point",
-        "path": "packages/numerical-methods/punto_flotante.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.py",
+        "path": "packages/numerical-methods/punto_flotante.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.md",
         "assetPath": "/notebooks/numerical-methods/floating-point/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Numerical differentiation",

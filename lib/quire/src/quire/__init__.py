@@ -2,6 +2,7 @@
 
 from quire import plot
 from quire.cache import cache
+from quire.execute import article_namespace
 from quire.outputs import md
 
-__all__ = ["cache", "md", "plot"]
+__all__ = ["article_namespace", "cache", "md", "plot"]

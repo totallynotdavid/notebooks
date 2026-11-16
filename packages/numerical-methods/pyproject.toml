@@ -6,7 +6,9 @@ dependencies = [
     "matplotlib>=3.11.2",
     "numpy>=2.5.4",
     "plotly>=7.1.0",
+    "quire",
 ]
 
 [tool.uv.sources]
 animation = { workspace = true }
+quire = { workspace = true }

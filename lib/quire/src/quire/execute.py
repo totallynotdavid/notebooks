@@ -23,6 +23,17 @@ class ArticleError(Exception):
 
 
 def run_article(path: Path, *, use_cache: bool = True) -> dict:
+    blocks, _ = _execute(path, use_cache)
+    return {"version": VERSION, "blocks": blocks}
+
+
+def article_namespace(path: Path, *, use_cache: bool = True) -> dict:
+    """The names an article defines after its last fence, for tests."""
+    _, namespace = _execute(path, use_cache)
+    return namespace
+
+
+def _execute(path: Path, use_cache: bool) -> tuple[list[dict], dict]:
     path = path.resolve()
     blocks = parse(path.read_text(encoding="utf-8"))
     namespace: dict[str, object] = {"__name__": "__quire__", "__file__": str(path)}
@@ -44,7 +55,7 @@ def run_article(path: Path, *, use_cache: bool = True) -> dict:
                     "outputs": outputs,
                 }
             )
-    return {"version": VERSION, "blocks": rendered}
+    return rendered, namespace
 
 
 @contextlib.contextmanager

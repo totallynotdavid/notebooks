@@ -11,7 +11,7 @@ title = "Numerical methods"
 [[topics.notebooks]]
 id = "floating-point"
 title = "Floating-point error"
-file = "punto_flotante.py"
+file = "punto_flotante.md"
 summary = "Binary representation with float.hex, machine epsilon from numpy.finfo, and how float32 and float64 differ when adding, subtracting and accumulating."
 
 [[topics.notebooks]]

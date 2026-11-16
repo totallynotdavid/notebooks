@@ -1,4 +1,4 @@
-"""Run the numerical-methods notebooks as marimo runs them and check their numbers."""
+"""Run the numerical-methods notebooks and check their numbers."""
 
 from __future__ import annotations
 
@@ -7,11 +7,15 @@ import unittest
 from pathlib import Path
 
 import numpy as np
+from quire import article_namespace
 
 PACKAGE = Path(__file__).resolve().parents[1]
 
 
 def run_notebook(name: str) -> dict:
+    article = PACKAGE / f"{name}.md"
+    if article.exists():
+        return article_namespace(article, use_cache=False)
     path = PACKAGE / f"{name}.py"
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)

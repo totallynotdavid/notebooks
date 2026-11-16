@@ -5,13 +5,13 @@ package of a topic owns the dependencies of its notebooks. Open a marimo
 notebook with its package:
 
 ```sh
-uv run --package numerical-methods marimo edit packages/numerical-methods/punto_flotante.py
+uv run --package numerical-methods marimo edit packages/numerical-methods/raices.py
 ```
 
 Check the same notebook without opening the editor:
 
 ```sh
-uv run --package numerical-methods marimo check packages/numerical-methods/punto_flotante.py
+uv run --package numerical-methods marimo check packages/numerical-methods/raices.py
 ```
 
 The repository-wide check reads [`notebooks.toml`](../notebooks.toml), validates
