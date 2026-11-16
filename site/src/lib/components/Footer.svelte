@@ -52,7 +52,7 @@ uv run --package dynamics quire build \
 	}
 	.footer__inner {
 		display: grid;
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2.5rem;
 		max-width: var(--layout-width);
 		margin: 0 auto;

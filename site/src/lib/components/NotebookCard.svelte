@@ -19,6 +19,7 @@
 	.card {
 		display: flex;
 		flex: 1 1 17rem;
+		min-width: 0;
 		max-width: 22rem;
 		flex-direction: column;
 		justify-content: space-between;
