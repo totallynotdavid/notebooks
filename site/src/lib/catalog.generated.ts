@@ -205,10 +205,10 @@ export const topics: Topic[] = [
         "title": "Landsat rasters with rasterio",
         "summary": "Reading a Landsat scene with rasterio: metadata, bands, and masking NoData values.",
         "slug": "remote-sensing/landsat-rasterio",
-        "path": "packages/remote-sensing/landsat_rasterio.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.py",
+        "path": "packages/remote-sensing/landsat_rasterio.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.md",
         "assetPath": "/notebooks/remote-sensing/landsat-rasterio/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "GaoFen-1 atmospheric correction",

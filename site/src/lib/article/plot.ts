@@ -69,7 +69,9 @@ export function renderPlot(
   }
   return Plot.plot({
     ...options,
-    width,
+    // A figure's own width caps the column width: a square raster would
+    // otherwise grow taller than the screen.
+    width: Math.min(width, (spec.options.width as number) ?? width),
     marks: spec.marks.map((mark) => buildMark(mark, frame)),
     style: {
       background: "transparent",

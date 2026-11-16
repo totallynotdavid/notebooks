@@ -119,7 +119,7 @@ summary = "SRTM elevation, MODIS land cover and land surface temperature over Li
 [[topics.notebooks]]
 id = "landsat-rasterio"
 title = "Landsat rasters with rasterio"
-file = "landsat_rasterio.py"
+file = "landsat_rasterio.md"
 summary = "Reading a Landsat scene with rasterio: metadata, bands, and masking NoData values."
 
 [[topics.notebooks]]

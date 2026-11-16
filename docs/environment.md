@@ -9,12 +9,13 @@ mise install -y
 mise run install
 ```
 
-The remote-sensing raster notebook uses rasterio. Its package includes the
+The remote-sensing raster article uses rasterio. Its package includes the
 runtime libraries needed to open the committed GeoTIFF, so no system raster
-installation is required. Open the notebook with:
+installation is required. Preview the article with:
 
 ```sh
-uv run --locked --package remote-sensing marimo edit packages/remote-sensing/landsat_rasterio.py
+uv run --locked --package remote-sensing quire watch packages/remote-sensing/landsat_rasterio.md \
+  -o site/.articles/remote-sensing/landsat-rasterio.json
 ```
 
 Some notebooks need external data or credentials. Their source files state the
