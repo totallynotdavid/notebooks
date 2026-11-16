@@ -213,53 +213,73 @@ integradores con $\theta_0=2$ rad, $\dot\theta_0=0$ y $\Delta t=0.1$ s durante
   períodos, pero no es simpléctico y su error se acumula.
 
 ```python
+DURACION = 2000.0
 DT = 0.1
-PASOS = 20_000
+PASOS = round(DURACION / DT)
 THETA_INICIAL = 2.0
 
 
-def trayectoria(paso):
-    y = np.empty((PASOS + 1, 2))
+def error_energia(paso, dt):
+    pasos = round(DURACION / dt)
+    y = np.empty((pasos + 1, 2))
     y[0] = (THETA_INICIAL, 0.0)
-    for i in range(PASOS):
-        y[i + 1] = paso(y[i], DT)
-    return y
+    for i in range(pasos):
+        y[i + 1] = paso(y[i], dt)
+    e0 = energia(y[0])
+    return (energia(y) - e0) / e0
 
 
-e0 = energia(np.array([THETA_INICIAL, 0.0]))
 t_energia = np.arange(PASOS + 1) * DT
-error_rk4 = (energia(trayectoria(paso_rk4)) - e0) / e0
-error_verlet = (energia(trayectoria(paso_verlet)) - e0) / e0
+error_rk4 = error_energia(paso_rk4, DT)
+error_verlet = error_energia(paso_verlet, DT)
 ```
 
 El error de Verlet oscila más rápido de lo que la página puede mostrar punto a
 punto, así que la figura lo dibuja como la franja entre su mínimo y su máximo en
-cada intervalo de 2 s.
+cada intervalo de 2 s. En la escala logarítmica, mueve $\Delta t$: al dividirlo
+entre dos, el error de Verlet baja unas 4 veces y el de RK4 unas 30.
 
 ```python
-# 20 000 pasos en 1000 tramos de 20: mínimo y máximo de cada tramo.
-tramos = error_verlet[1:].reshape(-1, 20)
-t_tramos = t_energia[1:].reshape(-1, 20).mean(axis=1)
+TRAMOS = 1000  # intervalos de 2 s
+pasos_dt = [0.025, 0.05, 0.1, 0.2]
+t_fin = np.arange(1, TRAMOS + 1) * DURACION / TRAMOS
+t_medio = t_fin - DURACION / TRAMOS / 2
+
+
+def tramos(error):
+    """Error sin el instante inicial, una fila por intervalo de 2 s."""
+    return error[1:].reshape(TRAMOS, -1)
+
+
+verlet = [tramos(error_energia(paso_verlet, dt)) for dt in pasos_dt]
+rk4 = [tramos(error_energia(paso_rk4, dt)) for dt in pasos_dt]
 
 P.grid(
     P.figure(
         P.areaY(
-            x=t_tramos,
-            y1=tramos.min(axis=1),
-            y2=tramos.max(axis=1),
+            x=t_medio,
+            y1=tramos(error_verlet).min(axis=1),
+            y2=tramos(error_verlet).max(axis=1),
             series="velocity Verlet",
             fillOpacity=0.6,
         ),
-        P.line(x=t_energia[::20], y=error_rk4[::20], series="RK4"),
-        title="Error relativo de la energía",
+        P.line(x=t_fin, y=tramos(error_rk4)[:, -1], series="RK4"),
+        title=f"Error relativo de la energía, Δt = {DT} s",
         x={"label": "t [s]"},
         y={"label": "(E − E₀)/E₀"},
         color={"legend": True},
         grid=True,
     ),
     P.figure(
-        P.line(x=t_tramos, y=np.abs(tramos).max(axis=1), series="velocity Verlet"),
-        P.line(x=t_energia[1::20], y=np.abs(error_rk4[1::20]), series="RK4"),
+        P.line(
+            x=t_medio,
+            y=np.array([np.abs(t).max(axis=1) for t in verlet]),
+            series="velocity Verlet",
+        ),
+        P.line(x=t_fin, y=np.array([np.abs(t[:, -1]) for t in rk4]), series="RK4"),
+        frames=[f"Δt = {dt} s" for dt in pasos_dt],
+        parameter="Δt",
+        start=pasos_dt.index(DT),
         title="Escala logarítmica: máximo de |E − E₀|/E₀ en cada tramo",
         x={"label": "t [s]", "type": "log"},
         y={"label": "|E − E₀|/E₀", "type": "log"},

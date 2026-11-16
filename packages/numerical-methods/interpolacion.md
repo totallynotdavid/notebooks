@@ -328,17 +328,31 @@ errores_centro = np.array(
 )
 ```
 
+Mueve el grado: con nodos equiespaciados el polinomio oscila cada vez más cerca
+de los extremos, y con nodos de Chebyshev se acerca a la función.
+
 ```python hidden
-GRADO = 14
 RHO = (1 + np.sqrt(26)) / 5
 malla = MALLA[::10]
+grados = GRADOS[GRADOS <= 20]
+
+
+def nodos_rellenos(n):
+    """Los nodos equiespaciados de grado n, completados con NaN hasta el mayor grado."""
+    x = np.full(grados[-1] + 1, np.nan)
+    x[: n + 1] = nodos_equiespaciados(n)
+    return x
+
+
 P.grid(
     P.figure(
         P.line(x=malla, y=runge(malla), series="1/(1+25x²)", strokeWidth=2.5),
         *(
             P.line(
                 x=malla,
-                y=lagrange(nodos(GRADO), runge(nodos(GRADO)), malla),
+                y=np.array(
+                    [lagrange(nodos(n), runge(nodos(n)), malla) for n in grados]
+                ),
                 series=nombre,
                 clip=True,
             )
@@ -348,12 +362,15 @@ P.grid(
             )
         ),
         P.dot(
-            x=nodos_equiespaciados(GRADO),
-            y=runge(nodos_equiespaciados(GRADO)),
+            x=np.array([nodos_rellenos(n) for n in grados]),
+            y=np.array([runge(nodos_rellenos(n)) for n in grados]),
             r=3,
             series="nodos equiespaciados",
         ),
-        title=f"Polinomio de grado {GRADO}",
+        frames=[f"n = {n}" for n in grados],
+        parameter="grado",
+        start=int(np.flatnonzero(grados == 14)[0]),
+        title="Polinomio interpolante",
         x={"label": "x"},
         y={"domain": [-0.6, 1.4]},
         grid=True,
