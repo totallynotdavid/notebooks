@@ -187,10 +187,10 @@ export const topics: Topic[] = [
         "title": "Radiative transfer with 6S",
         "summary": "Atmospheric radiative transfer with the 6S model through Py6S.",
         "slug": "remote-sensing/radiative-transfer-6s",
-        "path": "packages/remote-sensing/transferencia_radiativa_6s.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.py",
+        "path": "packages/remote-sensing/transferencia_radiativa_6s.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.md",
         "assetPath": "/notebooks/remote-sensing/radiative-transfer-6s/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Earth Engine over Peru",

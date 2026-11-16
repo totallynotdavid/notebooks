@@ -107,7 +107,7 @@ summary = "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displace
 [[topics.notebooks]]
 id = "radiative-transfer-6s"
 title = "Radiative transfer with 6S"
-file = "transferencia_radiativa_6s.py"
+file = "transferencia_radiativa_6s.md"
 summary = "Atmospheric radiative transfer with the 6S model through Py6S."
 
 [[topics.notebooks]]
