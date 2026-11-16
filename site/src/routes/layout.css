@@ -109,7 +109,11 @@ p {
   margin: 0 0 1.25rem 0;
 }
 
-code {
+pre code {
+  font: inherit;
+}
+
+:not(pre) > code {
   font-family: var(--font-mono);
   font-size: 90%;
   background: var(--code-bg);

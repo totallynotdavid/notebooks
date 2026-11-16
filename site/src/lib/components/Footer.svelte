@@ -83,12 +83,6 @@ uv run --package dynamics quire build \
 		font: 400 var(--text-label) / 1.5 var(--font-mono);
 		color: var(--content);
 	}
-	.footer__code code {
-		padding: 0;
-		background: none;
-		border: 0;
-		font: inherit;
-	}
 	.footer__column ul {
 		display: flex;
 		flex-direction: column;
