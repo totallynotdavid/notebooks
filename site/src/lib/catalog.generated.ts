@@ -76,10 +76,10 @@ export const topics: Topic[] = [
         "title": "Monte Carlo integration",
         "summary": "The Monte Carlo estimator in NumPy, its error falling as 1/sqrt(N), and variance reduction by importance sampling.",
         "slug": "numerical-methods/monte-carlo",
-        "path": "packages/numerical-methods/monte_carlo.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.py",
+        "path": "packages/numerical-methods/monte_carlo.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.md",
         "assetPath": "/notebooks/numerical-methods/monte-carlo/",
-        "kind": "marimo"
+        "kind": "article"
       }
     ]
   },

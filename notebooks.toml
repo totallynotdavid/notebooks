@@ -35,7 +35,7 @@ summary = "Lagrange, Newton divided differences and finite differences, and Rung
 [[topics.notebooks]]
 id = "monte-carlo"
 title = "Monte Carlo integration"
-file = "monte_carlo.py"
+file = "monte_carlo.md"
 summary = "The Monte Carlo estimator in NumPy, its error falling as 1/sqrt(N), and variance reduction by importance sampling."
 
 [[topics]]
