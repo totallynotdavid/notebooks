@@ -29,6 +29,9 @@ const TIPPED = new Set([
   "barX",
   "cell",
 ]);
+// A band scale lists every value, so a [min, max] domain would drop the rest.
+const X_BANDS = new Set(["barY", "cell"]);
+const Y_BANDS = new Set(["barX", "cell"]);
 const X_CHANNELS = ["x", "x1", "x2"];
 const Y_CHANNELS = ["y", "y1", "y2"];
 
@@ -43,8 +46,10 @@ export function renderPlot(
   options.y = withLogTicks(options.y);
   if (spec.frames) {
     // Fixed scales, or the axes would jump from frame to frame.
-    options.x = withDomain(options.x, spec.marks, X_CHANNELS);
-    options.y = withDomain(options.y, spec.marks, Y_CHANNELS);
+    if (!spec.marks.some((mark) => X_BANDS.has(mark.kind)))
+      options.x = withDomain(options.x, spec.marks, X_CHANNELS);
+    if (!spec.marks.some((mark) => Y_BANDS.has(mark.kind)))
+      options.y = withDomain(options.y, spec.marks, Y_CHANNELS);
   }
   if (palette.length > 0 && usesCategoricalColor(spec)) {
     // Named series need a key; a figure with none keeps the legend off.
