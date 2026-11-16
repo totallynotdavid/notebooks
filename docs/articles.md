@@ -117,6 +117,21 @@ P.figure(
 A channel whose element count changes between frames is padded with NaN to the
 longest frame; Plot skips the NaN points.
 
+Elements that accumulate, such as the iterates of a method, are sent once with a
+`since` channel that holds the frame each element first appears in:
+
+```python
+P.dot(x=iterados, y=np.zeros(n), since=np.arange(n))
+```
+
+An axis `domain` with one `[min, max]` row per frame zooms that axis with the
+frame. Use it to follow a value that converges into a window too small to see at
+the first frame's scale:
+
+```python
+x = {"domain": [[c - w, c + w] for c, w in zip(centros, semianchos)]}
+```
+
 Every frame is stored in the article, so keep frames few and rounded. A figure
 larger than 16 KB loads from its own file as it nears the view; see
 [architecture.md](architecture.md).

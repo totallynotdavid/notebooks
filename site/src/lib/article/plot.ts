@@ -44,8 +44,8 @@ export function renderPlot(
   zoom: Zoom = {},
 ): SVGSVGElement | HTMLElement {
   const options: Record<string, unknown> = { ...spec.options };
-  options.x = withLogTicks(options.x);
-  options.y = withLogTicks(options.y);
+  options.x = withLogTicks(atFrame(options.x, frame));
+  options.y = withLogTicks(atFrame(options.y, frame));
   if (spec.frames) {
     // Fixed scales, or the axes would jump from frame to frame.
     if (!spec.marks.some((mark) => X_BANDS.has(mark.kind)))
@@ -146,6 +146,14 @@ function withLogTicks(scale: unknown): unknown {
   const options = (scale ?? {}) as Record<string, unknown>;
   if (options.type !== "log") return scale;
   return { ticks: 4, tickFormat: powerOfTen, ...options };
+}
+
+/** A domain with one [min, max] row per frame zooms the axis with the frame. */
+function atFrame(scale: unknown, frame: number): unknown {
+  const options = scale as Record<string, unknown> | undefined;
+  const domain = options?.domain;
+  if (!Array.isArray(domain) || !Array.isArray(domain[0])) return scale;
+  return { ...options, domain: domain[frame] };
 }
 
 /** Ticks the article listed outside a zoomed domain would draw off the frame. */
