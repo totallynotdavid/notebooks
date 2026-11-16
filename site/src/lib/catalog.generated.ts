@@ -162,10 +162,10 @@ export const topics: Topic[] = [
         "title": "Liquid argon and potassium clusters",
         "summary": "Lennard-Jones with velocity Verlet and periodic boundaries: energy, temperature, g(r) and diffusion, then a tight-binding potential for K clusters.",
         "slug": "statistical-physics/argon-and-potassium",
-        "path": "packages/statistical-physics/argon_y_potasio.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.py",
+        "path": "packages/statistical-physics/argon_y_potasio.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.md",
         "assetPath": "/notebooks/statistical-physics/argon-and-potassium/",
-        "kind": "marimo"
+        "kind": "article"
       }
     ]
   },

@@ -6,7 +6,6 @@ mise run test:statistical-physics
 
 from __future__ import annotations
 
-import importlib.util
 import unittest
 from pathlib import Path
 
@@ -17,14 +16,7 @@ PACKAGE = Path(__file__).resolve().parents[1]
 
 
 def run_notebook(name: str) -> dict:
-    article = PACKAGE / f"{name}.md"
-    if article.exists():
-        return article_namespace(article, use_cache=False)
-    spec = importlib.util.spec_from_file_location(name, PACKAGE / f"{name}.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    _, defs = module.app.run()
-    return defs
+    return article_namespace(PACKAGE / f"{name}.md", use_cache=False)
 
 
 class HypersphereTest(unittest.TestCase):

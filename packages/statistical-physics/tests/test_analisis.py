@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from dinamica_molecular import analisis, animacion
+from dinamica_molecular import analisis
 
 
 class Difusion(unittest.TestCase):
@@ -57,15 +57,6 @@ class DistribucionRadial(unittest.TestCase):
         self.assertGreater(g[np.abs(r - 2.0) < 0.05].max(), 5.0)
         self.assertGreater(g[np.abs(r - 2 * np.sqrt(2)) < 0.05].max(), 5.0)
         self.assertEqual(g[(r > 2.1) & (r < 2.7)].sum(), 0.0)
-
-
-class Animacion(unittest.TestCase):
-    def test_gif_valido_y_pequeno(self):
-        rng = np.random.default_rng(0)
-        cuadros = rng.uniform(0, 5, size=(6, 40, 3))
-        gif = animacion.gif_trayectoria(cuadros, 5.0, pixeles=120)
-        self.assertEqual(gif[:6], b"GIF89a")
-        self.assertLess(len(gif), 1_000_000)
 
 
 if __name__ == "__main__":

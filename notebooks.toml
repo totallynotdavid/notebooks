@@ -91,7 +91,7 @@ summary = "Metropolis sampling of the 3D Ising model on several lattice sizes: m
 [[topics.notebooks]]
 id = "argon-and-potassium"
 title = "Liquid argon and potassium clusters"
-file = "argon_y_potasio.py"
+file = "argon_y_potasio.md"
 summary = "Lennard-Jones with velocity Verlet and periodic boundaries: energy, temperature, g(r) and diffusion, then a tight-binding potential for K clusters."
 
 [[topics]]

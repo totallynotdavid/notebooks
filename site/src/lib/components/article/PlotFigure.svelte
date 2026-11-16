@@ -93,6 +93,10 @@
 		display: block;
 		--plot-background: var(--page);
 	}
+	/* A chart with no title or legend is a bare svg, narrower than the column. */
+	.plot__canvas > :global(svg) {
+		margin: 0 auto;
+	}
 	/* Plot styles its legend apart from the chart, in a system font. */
 	.plot__canvas :global([class*='-swatches']) {
 		font-family: var(--font-mono);
