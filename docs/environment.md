@@ -20,6 +20,6 @@ uv run --locked --package remote-sensing marimo edit packages/remote-sensing/lan
 Some notebooks need external data or credentials. Their source files state the
 required inputs. The current examples are the GaoFen-1 correction in
 [`gaofen1/prepare.py`](../packages/remote-sensing/gaofen1/prepare.py) and the
-Earth Engine notebook
-[`earth_engine_peru.py`](../packages/remote-sensing/earth_engine_peru.py), which
-reads `EE_PROJECT` from `packages/remote-sensing/.env`.
+Earth Engine fixture script
+[`prepare_earth_engine.py`](../packages/remote-sensing/prepare_earth_engine.py),
+which reads `EE_PROJECT` from `packages/remote-sensing/.env`.

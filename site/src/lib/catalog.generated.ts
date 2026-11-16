@@ -196,10 +196,10 @@ export const topics: Topic[] = [
         "title": "Earth Engine over Peru",
         "summary": "SRTM elevation, MODIS land cover and land surface temperature over Lima, Cusco and Iquitos with Google Earth Engine.",
         "slug": "remote-sensing/earth-engine-peru",
-        "path": "packages/remote-sensing/earth_engine_peru.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.py",
+        "path": "packages/remote-sensing/earth_engine_peru.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.md",
         "assetPath": "/notebooks/remote-sensing/earth-engine-peru/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Landsat rasters with rasterio",

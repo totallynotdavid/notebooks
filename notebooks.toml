@@ -113,7 +113,7 @@ summary = "Atmospheric radiative transfer with the 6S model through Py6S."
 [[topics.notebooks]]
 id = "earth-engine-peru"
 title = "Earth Engine over Peru"
-file = "earth_engine_peru.py"
+file = "earth_engine_peru.md"
 summary = "SRTM elevation, MODIS land cover and land surface temperature over Lima, Cusco and Iquitos with Google Earth Engine."
 
 [[topics.notebooks]]
