@@ -8,7 +8,7 @@
 	// A grid that shares one player passes `frame` in and turns `player` off.
 	let {
 		spec,
-		frame = $bindable(0),
+		frame = $bindable(spec.frames?.start ?? 0),
 		player = true
 	}: { spec: PlotSpec; frame?: number; player?: boolean } = $props();
 
@@ -47,7 +47,7 @@
 		ondblclick={() => (zoom = {})}
 	></div>
 	{#if spec.frames && player}
-		<Player labels={spec.frames.labels} fps={spec.frames.fps} bind:frame maxWidth={plotWidth} />
+		<Player frames={spec.frames} bind:frame maxWidth={plotWidth} />
 	{/if}
 </div>
 

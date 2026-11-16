@@ -8,6 +8,7 @@ A figure with `frames` animates. A channel with one row per frame, shape
 (frames, n), changes with the frame; every other channel is drawn once.
 A `since` channel holds the frame that first draws each element, so points
 that accumulate are sent once. Animated figures in one `grid` share a player.
+With `parameter`, the frames are values the reader picks with a slider.
 """
 
 from __future__ import annotations
@@ -90,6 +91,8 @@ class Figure:
     frames: list[str] | None = None
     fps: float = 20
     digits: int = DIGITS
+    parameter: str | None = None
+    start: int = 0
 
     def __quire__(self) -> dict:
         count = None if self.frames is None else len(self.frames)
@@ -99,7 +102,10 @@ class Figure:
             "options": plain(self.options, self.digits),
         }
         if self.frames is not None:
-            spec["frames"] = {"labels": list(self.frames), "fps": self.fps}
+            frames: dict[str, object] = {"labels": list(self.frames), "fps": self.fps}
+            if self.parameter is not None:
+                frames |= {"parameter": self.parameter, "start": self.start}
+            spec["frames"] = frames
         return spec
 
 
@@ -108,10 +114,21 @@ def figure(
     frames: list[str] | None = None,
     fps: float = 20,
     digits: int = DIGITS,
+    parameter: str | None = None,
+    start: int = 0,
     **options: object,
 ) -> Figure:
-    """A Plot figure. `frames` labels each frame; options go to Plot.plot."""
-    return Figure(list(marks), options, frames, fps, digits)
+    """A Plot figure. `frames` labels each frame; options go to Plot.plot.
+
+    With `parameter`, each frame is one value of that parameter: the reader
+    picks it with a slider that starts at frame `start`, and nothing plays.
+    """
+    if parameter is not None:
+        if frames is None:
+            raise ValueError("parameter needs frames, one per value")
+        if not 0 <= start < len(frames):
+            raise ValueError(f"start {start} is outside the {len(frames)} frames")
+    return Figure(list(marks), options, frames, fps, digits, parameter, start)
 
 
 @dataclass

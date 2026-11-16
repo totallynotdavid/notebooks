@@ -13,11 +13,20 @@ export interface MarkSpec {
   series?: string;
 }
 
+export interface Frames {
+  labels: string[];
+  fps: number;
+  /** Names what the frames vary; the reader picks a value and nothing plays. */
+  parameter?: string;
+  /** The frame shown first when `parameter` is set. */
+  start?: number;
+}
+
 export interface PlotSpec {
   type: "plot";
   marks: MarkSpec[];
   options: Record<string, unknown>;
-  frames?: { labels: string[]; fps: number };
+  frames?: Frames;
 }
 
 export interface GridSpec {

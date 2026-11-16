@@ -100,7 +100,25 @@ P.figure(
 )
 ```
 
-Every frame is stored in the page, so keep frames few and rounded.
+When the frames are values of a parameter rather than steps in time, name the
+parameter. The reader then picks a value with a slider that starts at frame
+`start`, and nothing plays:
+
+```python
+P.figure(
+    P.line(x=malla, y=curvas),  # curvas has shape (len(grados), len(malla))
+    frames=[f"n = {n}" for n in grados],
+    parameter="grado",
+    start=6,
+)
+```
+
+A channel whose element count changes between frames is padded with NaN to the
+longest frame; Plot skips the NaN points.
+
+Every frame is stored in the article, so keep frames few and rounded. A figure
+larger than 16 KB loads from its own file as it nears the view; see
+[architecture.md](architecture.md).
 
 ## Cache
 

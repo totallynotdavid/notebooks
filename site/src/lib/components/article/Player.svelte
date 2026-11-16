@@ -1,11 +1,15 @@
 <script lang="ts">
+	import type { Frames } from '#lib/article/types.js';
+
 	let {
-		labels,
-		fps,
+		frames,
 		frame = $bindable(0),
 		maxWidth
-	}: { labels: string[]; fps: number; frame?: number; maxWidth?: number } = $props();
+	}: { frames: Frames; frame?: number; maxWidth?: number } = $props();
 
+	const labels = $derived(frames.labels);
+	// A parameter slider picks one precomputed run; it has nothing to play.
+	const parameter = $derived(frames.parameter);
 	let playing = $state(false);
 	let touched = false;
 	let root: HTMLDivElement | undefined = $state();
@@ -15,7 +19,8 @@
 	// reader asked for less motion or already moved the player.
 	$effect(() => {
 		const figure = root?.parentElement;
-		if (!figure || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (!figure || parameter !== undefined) return;
+		if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				// A figure taller than the screen counts once it fills most of it.
@@ -34,7 +39,7 @@
 
 	$effect(() => {
 		if (!playing) return;
-		const step = 1000 / fps;
+		const step = 1000 / frames.fps;
 		let previous = performance.now();
 		let request = requestAnimationFrame(function tick(now) {
 			if (now - previous >= step) {
@@ -58,13 +63,17 @@
 </script>
 
 <div class="player" bind:this={root} style:max-width={maxWidth ? `${maxWidth}px` : null}>
-	<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
-		{#if playing}
-			<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
-		{:else}
-			<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
-		{/if}
-	</button>
+	{#if parameter !== undefined}
+		<span class="player__name">{parameter}</span>
+	{:else}
+		<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
+			{#if playing}
+				<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
+			{:else}
+				<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>
+			{/if}
+		</button>
+	{/if}
 	<input
 		class="player__scrubber"
 		type="range"
@@ -75,7 +84,8 @@
 			touched = true;
 			playing = false;
 		}}
-		aria-label="Frame"
+		aria-label={parameter ?? 'Frame'}
+		aria-valuetext={labels[frame]}
 	/>
 	<output class="player__label">{labels[frame]}</output>
 </div>
@@ -118,6 +128,10 @@
 		width: 1rem;
 		height: 1rem;
 		fill: currentColor;
+	}
+	.player__name {
+		flex-shrink: 0;
+		color: var(--content);
 	}
 	.player__scrubber {
 		flex: 1;

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
+
 	import type { Output } from '#lib/article/types.js';
 
 	import Player from './Player.svelte';
@@ -12,7 +14,8 @@
 			? output.figures[0].frames
 			: undefined
 	);
-	let frame = $state(0);
+	// The player owns the frame after the first render.
+	let frame = $state(untrack(() => shared?.start ?? 0));
 </script>
 
 {#if output.type === 'html'}
@@ -34,7 +37,7 @@
 			{/each}
 		</div>
 		{#if shared}
-			<Player labels={shared.labels} fps={shared.fps} bind:frame />
+			<Player frames={shared} bind:frame />
 		{/if}
 	</figure>
 {/if}
