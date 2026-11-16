@@ -230,10 +230,10 @@ export const topics: Topic[] = [
         "title": "Processing SAC records with ObsPy",
         "summary": "Records of the 2007 Pisco earthquake: a record section by distance, spectra, and P-wave picking with STA/LTA.",
         "slug": "geophysics/sac-processing",
-        "path": "packages/geophysics/procesamiento_sac.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.py",
+        "path": "packages/geophysics/procesamiento_sac.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.md",
         "assetPath": "/notebooks/geophysics/sac-processing/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "From fault to tsunami",
