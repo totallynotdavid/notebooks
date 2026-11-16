@@ -49,10 +49,10 @@ export const topics: Topic[] = [
         "title": "Numerical differentiation",
         "summary": "Forward, backward and central differences, the error against h with its order and rounding floor, and Richardson extrapolation.",
         "slug": "numerical-methods/numerical-differentiation",
-        "path": "packages/numerical-methods/derivacion_numerica.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.py",
+        "path": "packages/numerical-methods/derivacion_numerica.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.md",
         "assetPath": "/notebooks/numerical-methods/numerical-differentiation/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Solving nonlinear equations",

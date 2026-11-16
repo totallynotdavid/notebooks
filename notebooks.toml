@@ -17,7 +17,7 @@ summary = "Binary representation with float.hex, machine epsilon from numpy.finf
 [[topics.notebooks]]
 id = "numerical-differentiation"
 title = "Numerical differentiation"
-file = "derivacion_numerica.py"
+file = "derivacion_numerica.md"
 summary = "Forward, backward and central differences, the error against h with its order and rounding floor, and Richardson extrapolation."
 
 [[topics.notebooks]]
