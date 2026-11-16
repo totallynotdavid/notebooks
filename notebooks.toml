@@ -29,7 +29,7 @@ summary = "Bisection, false position and Newton's method with their convergence 
 [[topics.notebooks]]
 id = "interpolation"
 title = "Polynomial interpolation"
-file = "interpolacion.py"
+file = "interpolacion.md"
 summary = "Lagrange, Newton divided differences and finite differences, and Runge's phenomenon with equispaced and Chebyshev nodes."
 
 [[topics.notebooks]]

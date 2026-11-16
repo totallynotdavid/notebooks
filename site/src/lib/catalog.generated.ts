@@ -67,10 +67,10 @@ export const topics: Topic[] = [
         "title": "Polynomial interpolation",
         "summary": "Lagrange, Newton divided differences and finite differences, and Runge's phenomenon with equispaced and Chebyshev nodes.",
         "slug": "numerical-methods/interpolation",
-        "path": "packages/numerical-methods/interpolacion.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.py",
+        "path": "packages/numerical-methods/interpolacion.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.md",
         "assetPath": "/notebooks/numerical-methods/interpolation/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Monte Carlo integration",
