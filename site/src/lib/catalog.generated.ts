@@ -144,10 +144,10 @@ export const topics: Topic[] = [
         "title": "Volume of a hypersphere",
         "summary": "Rejection Monte Carlo for the volume of the unit ball against the exact formula, and why the acceptance rate collapses as the dimension grows.",
         "slug": "statistical-physics/hypersphere-volume",
-        "path": "packages/statistical-physics/volumen_hiperesfera.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.py",
+        "path": "packages/statistical-physics/volumen_hiperesfera.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.md",
         "assetPath": "/notebooks/statistical-physics/hypersphere-volume/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "3D Ising model",
