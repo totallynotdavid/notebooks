@@ -17,18 +17,10 @@ select = ["E4", "E7", "E9", "F", "B", "I", "UP", "SIM", "RUF"]
 # Allow these Unicode characters in lesson text.
 allowed-confusables = ["×", "σ", "–", "−"]
 
-[tool.ruff.lint.per-file-ignores]
-# A marimo cell shows its last expression, which B018 reads as useless.
-"packages/**" = ["B018"]
-
 [dependency-groups]
 dev = [
     { include-group = "lint" },
-    { include-group = "notebooks" },
 ]
 lint = [
     "ruff>=0.17.5",
-]
-notebooks = [
-    "marimo>=0.25.2",
 ]

@@ -18,9 +18,14 @@ uv run --locked --package remote-sensing quire watch packages/remote-sensing/lan
   -o site/.articles/remote-sensing/landsat-rasterio.json
 ```
 
-Some notebooks need external data or credentials. Their source files state the
-required inputs. The current examples are the GaoFen-1 correction in
-[`gaofen1/prepare.py`](../packages/remote-sensing/gaofen1/prepare.py) and the
-Earth Engine fixture script
-[`prepare_earth_engine.py`](../packages/remote-sensing/prepare_earth_engine.py),
-which reads `EE_PROJECT` from `packages/remote-sensing/.env`.
+Every article builds offline from data committed beside it. These scripts
+refresh that data from external sources, and only they need a network or
+credentials. The Earth Engine scripts read `EE_PROJECT` from
+`packages/remote-sensing/.env`.
+
+| Script                                                                                      | Refreshes                                     |
+| ------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| [`prepare_landsat.py`](../packages/remote-sensing/prepare_landsat.py)                       | The Landsat clip, from Earth Engine           |
+| [`prepare_earth_engine.py`](../packages/remote-sensing/prepare_earth_engine.py)             | The Earth Engine results over Peru            |
+| [`gaofen1/prepare.py`](../packages/remote-sensing/gaofen1/prepare.py)                       | The GaoFen-1 clip and its Earth Engine inputs |
+| [`ingemmet_peligros/inventario.py`](../packages/geophysics/ingemmet_peligros/inventario.py) | The INGEMMET hazard inventory for Ancash      |

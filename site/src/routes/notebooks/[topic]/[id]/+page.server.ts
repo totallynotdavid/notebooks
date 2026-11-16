@@ -6,12 +6,9 @@ import { loadArticle } from "#lib/server/article.js";
 import type { EntryGenerator, PageServerLoad } from "./$types";
 
 const articles = topics.flatMap((topic) =>
-  topic.notebooks
-    .filter((notebook) => notebook.kind === "article")
-    .map((notebook) => ({ topic, notebook })),
+  topic.notebooks.map((notebook) => ({ topic, notebook })),
 );
 
-// Writes notebooks/<topic>/<id>/index.html, the same shape as the marimo exports.
 export const trailingSlash = "always";
 
 export const entries: EntryGenerator = () =>

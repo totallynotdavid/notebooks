@@ -17,11 +17,6 @@ markdown, text or chart specs
 [`plot.py`](../lib/quire/src/quire/plot.py)). It writes one JSON document per
 article; see [articles](articles.md).
 
-`lib/animation` builds the Plotly figures whose frames play in the browser, so
-an exported marimo page animates without a Python kernel. `figura_animada` adds
-the play and pause buttons and the slider; see
-[notebooks](notebooks.md#animations).
-
 ## Notebook sources
 
 A notebook lives in the package of its topic, next to the modules and data it
@@ -34,31 +29,17 @@ publishes every notebook in the catalog.
 [`scripts/notebooks_manifest.py`](../scripts/notebooks_manifest.py) reads the
 catalog, checks ids, paths and packages, and writes the typed frontend data to
 [`site/src/lib/catalog.generated.ts`](../site/src/lib/catalog.generated.ts).
-Each notebook receives a source URL to the repository, the path of its published
-page, and a `kind`: `article` for a `.md` file and `marimo` for a `.py` file.
+Each notebook receives a source URL to the repository.
 
 ## Export pipeline
 
 [`scripts/export_notebooks.py`](../scripts/export_notebooks.py) owns validation,
-catalog generation, and notebook export. The `validate` command checks only the
+catalog generation, and article builds. The `validate` command checks only the
 manifest. The `data` command regenerates the frontend catalog, and
 `data --check` fails when the committed catalog is out of date without writing
 it. The `export` command does not touch the catalog. It runs each article with
-`quire build` and writes its document to `site/.articles/<slug>.json`. It checks
-each marimo notebook, runs it with `marimo export html`, and writes its results
-as one static page. A notebook whose check or export fails fails the command,
-and its page is not written. So does a page over 1,000,000 bytes
-(`MAX_PAGE_BYTES`), because marimo embeds every figure in the page: a Matplotlib
-figure as a base64 PNG and a Plotly figure as JSON escaped twice, about 2.7
-times its raw size. Lower the figure resolution, plot fewer points or use fewer
-frames to fit.
-
-The export rewrites the page shell that marimo generates: the catalog title and
-summary replace the title and description, the language is `es` because the
-notebook text is Spanish, and marimo's favicon, manifest, touch icon and two
-decorative image preloads are removed. The export fails if marimo's template no
-longer has one of these parts. The page still loads marimo's frontend scripts
-from the jsDelivr CDN, pinned to the locked marimo version.
+`quire build` and writes its document to `site/.articles/<slug>.json`. An
+article whose fence raises fails the command, and its document is not written.
 
 The pipeline runs `uv run --locked` with the package of each notebook's topic.
 This keeps notebook imports scoped to the package that owns them.
@@ -70,9 +51,7 @@ notebooks.toml
 notebooks_manifest.py ----> catalog.generated.ts ----> Svelte components
       |
       v
-export_notebooks.py ------> site/static/notebooks ----> static site build
-      |                                                   ^
-      +-------------------> site/.articles -----> article route
+export_notebooks.py ------> site/.articles ----------> article route
 ```
 
 ## Site
@@ -80,7 +59,7 @@ export_notebooks.py ------> site/static/notebooks ----> static site build
 [`site/src/routes/+page.svelte`](../site/src/routes/+page.svelte) renders the
 catalog. It loads the generated site data, applies the search and topic filters
 from [`site/src/lib/filters.ts`](../site/src/lib/filters.ts), and groups the
-notebooks by topic. Each card links to the notebook's published page.
+notebooks by topic. Each card links to the notebook's article page.
 
 The route
 [`notebooks/[topic]/[id]`](../site/src/routes/notebooks/[topic]/[id]/+page.server.ts)
@@ -98,8 +77,7 @@ theme, and plays its frames.
 prerendering. The SvelteKit adapter produces a static site in `site/build`. The
 deployment workflow in
 [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) generates the
-catalog, checks and exports the notebooks, then builds that directory for GitHub
-Pages.
+catalog, builds the articles, then builds that directory for GitHub Pages.
 
 [`layout.md`](layout.md) defines the folder map and site build boundary. `site/`
 contains only the frontend and generated site inputs. Notebook source, data,
@@ -109,5 +87,5 @@ documentation, and build tooling remain outside it.
 
 Each package `pyproject.toml` owns the dependencies of its notebooks. The
 remote-sensing package declares rasterio as a normal dependency for its raster
-notebook. Package requirements are documented in
+article. Package requirements are documented in
 [`environment.md`](environment.md).

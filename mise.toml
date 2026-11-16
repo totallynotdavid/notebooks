@@ -35,10 +35,6 @@ run = "site/node_modules/.bin/oxfmt --check"
 description = "Check that the generated site catalog matches notebooks.toml"
 run = "uv run --locked python scripts/export_notebooks.py data --check"
 
-[tasks."lint:notebooks"]
-description = "Validate notebooks.toml and run marimo check on every listed notebook"
-run = "uv run --locked python scripts/check_notebooks.py"
-
 [tasks.fix]
 description = "Apply safe lint fixes and format Python, site code and documents"
 run = [

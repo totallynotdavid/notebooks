@@ -8,7 +8,7 @@ notebook source, tooling, and documentation boundaries.
 2. [Deployment](deploy.md): reproduce the GitHub Pages build.
 3. [Articles](articles.md): write and preview a Markdown article whose Python
    runs at build time.
-4. [Notebooks](notebooks.md): open, check, catalog, and export notebooks.
+4. [Notebooks](notebooks.md): catalog, build, and test notebooks.
 5. [Site](site.md): generate the catalog and build or serve the static site.
 6. [Architecture](architecture.md): the packages, catalog, export pipeline and
    site, and which module owns each.

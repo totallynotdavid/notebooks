@@ -2,20 +2,20 @@
 
 The repository has one site boundary. `site/` contains the frontend and its
 generated static inputs. Notebook source stays in `packages/` and enters the
-site only through the explicit notebook export command. The SvelteKit build does
-not scan the repository root or the topic packages directly.
+site only through the article export command. The SvelteKit build does not scan
+the repository root or the topic packages directly.
 
 ## Top-level folders
 
-| Folder         | Kind            | What belongs there                                                                           |
-| -------------- | --------------- | -------------------------------------------------------------------------------------------- |
-| `site/`        | site            | SvelteKit source, frontend tests, static site assets, and ignored generated notebook exports |
-| `packages/`    | notebook source | Topic packages, notebooks, supporting Python source, data, and package dependencies          |
-| `lib/`         | notebook source | Workspace libraries that several topic packages import; they hold no notebooks               |
-| `scripts/`     | tooling         | Catalog validation, frontend data generation, notebook checks, and publication orchestration |
-| `.github/`     | tooling         | CI and GitHub Pages deployment workflows, and the contributing guide                         |
-| `docs/`        | other           | Architecture and operator documentation; it is not site content                              |
-| `.ruff_cache/` | other           | Ignored Ruff analysis cache; never part of a build input                                     |
+| Folder         | Kind            | What belongs there                                                                 |
+| -------------- | --------------- | ---------------------------------------------------------------------------------- |
+| `site/`        | site            | SvelteKit source, frontend tests, static site assets, and ignored built articles   |
+| `packages/`    | notebook source | Topic packages, articles, supporting Python source, data, and package dependencies |
+| `lib/`         | notebook source | Workspace libraries that topic packages import; they hold no articles              |
+| `scripts/`     | tooling         | Catalog validation, frontend data generation, and article builds                   |
+| `.github/`     | tooling         | CI and GitHub Pages deployment workflows, and the contributing guide               |
+| `docs/`        | other           | Architecture and operator documentation; it is not site content                    |
+| `.ruff_cache/` | other           | Ignored Ruff analysis cache; never part of a build input                           |
 
 The table covers repository content and the generated cache that can appear at
 the repository root. Git metadata, virtual environments, and agent credentials
@@ -40,14 +40,13 @@ The site build path is narrow:
 packages/ + notebooks.toml
         │
         ├─ scripts/notebooks_manifest.py ──> site/src/lib/catalog.generated.ts
-        └─ scripts/export_notebooks.py ────> site/static/notebooks/ (generated)
+        └─ scripts/export_notebooks.py ────> site/.articles/ (generated)
                                                         │
 site/src/ + site/static/ ──────────────────────────────┘
                               └─> site/build/ (generated deploy artifact)
 ```
 
-`site/static/notebooks/`, `site/build/`, `site/.svelte-kit/`, and
-`site/node_modules/` are ignored generated or installed content. Do not place
-notebook source, research notes, native build output, or documentation under
-`site/`. Add those files to `packages/` or the appropriate tooling/documentation
-folder instead.
+`site/.articles/`, `site/build/`, `site/.svelte-kit/`, and `site/node_modules/`
+are ignored generated or installed content. Do not place notebook source,
+research notes, native build output, or documentation under `site/`. Add those
+files to `packages/` or the appropriate tooling/documentation folder instead.

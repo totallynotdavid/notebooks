@@ -11,7 +11,6 @@ on:
       - "notebooks.toml"
       - "scripts/export_notebooks.py"
       - "scripts/notebooks_manifest.py"
-      - "scripts/check_notebooks.py"
       - "scripts/test_export_notebooks.py"
       - "site/**"
       - "mise.toml"

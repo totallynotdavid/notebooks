@@ -7,8 +7,6 @@ export interface Notebook {
   slug: string;
   path: string;
   sourceUrl: string;
-  assetPath: string;
-  kind: 'article' | 'marimo';
 }
 
 export interface Topic {
@@ -41,45 +39,35 @@ export const topics: Topic[] = [
         "summary": "Binary representation with float.hex, machine epsilon from numpy.finfo, and how float32 and float64 differ when adding, subtracting and accumulating.",
         "slug": "numerical-methods/floating-point",
         "path": "packages/numerical-methods/punto_flotante.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.md",
-        "assetPath": "/notebooks/numerical-methods/floating-point/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.md"
       },
       {
         "title": "Numerical differentiation",
         "summary": "Forward, backward and central differences, the error against h with its order and rounding floor, and Richardson extrapolation.",
         "slug": "numerical-methods/numerical-differentiation",
         "path": "packages/numerical-methods/derivacion_numerica.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.md",
-        "assetPath": "/notebooks/numerical-methods/numerical-differentiation/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.md"
       },
       {
         "title": "Solving nonlinear equations",
         "summary": "Bisection, false position and Newton's method with their convergence plots, the observed order, and the multiple-root case.",
         "slug": "numerical-methods/root-finding",
         "path": "packages/numerical-methods/raices.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.md",
-        "assetPath": "/notebooks/numerical-methods/root-finding/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.md"
       },
       {
         "title": "Polynomial interpolation",
         "summary": "Lagrange, Newton divided differences and finite differences, and Runge's phenomenon with equispaced and Chebyshev nodes.",
         "slug": "numerical-methods/interpolation",
         "path": "packages/numerical-methods/interpolacion.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.md",
-        "assetPath": "/notebooks/numerical-methods/interpolation/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.md"
       },
       {
         "title": "Monte Carlo integration",
         "summary": "The Monte Carlo estimator in NumPy, its error falling as 1/sqrt(N), and variance reduction by importance sampling.",
         "slug": "numerical-methods/monte-carlo",
         "path": "packages/numerical-methods/monte_carlo.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.md",
-        "assetPath": "/notebooks/numerical-methods/monte-carlo/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.md"
       }
     ]
   },
@@ -93,45 +81,35 @@ export const topics: Topic[] = [
         "summary": "The exact period from the complete elliptic integral against small oscillations, and energy drift under velocity Verlet and RK4.",
         "slug": "dynamics/simple-pendulum",
         "path": "packages/dynamics/pendulo_simple.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_simple.md",
-        "assetPath": "/notebooks/dynamics/simple-pendulum/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_simple.md"
       },
       {
         "title": "Two masses and three springs",
         "summary": "Normal modes from an eigenvalue decomposition, and the RK4 time series that shows them.",
         "slug": "dynamics/three-springs",
         "path": "packages/dynamics/tres_resortes.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.md",
-        "assetPath": "/notebooks/dynamics/three-springs/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.md"
       },
       {
         "title": "Double pendulum",
         "summary": "A chaotic double pendulum with Euler and RK4, the energy drift of each method, and a Lyapunov exponent from two nearby trajectories.",
         "slug": "dynamics/double-pendulum",
         "path": "packages/dynamics/pendulo_doble.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.md",
-        "assetPath": "/notebooks/dynamics/double-pendulum/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.md"
       },
       {
         "title": "Lorenz attractor",
         "summary": "The Lorenz system integrated with RK4: the attractor, its largest Lyapunov exponent, the map of z maxima, and the bifurcation in rho.",
         "slug": "dynamics/lorenz-attractor",
         "path": "packages/dynamics/atractor_de_lorenz.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.md",
-        "assetPath": "/notebooks/dynamics/lorenz-attractor/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.md"
       },
       {
         "title": "The heat equation in one dimension",
         "summary": "The 1D heat equation with finite differences: the explicit scheme at r = 0.4, 0.5 and 0.6 (unstable), Crank-Nicolson, and the Fourier solution.",
         "slug": "dynamics/heat-equation",
         "path": "packages/dynamics/edp_calor.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.md",
-        "assetPath": "/notebooks/dynamics/heat-equation/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.md"
       }
     ]
   },
@@ -145,27 +123,21 @@ export const topics: Topic[] = [
         "summary": "Rejection Monte Carlo for the volume of the unit ball against the exact formula, and why the acceptance rate collapses as the dimension grows.",
         "slug": "statistical-physics/hypersphere-volume",
         "path": "packages/statistical-physics/volumen_hiperesfera.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.md",
-        "assetPath": "/notebooks/statistical-physics/hypersphere-volume/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.md"
       },
       {
         "title": "3D Ising model",
         "summary": "Metropolis sampling of the 3D Ising model on several lattice sizes: magnetization, energy, susceptibility, specific heat, and the Binder cumulant crossing that locates the critical temperature.",
         "slug": "statistical-physics/ising-model",
         "path": "packages/statistical-physics/modelo_de_ising.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.md",
-        "assetPath": "/notebooks/statistical-physics/ising-model/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.md"
       },
       {
         "title": "Liquid argon and potassium clusters",
         "summary": "Lennard-Jones with velocity Verlet and periodic boundaries: energy, temperature, g(r) and diffusion, then a tight-binding potential for K clusters.",
         "slug": "statistical-physics/argon-and-potassium",
         "path": "packages/statistical-physics/argon_y_potasio.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.md",
-        "assetPath": "/notebooks/statistical-physics/argon-and-potassium/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.md"
       }
     ]
   },
@@ -179,45 +151,35 @@ export const topics: Topic[] = [
         "summary": "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displacement law, and the Stefan-Boltzmann law by numerical integration.",
         "slug": "remote-sensing/planck-curve",
         "path": "packages/remote-sensing/curva_de_planck.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.md",
-        "assetPath": "/notebooks/remote-sensing/planck-curve/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.md"
       },
       {
         "title": "Radiative transfer with 6S",
         "summary": "Atmospheric radiative transfer with the 6S model through Py6S.",
         "slug": "remote-sensing/radiative-transfer-6s",
         "path": "packages/remote-sensing/transferencia_radiativa_6s.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.md",
-        "assetPath": "/notebooks/remote-sensing/radiative-transfer-6s/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.md"
       },
       {
         "title": "Earth Engine over Peru",
         "summary": "SRTM elevation, MODIS land cover and land surface temperature over Lima, Cusco and Iquitos with Google Earth Engine.",
         "slug": "remote-sensing/earth-engine-peru",
         "path": "packages/remote-sensing/earth_engine_peru.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.md",
-        "assetPath": "/notebooks/remote-sensing/earth-engine-peru/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.md"
       },
       {
         "title": "Landsat rasters with rasterio",
         "summary": "Reading a Landsat scene with rasterio: metadata, bands, and masking NoData values.",
         "slug": "remote-sensing/landsat-rasterio",
         "path": "packages/remote-sensing/landsat_rasterio.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.md",
-        "assetPath": "/notebooks/remote-sensing/landsat-rasterio/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.md"
       },
       {
         "title": "GaoFen-1 atmospheric correction",
         "summary": "Atmospheric correction of GaoFen-1 images with 6S and rasterio.",
         "slug": "remote-sensing/gaofen1-atmospheric-correction",
         "path": "packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md",
-        "assetPath": "/notebooks/remote-sensing/gaofen1-atmospheric-correction/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md"
       }
     ]
   },
@@ -231,27 +193,21 @@ export const topics: Topic[] = [
         "summary": "Records of the 2007 Pisco earthquake: a record section by distance, spectra, and P-wave picking with STA/LTA.",
         "slug": "geophysics/sac-processing",
         "path": "packages/geophysics/procesamiento_sac.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.md",
-        "assetPath": "/notebooks/geophysics/sac-processing/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.md"
       },
       {
         "title": "From fault to tsunami",
         "summary": "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, checked against the Fortran code, and the tsunami's initial condition through the Kajiura filter.",
         "slug": "geophysics/fault-to-tsunami",
         "path": "packages/geophysics/deformacion_tsunami.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.md",
-        "assetPath": "/notebooks/geophysics/fault-to-tsunami/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.md"
       },
       {
         "title": "Mass movements in Ancash",
         "summary": "INGEMMET's geological hazard inventory for Ancash: types of mass movement, the most affected provinces, a map, and the factors behind debris flows.",
         "slug": "geophysics/ancash-landslides",
         "path": "packages/geophysics/peligros_geologicos_ancash.md",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.md",
-        "assetPath": "/notebooks/geophysics/ancash-landslides/",
-        "kind": "article"
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.md"
       }
     ]
   }

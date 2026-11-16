@@ -1,4 +1,4 @@
-"""Prepare the small, offline Gaofen-1 fixture used by ``correccion_atmosferica_gaofen1.py``.
+"""Prepare the small, offline Gaofen-1 fixture used by ``correccion_atmosferica_gaofen1.md``.
 
 The large scene is downloaded to ``.cache/`` unless a verified local data
 directory is configured. Only the small clip and the Earth Engine response JSON

@@ -33,8 +33,6 @@ function nb(title: string, summary: string, path: string) {
     slug: path,
     path,
     sourceUrl: "",
-    assetPath: "",
-    kind: "marimo" as const,
   };
 }
 

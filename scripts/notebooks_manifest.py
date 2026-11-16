@@ -38,11 +38,6 @@ class Notebook:
     def package(self) -> str:
         return self.topic_id
 
-    @property
-    def kind(self) -> str:
-        """Markdown files are quire articles; Python files are marimo notebooks."""
-        return "article" if self.path.endswith(".md") else "marimo"
-
 
 def load_manifest() -> tuple[SiteConfig, list[Notebook]]:
     with MANIFEST.open("rb") as file:
@@ -99,6 +94,9 @@ def validate_manifest(notebooks: list[Notebook]) -> None:
         if Path(notebook.path).is_absolute() or ".." in Path(notebook.path).parts:
             errors.append(f"Invalid notebook path: {notebook.path}")
 
+        if Path(notebook.path).suffix != ".md":
+            errors.append(f"Not a Markdown article: {notebook.path}")
+
         if not (ROOT / notebook.path).exists():
             errors.append(f"Missing notebook: {notebook.path}")
 
@@ -119,8 +117,6 @@ export interface Notebook {
   slug: string;
   path: string;
   sourceUrl: string;
-  assetPath: string;
-  kind: 'article' | 'marimo';
 }
 
 export interface Topic {
@@ -188,8 +184,6 @@ def notebook_data(site: SiteConfig, notebook: Notebook) -> dict:
         "slug": notebook.slug,
         "path": notebook.path,
         "sourceUrl": source_url(site, notebook),
-        "assetPath": f"/notebooks/{notebook.slug}/",
-        "kind": notebook.kind,
     }
 
 
