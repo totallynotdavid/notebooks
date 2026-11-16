@@ -7,24 +7,17 @@
 <footer class="footer">
 	<div class="footer__inner">
 		<div class="footer__about">
-			<h3 class="footer__title">{site.title}</h3>
-			<p>
-				Each notebook is written in Spanish and published as a page of its results. Your browser
-				runs no Python. To change the parameters and rerun a notebook, clone the repository and
-				rebuild it:
+			<p class="footer__lead">
+				Computational physics notebooks in Spanish, each published as a page of its results.
 			</p>
-			<pre class="footer__code"><code
-					>git clone {site.repository}
-cd notebooks
-mise install -y && mise run install
-uv run --package dynamics quire build \
-  packages/dynamics/pendulo_simple.md \
-  -o site/.articles/dynamics/simple-pendulum.json</code
-				></pre>
+			<p>
+				Your browser runs no Python. To rerun a notebook with other parameters, clone the repository
+				and build it with <a href="{site.repository}#readme" rel="external noopener">one command</a>.
+			</p>
 		</div>
 
 		<nav class="footer__column" aria-label="Topics">
-			<h4 class="footer__heading">Topics</h4>
+			<h2 class="footer__heading">Topics</h2>
 			<ul>
 				{#each topics as topic (topic.id)}
 					<li><a href="?topic={topic.id}">{topic.title}</a></li>
@@ -33,7 +26,7 @@ uv run --package dynamics quire build \
 		</nav>
 
 		<nav class="footer__column" aria-label="Project">
-			<h4 class="footer__heading">Project</h4>
+			<h2 class="footer__heading">Project</h2>
 			<ul>
 				<li><a href={site.repository} rel="external noopener">Source on GitHub ↗</a></li>
 				<li><a href="{site.repository}/issues" rel="external noopener">Report a problem ↗</a></li>
@@ -45,62 +38,65 @@ uv run --package dynamics quire build \
 
 <style>
 	.footer {
+		padding: 3.5rem 0 calc(3rem + env(safe-area-inset-bottom));
 		background: var(--deemphasized);
-		font-family: var(--font-base);
-		padding: 3rem 0 calc(2rem + env(safe-area-inset-bottom));
 		color: var(--content-secondary);
+		font: var(--text-label) / 1.6 var(--font-base);
 	}
 	.footer__inner {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
-		gap: 2.5rem;
+		gap: 2.5rem 3rem;
 		max-width: var(--layout-width);
 		margin: 0 auto;
 		padding: 0 var(--gutter);
 	}
-	.footer__title,
-	.footer__heading {
-		margin: 0 0 0.75rem;
-		color: var(--content);
-	}
-	.footer__heading {
-		font: 500 var(--text-label) var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
+	.footer__about {
+		max-width: 26rem;
 	}
 	.footer__about p {
-		max-width: 34rem;
-		margin: 0 0 1rem;
-		line-height: 1.5;
-	}
-	.footer__code {
 		margin: 0;
-		padding: 0.75rem 1rem;
-		overflow-x: auto;
-		background: var(--page);
-		border: 1px solid var(--field-border);
-		border-radius: var(--radius);
-		font: 400 var(--text-label) / 1.5 var(--font-mono);
+		text-wrap: pretty;
+	}
+	.footer__about p + p {
+		margin-top: 0.75rem;
+	}
+	.footer__lead {
 		color: var(--content);
+		font-size: var(--text-body);
+	}
+	.footer__about a {
+		color: var(--content);
+		text-decoration: underline;
+		text-decoration-color: var(--content-secondary);
+		text-underline-offset: 0.2em;
+	}
+	.footer__heading {
+		margin: 0 0 1rem;
+		color: var(--content-secondary);
+		font: 500 0.75rem var(--font-mono);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
 	}
 	.footer__column ul {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		display: grid;
+		gap: 0.6rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 	.footer__column a {
 		color: var(--content);
+		transition: color 150ms ease-out;
 	}
+	.footer__about a:hover,
 	.footer__column a:hover {
 		color: var(--accent);
 	}
 
 	@media (min-width: 768px) {
 		.footer__inner {
-			grid-template-columns: 2fr 1fr 1fr;
+			grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr);
 		}
 	}
 </style>
