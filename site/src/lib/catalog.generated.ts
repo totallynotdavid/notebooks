@@ -153,10 +153,10 @@ export const topics: Topic[] = [
         "title": "3D Ising model",
         "summary": "Metropolis sampling of the 3D Ising model on several lattice sizes: magnetization, energy, susceptibility, specific heat, and the Binder cumulant crossing that locates the critical temperature.",
         "slug": "statistical-physics/ising-model",
-        "path": "packages/statistical-physics/modelo_de_ising.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.py",
+        "path": "packages/statistical-physics/modelo_de_ising.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.md",
         "assetPath": "/notebooks/statistical-physics/ising-model/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Liquid argon and potassium clusters",

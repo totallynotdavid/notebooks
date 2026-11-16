@@ -85,7 +85,7 @@ summary = "Rejection Monte Carlo for the volume of the unit ball against the exa
 [[topics.notebooks]]
 id = "ising-model"
 title = "3D Ising model"
-file = "modelo_de_ising.py"
+file = "modelo_de_ising.md"
 summary = "Metropolis sampling of the 3D Ising model on several lattice sizes: magnetization, energy, susceptibility, specific heat, and the Binder cumulant crossing that locates the critical temperature."
 
 [[topics.notebooks]]
