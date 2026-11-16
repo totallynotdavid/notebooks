@@ -19,8 +19,8 @@ $f(x+h)=f(x)+hf'(x)+\tfrac{h^2}{2}f''(x)+\tfrac{h^3}{6}f'''(x)+\cdots$
 | 3 puntos atrás    | $\dfrac{3f(x)-4f(x-h)+f(x-2h)}{2h}$  | $-\tfrac{h^2}{3} f'''(x)+O(h^3)$ |
 
 El error es $D-f'$, y la tabla muestra su primer término. El ejemplo es
-$f(x)=\tan x$ en $x=1$, con $f'(x)=\sec^2 x$. Los números de este cuaderno están
-en doble precisión (`float64`).
+$f(x)=\tan x$ en $x=1$, con $f'(x)=\sec^2 x$. Todos los cálculos usan doble
+precisión (`float64`).
 
 ```python
 X0 = 1.0

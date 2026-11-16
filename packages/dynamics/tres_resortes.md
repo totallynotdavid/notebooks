@@ -4,7 +4,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Dos masas y tres resortes: modos normales
+# Dos masas y tres resortes
 
 Dos masas $m_1, m_2$ se mueven en línea recta entre dos paredes. Un resorte
 $k_1$ une la pared izquierda con $m_1$, un resorte $k$ une las masas y un

@@ -4,7 +4,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Ecuación de calor 1D: explícito, Crank–Nicolson y Fourier
+# Ecuación de calor en una dimensión
 
 Una barra de longitud $L$ con difusividad $\alpha$ evoluciona según
 

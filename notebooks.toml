@@ -140,9 +140,9 @@ summary = "Records of the 2007 Pisco earthquake: a record section by distance, s
 
 [[topics.notebooks]]
 id = "fault-to-tsunami"
-title = "From fault to tsunami"
+title = "Tsunami initial condition"
 file = "deformacion_tsunami.md"
-summary = "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, checked against the Fortran code, and the tsunami's initial condition through the Kajiura filter."
+summary = "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, and the sea surface it lifts through the Kajiura filter."
 
 [[topics.notebooks]]
 id = "ancash-landslides"

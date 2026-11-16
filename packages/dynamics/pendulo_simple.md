@@ -4,7 +4,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Péndulo simple: período exacto y energía numérica
+# Péndulo simple
 
 Una masa en el extremo de una varilla rígida de longitud $\ell$ obedece
 

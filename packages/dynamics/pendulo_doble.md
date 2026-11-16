@@ -4,7 +4,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Péndulo doble: Euler, RK4 y exponente de Lyapunov
+# Péndulo doble
 
 Dos masas $m_1, m_2$ cuelgan de varillas rígidas de longitud $\ell_1, \ell_2$.
 Los ángulos $(\theta_1,\theta_2)$ medidos desde la vertical y sus velocidades

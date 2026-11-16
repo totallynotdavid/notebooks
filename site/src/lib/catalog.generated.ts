@@ -196,8 +196,8 @@ export const topics: Topic[] = [
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.md"
       },
       {
-        "title": "From fault to tsunami",
-        "summary": "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, checked against the Fortran code, and the tsunami's initial condition through the Kajiura filter.",
+        "title": "Tsunami initial condition",
+        "summary": "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, and the sea surface it lifts through the Kajiura filter.",
         "slug": "geophysics/fault-to-tsunami",
         "path": "packages/geophysics/deformacion_tsunami.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.md"

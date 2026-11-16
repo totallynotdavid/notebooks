@@ -12,13 +12,12 @@ from quire import plot as P
 
 Un número real se guarda como $(-1)^s\,(1.m)_2\times2^{e}$: un signo, un
 exponente y una mantisa de longitud fija. Solo unos cuantos reales caben, y el
-resto se redondea al más cercano. De ahí salen todos los errores de este
-cuaderno.
+resto se redondea al más cercano. De ahí salen todos los errores que siguen.
 
-| tipo   | NumPy     | Fortran            | signo |       exponente | mantisa |
-| ------ | --------- | ------------------ | ----: | --------------: | ------: |
-| simple | `float32` | `real`             |     1 |   8 (sesgo 127) |      23 |
-| doble  | `float64` | `double precision` |     1 | 11 (sesgo 1023) |      52 |
+| tipo   | NumPy     | signo |       exponente | mantisa |
+| ------ | --------- | ----: | --------------: | ------: |
+| simple | `float32` |     1 |   8 (sesgo 127) |      23 |
+| doble  | `float64` |     1 | 11 (sesgo 1023) |      52 |
 
 El `float` de Python es un `float64`.
 
@@ -193,9 +192,9 @@ Se suma $10^{-5}$ diez mil veces a $1$. El valor exacto de la suma de los
 números decimales $1+10^4\cdot10^{-5}$ es $1.1$. Cuatro variantes:
 
 1. acumulador `float64` y sumando `float64`;
-2. acumulador `float64` y sumando `float32` ($10^{-5}$ redondeado a simple, el
-   efecto de escribir `0.00001` en un programa Fortran de doble precisión: una
-   constante real es de precisión simple);
+2. acumulador `float64` y sumando `float32` ($10^{-5}$ redondeado a simple, como
+   una constante `0.00001` sin sufijo en un programa Fortran de doble
+   precisión);
 3. todo en `float32`;
 4. todo en `float32`, sumando primero 100 grupos de 100 sumandos y después los
    grupos (suma por bloques).

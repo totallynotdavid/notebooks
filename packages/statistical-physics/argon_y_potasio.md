@@ -5,7 +5,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Dinámica molecular: argón líquido y cúmulos de potasio
+# Argón líquido y cúmulos de potasio
 
 Un fluido de Lennard-Jones se integra con velocity Verlet en una caja cúbica
 periódica, siguiendo el método de Verlet (1967). Las fuerzas usan la convención
@@ -290,8 +290,8 @@ E = \sum_i \Big[ A \sum_{j\neq i} e^{-p\,(r_{ij}/r_0 - 1)}
 $$
 
 El primer término es una repulsión de pares y el segundo la energía de banda.
-Los parámetros ($A$, $\xi$, $r_0$, $p$, $q$) para K son los del código original
-de este paquete. Los cúmulos regulares de 2, 3 y 4 átomos (dímero, triángulo y
+Para K se usa $A=1.51$ mRy, $\xi=19.3$ mRy, $r_0=8.253\,a_0$, $p=10.58$ y
+$q=1.34$. Los cúmulos regulares de 2, 3 y 4 átomos (dímero, triángulo y
 tetraedro) permiten ver la dependencia con la coordinación: la energía por átomo
 baja al pasar de 1 a 3 vecinos.
 

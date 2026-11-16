@@ -38,7 +38,7 @@ def tiempo_desde_origen(tr):
     return tr.times() + tr.stats.sac.b - tr.stats.sac.o
 ```
 
-# Procesamiento de señales sísmicas con ObsPy
+# Registros SAC con ObsPy
 
 Registros de la componente vertical (BHZ) del terremoto de Pisco del 15 de
 agosto de 2007 (Mw 8.0), en formato SAC. El artículo lee los archivos, quita la

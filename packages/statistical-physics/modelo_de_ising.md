@@ -7,7 +7,7 @@ from quire import md
 from quire import plot as P
 ```
 
-# Modelo de Ising 3D: muestreo de Metropolis
+# Modelo de Ising 3D
 
 Hamiltoniano sin campo externo, con $J=1$ y $k_B=1$:
 

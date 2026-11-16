@@ -24,7 +24,7 @@ def tabla(encabezado, filas):
     )
 ```
 
-# Earth Engine en Perú: costa, Andes y Amazonía
+# Earth Engine en el Perú
 
 Este artículo compara Lima, Cusco e Iquitos con tres productos de Google Earth
 Engine: la elevación SRTM, la cobertura del suelo MODIS MCD12Q1 y la temperatura

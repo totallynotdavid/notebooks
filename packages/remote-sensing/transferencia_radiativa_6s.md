@@ -33,7 +33,7 @@ def tabla(encabezado, filas):
     )
 ```
 
-# Transferencia radiativa con 6S a través de Py6S
+# Transferencia radiativa con 6S
 
 El modelo **6S** (Second Simulation of a Satellite Signal in the Solar Spectrum)
 calcula la radiancia que un sensor satelital mide sobre una superficie, dados la
