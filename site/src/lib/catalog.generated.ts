@@ -58,10 +58,10 @@ export const topics: Topic[] = [
         "title": "Solving nonlinear equations",
         "summary": "Bisection, false position and Newton's method with their convergence plots, the observed order, and the multiple-root case.",
         "slug": "numerical-methods/root-finding",
-        "path": "packages/numerical-methods/raices.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.py",
+        "path": "packages/numerical-methods/raices.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.md",
         "assetPath": "/notebooks/numerical-methods/root-finding/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Polynomial interpolation",

@@ -23,7 +23,7 @@ summary = "Forward, backward and central differences, the error against h with i
 [[topics.notebooks]]
 id = "root-finding"
 title = "Solving nonlinear equations"
-file = "raices.py"
+file = "raices.md"
 summary = "Bisection, false position and Newton's method with their convergence plots, the observed order, and the multiple-root case."
 
 [[topics.notebooks]]
