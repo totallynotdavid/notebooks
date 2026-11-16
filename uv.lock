@@ -399,6 +399,7 @@ version = "0.1.0"
 source = { editable = "packages/geophysics" }
 dependencies = [
     { name = "certifi" },
+    { name = "contourpy" },
     { name = "geopandas" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -410,6 +411,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "certifi", specifier = ">=2026.10.23" },
+    { name = "contourpy", specifier = ">=1.4.0" },
     { name = "geopandas", specifier = ">=1.2.0" },
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },

@@ -239,10 +239,10 @@ export const topics: Topic[] = [
         "title": "From fault to tsunami",
         "summary": "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, checked against the Fortran code, and the tsunami's initial condition through the Kajiura filter.",
         "slug": "geophysics/fault-to-tsunami",
-        "path": "packages/geophysics/deformacion_tsunami.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.py",
+        "path": "packages/geophysics/deformacion_tsunami.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.md",
         "assetPath": "/notebooks/geophysics/fault-to-tsunami/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Mass movements in Ancash",
