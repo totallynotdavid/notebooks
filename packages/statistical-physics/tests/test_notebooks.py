@@ -1,4 +1,4 @@
-"""Run each notebook as marimo runs it and check the numbers it computes.
+"""Run each notebook and check the numbers it computes.
 
 Run from the repository root:
 mise run test:statistical-physics
@@ -11,11 +11,15 @@ import unittest
 from pathlib import Path
 
 import numpy as np
+from quire import article_namespace
 
 PACKAGE = Path(__file__).resolve().parents[1]
 
 
 def run_notebook(name: str) -> dict:
+    article = PACKAGE / f"{name}.md"
+    if article.exists():
+        return article_namespace(article, use_cache=False)
     spec = importlib.util.spec_from_file_location(name, PACKAGE / f"{name}.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

@@ -17,6 +17,8 @@ const FILLED = new Set([
   "cell",
   "dot",
   "rect",
+  "rectX",
+  "rectY",
 ]);
 const TIPPED = new Set([
   "line",

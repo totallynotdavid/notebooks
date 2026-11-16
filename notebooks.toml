@@ -79,7 +79,7 @@ title = "Statistical and molecular physics"
 [[topics.notebooks]]
 id = "hypersphere-volume"
 title = "Volume of a hypersphere"
-file = "volumen_hiperesfera.py"
+file = "volumen_hiperesfera.md"
 summary = "Rejection Monte Carlo for the volume of the unit ball against the exact formula, and why the acceptance rate collapses as the dimension grows."
 
 [[topics.notebooks]]
