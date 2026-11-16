@@ -174,115 +174,286 @@ errores = {
 }
 ```
 
-La animación avanza una iteración por cuadro. La bisección muestra el intervalo
-que queda y su punto medio; falsa posición, la cuerda y su corte con el eje;
-Newton, la tangente en $x_{k-1}$ y su corte $x_k$. Cada panel da el error de su
-$x_k$.
+Las animaciones siguen a cada método hasta muy cerca de la raíz. Cada paso
+aparece primero en la ventana del paso anterior, y luego la ventana se acerca al
+nuevo $x_k$. Los pasos anteriores quedan tenues. La esquina da $x_k$, su error y
+el ancho de la ventana.
 
 ```python hidden
-K = 6
-METODOS = ["bisección", "falsa posición", "Newton, x₀ = −6"]
-ERRORES = dict(zip(METODOS, errores.values(), strict=True))
-k = np.arange(1, K + 1)
-newton_x = np.concatenate([[-6.0], historias["Newton ($x_0=-6$)"]])
-medio, ancho = medios[:K], anchos_biseccion[:K]
-a, b = intervalos_falsa[:K].T
-corte = cortes[:K]
-anterior, nuevo = newton_x[:K], newton_x[1 : K + 1]
-xs = np.linspace(-6.2, -3.8, 121)
+CUADROS_PASO, CUADROS_ZOOM = 5, 9
+INICIO = CUADROS_PASO + CUADROS_ZOOM
+RAIZ_F = float(RAIZ)
+# Puntos cada vez más juntos cerca de la raíz, para que la curva siga suave
+# cuando la ventana mide 10⁻⁸.
+_lejos = np.logspace(0.4, -10, 400)
+CURVA_X = RAIZ_F + np.concatenate([-_lejos, _lejos[::-1]])
+HALO = {"stroke": "var(--plot-background)", "strokeWidth": 6, "fill": "currentColor"}
+CONTORNO = {"stroke": "var(--plot-background)", "strokeWidth": 1.5}
 
 
-def columna(valores):
-    """Un valor por cuadro, como canal animado de una sola marca."""
-    return np.asarray(valores)[:, None]
+def recorrido(centros, semianchos):
+    """Paso que muestra cada cuadro y el dominio [min, max] de x en ese cuadro.
+
+    El paso j se ve primero en la ventana del paso j−1. Luego el semiancho se
+    reduce geométricamente hasta el del paso j, y el centro lo sigue.
+    """
+    c = np.concatenate([[-5.0], centros])
+    w = np.concatenate([[1.2], semianchos])
+    suave = (1 - np.cos(np.pi * np.arange(1, CUADROS_ZOOM + 1) / CUADROS_ZOOM)) / 2
+    t = np.concatenate([np.zeros(CUADROS_PASO), suave])
+    pasos, dominios = [], []
+    for j in range(len(centros)):
+        ancho = w[j] * (w[j + 1] / w[j]) ** t
+        avance = (w[j] - ancho) / (w[j] - w[j + 1])
+        centro = c[j] + (c[j + 1] - c[j]) * avance
+        pasos.append(np.full(len(t), j))
+        dominios.append(np.column_stack([centro - ancho, centro + ancho]))
+    return np.concatenate(pasos), np.concatenate(dominios)
 
 
-def panel(metodo, n=1):
-    return {"fx": [metodo] * n}
+def eje_y(dominios):
+    """El rango de f en cada ventana de x, con margen."""
+    muestra = f_cubica(np.linspace(dominios[:, 0], dominios[:, 1], 65))
+    bajo, alto = muestra.min(axis=0), muestra.max(axis=0)
+    margen = 0.15 * (alto - bajo)
+    return np.column_stack([bajo - margen, alto + margen])
 
 
-P.figure(
-    P.line(
-        x=np.tile(xs, 3),
-        y=np.tile(f_cubica(xs), 3),
-        fx=np.repeat(METODOS, len(xs)),
-        z=np.repeat(METODOS, len(xs)),
-        stroke="currentColor",
-        strokeOpacity=0.45,
-        clip=True,
-    ),
-    P.ruleY([0], strokeOpacity=0.6),
-    P.link(
-        x1=columna(medio - ancho),
-        x2=columna(medio + ancho),
-        y1=[0.0],
-        y2=[0.0],
-        strokeWidth=8,
-        strokeOpacity=0.5,
-        series=METODOS[0],
-        **panel(METODOS[0]),
-    ),
-    P.link(
-        x1=columna(medio),
-        x2=columna(medio),
-        y1=[0.0],
-        y2=columna(f_cubica(medio)),
-        strokeDasharray="2 3",
-        series=METODOS[0],
-        **panel(METODOS[0]),
-    ),
-    P.dot(x=columna(medio), y=[0.0], r=4, series=METODOS[0], **panel(METODOS[0])),
-    P.link(
-        x1=columna(a),
-        x2=columna(b),
-        y1=columna(f_cubica(a)),
-        y2=columna(f_cubica(b)),
-        series=METODOS[1],
-        **panel(METODOS[1]),
-    ),
-    P.link(
-        x1=columna(corte),
-        x2=columna(corte),
-        y1=[0.0],
-        y2=columna(f_cubica(corte)),
-        strokeDasharray="2 3",
-        series=METODOS[1],
-        **panel(METODOS[1]),
-    ),
-    P.dot(x=columna(corte), y=[0.0], r=4, series=METODOS[1], **panel(METODOS[1])),
-    P.link(
-        x1=columna(anterior),
-        x2=columna(nuevo),
-        y1=columna(f_cubica(anterior)),
-        y2=[0.0],
-        series=METODOS[2],
-        **panel(METODOS[2]),
-    ),
-    P.dot(
-        x=columna(anterior),
-        y=columna(f_cubica(anterior)),
-        r=3,
-        series=METODOS[2],
-        **panel(METODOS[2]),
-    ),
-    P.dot(x=columna(nuevo), y=[0.0], r=4, series=METODOS[2], **panel(METODOS[2])),
-    P.text(
-        x=[-6.15] * 3,
-        y=[16.0] * 3,
-        text=np.array(
-            [[f"e{j} = {ERRORES[m][j - 1]:.1e}" for m in METODOS] for j in k]
+def animacion(marcas, pasos, dominios, iterados, error, titulo):
+    """Curva, eje, marcas del método y la leyenda de cada cuadro."""
+    leyenda = [
+        f"k = {j + 1}\nxₖ = {iterados[j]:.12f}\neₖ = {error[j]:.1e}\n"
+        f"ventana: {hi - lo:.1e}"
+        for j, (lo, hi) in zip(pasos, dominios, strict=True)
+    ]
+    return P.figure(
+        P.line(
+            x=CURVA_X,
+            y=f_cubica(CURVA_X),
+            stroke="currentColor",
+            strokeOpacity=0.45,
+            clip=True,
         ),
-        fx=METODOS,
-        textAnchor="start",
-    ),
-    title="Una iteración por cuadro, f(x) = x³ + 5x² + 2",
-    frames=[f"k = {j}" for j in k],
-    fps=0.8,
-    x={"domain": [-6.2, -3.8], "label": "x", "ticks": 3},
-    y={"domain": [-36, 21], "label": "f(x)"},
-    fx={"domain": METODOS, "label": None},
-    color={"legend": False},
-    grid=True,
+        P.ruleY([0], strokeOpacity=0.6),
+        *marcas,
+        P.text(
+            text=np.array(leyenda)[:, None],
+            # f crece a través de la raíz: la esquina inferior derecha queda libre.
+            frameAnchor="bottom-right",
+            lineAnchor="bottom",
+            textAnchor="end",
+            lineHeight=1.3,
+            dx=-8,
+            dy=-8,
+            **HALO,
+        ),
+        title=titulo,
+        frames=[f"k = {j + 1}" for j in pasos],
+        fps=12,
+        digits=12,
+        x={"domain": dominios, "label": "x", "ticks": 3},
+        y={"domain": eje_y(dominios), "label": "f(x)", "ticks": 4},
+        grid=True,
+    )
+```
+
+**Bisección.** La barra es el intervalo que queda y el punto, su punto medio.
+Cada paso parte el intervalo en dos.
+
+```python hidden
+N_BIS = 18
+m, h = medios[:N_BIS], anchos_biseccion[:N_BIS]
+pasos, dominios = recorrido(m, 1.5 * h)
+inicio = np.arange(N_BIS) * INICIO
+padre_m = np.concatenate([[-5.0], m])[pasos, None]
+padre_h = np.concatenate([[1.0], h])[pasos, None]
+COLOR = "var(--chart-1)"
+animacion(
+    [
+        P.link(
+            x1=padre_m - padre_h,
+            x2=padre_m + padre_h,
+            y1=[0.0],
+            y2=[0.0],
+            stroke=COLOR,
+            strokeWidth=10,
+            strokeOpacity=0.2,
+            clip=True,
+        ),
+        P.dot(
+            x=m,
+            y=np.zeros(N_BIS),
+            since=inicio,
+            r=2,
+            fill="currentColor",
+            fillOpacity=0.5,
+            clip=True,
+        ),
+        P.link(
+            x1=(m - h)[pasos, None],
+            x2=(m + h)[pasos, None],
+            y1=[0.0],
+            y2=[0.0],
+            stroke=COLOR,
+            strokeWidth=10,
+            strokeOpacity=0.5,
+            clip=True,
+        ),
+        P.link(
+            x1=m[pasos, None],
+            x2=m[pasos, None],
+            y1=[0.0],
+            y2=f_cubica(m)[pasos, None],
+            stroke=COLOR,
+            strokeDasharray="2 3",
+            clip=True,
+        ),
+        P.dot(x=m[pasos, None], y=[0.0], r=4.5, fill=COLOR, clip=True, **CONTORNO),
+    ],
+    pasos,
+    dominios,
+    m,
+    errores["bisección"],
+    "Bisección, f(x) = x³ + 5x² + 2",
+)
+```
+
+```python hidden
+razon_falsa = errores["falsa posición"][11] / errores["falsa posición"][10]
+md(
+    rf"""**Falsa posición.** La cuerda une $(a,f(a))$ y $(b,f(b))$, y su corte con
+el eje es el nuevo $x_k$. En $[-6,-4]$ la función es cóncava ($f''=6x+10<0$),
+así que el extremo izquierdo, $-6$, nunca cambia y el error se reduce por un factor casi
+fijo, {razon_falsa:.2f} en el paso 12."""
+)
+```
+
+```python hidden
+N_FALSA = 12
+x_f = cortes[:N_FALSA]
+a, b = intervalos_falsa[:N_FALSA].T
+e_f = errores["falsa posición"]
+pasos, dominios = recorrido(x_f, 4 * e_f[:N_FALSA])
+inicio = np.arange(N_FALSA) * INICIO
+COLOR = "var(--chart-2)"
+animacion(
+    [
+        P.link(
+            x1=a,
+            x2=b,
+            y1=f_cubica(a),
+            y2=f_cubica(b),
+            since=inicio,
+            stroke=COLOR,
+            strokeOpacity=0.2,
+            clip=True,
+        ),
+        P.dot(
+            x=x_f,
+            y=np.zeros(N_FALSA),
+            since=inicio,
+            r=2.5,
+            fill=COLOR,
+            fillOpacity=0.4,
+            clip=True,
+        ),
+        P.link(
+            x1=a[pasos, None],
+            x2=b[pasos, None],
+            y1=f_cubica(a)[pasos, None],
+            y2=f_cubica(b)[pasos, None],
+            stroke=COLOR,
+            strokeWidth=1.5,
+            clip=True,
+        ),
+        P.link(
+            x1=x_f[pasos, None],
+            x2=x_f[pasos, None],
+            y1=[0.0],
+            y2=f_cubica(x_f)[pasos, None],
+            stroke=COLOR,
+            strokeDasharray="2 3",
+            clip=True,
+        ),
+        P.dot(x=x_f[pasos, None], y=[0.0], r=4.5, fill=COLOR, clip=True, **CONTORNO),
+    ],
+    pasos,
+    dominios,
+    x_f,
+    e_f,
+    "Falsa posición, f(x) = x³ + 5x² + 2",
+)
+```
+
+```python hidden
+e_n = errores["Newton ($x_0=-6$)"]
+
+
+def potencia(e):
+    """El orden de magnitud de e, en LaTeX."""
+    return rf"10^{{{int(np.floor(np.log10(e)))}}}"
+
+
+md(
+    rf"""**Newton.** La tangente en $(x_{{k-1}},f(x_{{k-1}}))$ corta el eje en $x_k$.
+Cerca de la raíz el error se eleva al cuadrado en cada paso: $e_2\sim{potencia(e_n[1])}$,
+$e_3\sim{potencia(e_n[2])}$, $e_4\sim{potencia(e_n[3])}$. En el último paso la
+ventana deja de achicarse, porque $e_5$ ya es del orden del redondeo de
+`float64`."""
+)
+```
+
+```python hidden
+N_NEWTON = 5
+recorridos = np.concatenate([[-6.0], historias["Newton ($x_0=-6$)"]])
+antes, x_n = recorridos[:N_NEWTON], recorridos[1 : N_NEWTON + 1]
+pasos, dominios = recorrido(x_n, np.maximum(3 * e_n[:N_NEWTON], 2e-9))
+inicio = np.arange(N_NEWTON) * INICIO
+COLOR = "var(--chart-3)"
+animacion(
+    [
+        P.link(
+            x1=antes,
+            x2=x_n,
+            y1=f_cubica(antes),
+            y2=np.zeros(N_NEWTON),
+            since=inicio,
+            stroke=COLOR,
+            strokeOpacity=0.2,
+            clip=True,
+        ),
+        P.dot(
+            x=x_n,
+            y=np.zeros(N_NEWTON),
+            since=inicio,
+            r=2.5,
+            fill=COLOR,
+            fillOpacity=0.4,
+            clip=True,
+        ),
+        P.link(
+            x1=antes[pasos, None],
+            x2=x_n[pasos, None],
+            y1=f_cubica(antes)[pasos, None],
+            y2=[0.0],
+            stroke=COLOR,
+            strokeWidth=1.5,
+            clip=True,
+        ),
+        P.dot(
+            x=antes[pasos, None],
+            y=f_cubica(antes)[pasos, None],
+            r=3,
+            fill=COLOR,
+            clip=True,
+        ),
+        P.dot(x=x_n[pasos, None], y=[0.0], r=4.5, fill=COLOR, clip=True, **CONTORNO),
+    ],
+    pasos,
+    dominios,
+    x_n,
+    e_n,
+    "Newton desde x₀ = −6, f(x) = x³ + 5x² + 2",
 )
 ```
 
