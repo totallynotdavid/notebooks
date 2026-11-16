@@ -6,12 +6,22 @@
 
 	import Navbar from '#lib/components/Navbar.svelte';
 	import CodeBlock from '#lib/components/article/CodeBlock.svelte';
+	import LazyFigure from '#lib/components/article/LazyFigure.svelte';
 	import Output from '#lib/components/article/Output.svelte';
 	import { site } from '#lib/catalog.generated.js';
 
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+
+	const figureUrl = (figure: number) => {
+		const [topic, id] = data.notebook.slug.split('/');
+		return resolve('/notebooks/[topic]/[id]/figures/[figure].json', {
+			topic,
+			id,
+			figure: String(figure)
+		});
+	};
 </script>
 
 <svelte:head>
@@ -34,7 +44,11 @@
 				<CodeBlock html={block.html} />
 			{/if}
 			{#each block.outputs as output, j (j)}
-				<Output {output} />
+				{#if output.type === 'lazy'}
+					<LazyFigure lazy={output} src={figureUrl(output.figure)} />
+				{:else}
+					<Output {output} />
+				{/if}
 			{/each}
 		{/if}
 	{/each}

@@ -41,10 +41,19 @@ export interface QuireDocument {
   blocks: QuireBlock[];
 }
 
+/** A large figure the page fetches from `figures/{figure}.json` near the view. */
+export interface LazyFigure {
+  type: "lazy";
+  figure: number;
+  /** Pixels to reserve until the figure draws. */
+  height: number;
+}
+
 export type Output =
   | { type: "html"; html: string }
   | { type: "text"; text: string }
-  | FigureSpec;
+  | FigureSpec
+  | LazyFigure;
 
 export type Block =
   | { type: "html"; html: string }

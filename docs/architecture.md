@@ -66,8 +66,13 @@ The route
 prerenders one page per article. At build time,
 [`site/src/lib/server/article.ts`](../site/src/lib/server/article.ts) reads the
 article's document, renders prose with markdown-it and KaTeX, and highlights
-code with Shiki. The page ships no Python and no markdown parser. In the
-browser,
+code with Shiki. The page ships no Python and no markdown parser. A figure whose
+spec exceeds 16 KB leaves the page data: the route
+[`figures/[figure].json`](../site/src/routes/notebooks/[topic]/[id]/figures/[figure].json/+server.ts)
+prerenders it as its own file, and
+[`LazyFigure.svelte`](../site/src/lib/components/article/LazyFigure.svelte)
+reserves its estimated height and fetches it a screen before it scrolls into
+view. In the browser,
 [`PlotFigure.svelte`](../site/src/lib/components/article/PlotFigure.svelte)
 draws each chart spec with Observable Plot
 ([`plot.ts`](../site/src/lib/article/plot.ts)), with the colors of the site

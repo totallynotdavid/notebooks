@@ -4,7 +4,7 @@
 	import Player from './Player.svelte';
 	import PlotFigure from './PlotFigure.svelte';
 
-	let { output }: { output: Output } = $props();
+	let { output }: { output: Exclude<Output, { type: 'lazy' }> } = $props();
 
 	// Animated figures in one grid move together under the first one's player.
 	const shared = $derived(
