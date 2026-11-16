@@ -6,6 +6,8 @@ Plot unchanged. `series="RK4"` names the mark in the color legend.
 
 A figure with `frames` animates. A channel with one row per frame, shape
 (frames, n), changes with the frame; every other channel is drawn once.
+A `since` channel holds the frame that first draws each element, so points
+that accumulate are sent once. Animated figures in one `grid` share a player.
 """
 
 from __future__ import annotations

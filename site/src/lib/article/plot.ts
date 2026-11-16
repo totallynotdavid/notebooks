@@ -73,8 +73,12 @@ function buildMark(mark: MarkSpec, frame: number): Plot.Markish {
   const channels: Record<string, unknown[]> = { ...mark.channels };
   for (const [name, frames] of Object.entries(mark.animated ?? {}))
     channels[name] = frames[frame];
+  // `since` holds the first frame that draws each element, so data that
+  // accumulates is sent once instead of once per frame.
+  const { since, ...drawn } = channels;
+  if (since) drawn.filter = since.map((first) => (first as number) <= frame);
 
-  const options: Record<string, unknown> = { ...mark.options, ...channels };
+  const options: Record<string, unknown> = { ...mark.options, ...drawn };
   if (mark.series !== undefined) {
     const series = mark.series;
     // An empty label makes the tip show the series name beside its swatch.

@@ -1,9 +1,18 @@
 <script lang="ts">
 	import type { Output } from '#lib/article/types.js';
 
+	import Player from './Player.svelte';
 	import PlotFigure from './PlotFigure.svelte';
 
 	let { output }: { output: Output } = $props();
+
+	// Animated figures in one grid move together under the first one's player.
+	const shared = $derived(
+		output.type === 'grid' && output.figures.every((figure) => figure.frames)
+			? output.figures[0].frames
+			: undefined
+	);
+	let frame = $state(0);
 </script>
 
 {#if output.type === 'html'}
@@ -14,10 +23,19 @@
 {:else if output.type === 'plot'}
 	<figure class="wide"><PlotFigure spec={output} /></figure>
 {:else if output.type === 'grid'}
-	<figure class="wide grid">
-		{#each output.figures as figure, i (i)}
-			<PlotFigure spec={figure} />
-		{/each}
+	<figure class="wide">
+		<div class="grid">
+			{#each output.figures as figure, i (i)}
+				{#if shared}
+					<PlotFigure spec={figure} {frame} player={false} />
+				{:else}
+					<PlotFigure spec={figure} />
+				{/if}
+			{/each}
+		</div>
+		{#if shared}
+			<Player labels={shared.labels} fps={shared.fps} bind:frame />
+		{/if}
 	</figure>
 {/if}
 
