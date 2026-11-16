@@ -125,7 +125,7 @@ summary = "Reading a Landsat scene with rasterio: metadata, bands, and masking N
 [[topics.notebooks]]
 id = "gaofen1-atmospheric-correction"
 title = "GaoFen-1 atmospheric correction"
-file = "gaofen1/correccion_atmosferica_gaofen1.py"
+file = "gaofen1/correccion_atmosferica_gaofen1.md"
 summary = "Atmospheric correction of GaoFen-1 images with 6S and rasterio."
 
 [[topics]]

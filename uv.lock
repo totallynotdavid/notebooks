@@ -1371,9 +1371,7 @@ source = { virtual = "packages/remote-sensing" }
 dependencies = [
     { name = "6s-bin" },
     { name = "earthengine-api" },
-    { name = "matplotlib" },
     { name = "numpy" },
-    { name = "pandas" },
     { name = "py6s" },
     { name = "python-dotenv" },
     { name = "rasterio" },
@@ -1383,9 +1381,7 @@ dependencies = [
 requires-dist = [
     { name = "6s-bin", specifier = ">=0.11.3" },
     { name = "earthengine-api", specifier = ">=1.7.52" },
-    { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },
-    { name = "pandas", specifier = ">=3.1.1" },
     { name = "py6s", specifier = ">=1.9.2" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
     { name = "rasterio", specifier = ">=1.5.2" },

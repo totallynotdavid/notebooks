@@ -214,10 +214,10 @@ export const topics: Topic[] = [
         "title": "GaoFen-1 atmospheric correction",
         "summary": "Atmospheric correction of GaoFen-1 images with 6S and rasterio.",
         "slug": "remote-sensing/gaofen1-atmospheric-correction",
-        "path": "packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.py",
+        "path": "packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md",
         "assetPath": "/notebooks/remote-sensing/gaofen1-atmospheric-correction/",
-        "kind": "marimo"
+        "kind": "article"
       }
     ]
   },
