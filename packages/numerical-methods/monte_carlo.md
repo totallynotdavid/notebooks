@@ -96,8 +96,8 @@ rng_animacion = np.random.default_rng(3)
 puntos = rng_animacion.uniform(-1.0, 1.0, size=(N_MAX, 2))
 dentro = np.sum(puntos**2, axis=1) <= 1.0
 estimacion_pi = 4.0 * np.cumsum(dentro) / np.arange(1, N_MAX + 1)
-cortes = np.unique(np.round(np.geomspace(10, N_MAX, 30)).astype(int))
-marcas = np.unique(np.round(np.geomspace(10, N_MAX, 200)).astype(int))
+cortes = np.unique(np.round(np.geomspace(10, N_MAX, 90)).astype(int))
+marcas = np.unique(np.round(np.geomspace(10, N_MAX, 400)).astype(int))
 p_dentro = np.pi / 4
 sigma_pi = 4.0 * np.sqrt(p_dentro * (1 - p_dentro) / marcas)
 
@@ -125,7 +125,7 @@ P.grid(
         P.line(x=np.cos(angulo), y=np.sin(angulo), stroke="currentColor"),
         title="Puntos al azar en el cuadrado",
         frames=[f"N = {c}" for c in cortes],
-        fps=3,
+        fps=15,
         x={"domain": [-1.05, 1.05], "label": None, "ticks": 5},
         y={"domain": [-1.05, 1.05], "label": None, "ticks": 5},
         aspectRatio=1,
@@ -163,7 +163,7 @@ P.grid(
         ),
         title="4 · fracción dentro",
         frames=[f"N = {c}" for c in cortes],
-        fps=3,
+        fps=15,
         x={"type": "log", "domain": [10, 1.25 * N_MAX], "label": "N"},
         y={"domain": [2.2, 4.1], "label": "estimación"},
         grid=True,
