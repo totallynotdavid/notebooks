@@ -101,7 +101,7 @@ title = "Radiation and remote sensing"
 [[topics.notebooks]]
 id = "planck-curve"
 title = "Planck's law"
-file = "curva_de_planck.py"
+file = "curva_de_planck.md"
 summary = "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displacement law, and the Stefan-Boltzmann law by numerical integration."
 
 [[topics.notebooks]]

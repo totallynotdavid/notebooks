@@ -178,10 +178,10 @@ export const topics: Topic[] = [
         "title": "Planck's law",
         "summary": "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displacement law, and the Stefan-Boltzmann law by numerical integration.",
         "slug": "remote-sensing/planck-curve",
-        "path": "packages/remote-sensing/curva_de_planck.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.py",
+        "path": "packages/remote-sensing/curva_de_planck.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.md",
         "assetPath": "/notebooks/remote-sensing/planck-curve/",
-        "kind": "marimo"
+        "kind": "article"
       },
       {
         "title": "Radiative transfer with 6S",
