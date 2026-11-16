@@ -83,7 +83,7 @@
 		margin: 0 auto;
 	}
 	.plot__canvas :global(h2) {
-		margin: 0 0 0.25rem;
+		margin: 0 0 0.75rem;
 		font-size: var(--text-body);
 		line-height: 1.4;
 		text-wrap: balance;

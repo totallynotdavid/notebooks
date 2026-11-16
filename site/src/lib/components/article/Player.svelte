@@ -95,7 +95,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		margin: 0.5rem auto 0;
+		margin: 0.75rem auto 0;
 		font-family: var(--font-mono);
 		font-size: var(--text-label);
 	}

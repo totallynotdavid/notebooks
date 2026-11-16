@@ -46,7 +46,7 @@
 	.placeholder {
 		display: grid;
 		place-items: center;
-		margin: 0.5rem 0 2rem;
+		margin: var(--figure-margin);
 		border-radius: var(--radius);
 		background: var(--code-bg);
 		color: var(--content-secondary);

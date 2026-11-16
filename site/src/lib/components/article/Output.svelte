@@ -44,7 +44,7 @@
 
 <style>
 	figure {
-		margin: 0.5rem 0 2rem;
+		margin: var(--figure-margin);
 	}
 	.grid {
 		display: grid;

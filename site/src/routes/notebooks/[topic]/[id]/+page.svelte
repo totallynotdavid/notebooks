@@ -69,6 +69,8 @@
 	.article {
 		--content-width: 42rem;
 		--wide-width: 64rem;
+		/* Grid items keep both margins, so this adds to the paragraph's 1.25rem. */
+		--figure-margin: 1.25rem 0 2.75rem;
 
 		display: grid;
 		grid-template-columns:
