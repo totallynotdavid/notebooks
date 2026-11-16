@@ -1,6 +1,7 @@
 import * as Plot from "@observablehq/plot";
 
 import type { MarkSpec, PlotSpec } from "./types.js";
+import type { Zoom } from "./zoom.js";
 
 type MarkFactory = (
   data: unknown,
@@ -40,6 +41,7 @@ export function renderPlot(
   frame: number,
   width: number,
   palette: string[],
+  zoom: Zoom = {},
 ): SVGSVGElement | HTMLElement {
   const options: Record<string, unknown> = { ...spec.options };
   options.x = withLogTicks(options.x);
@@ -51,6 +53,9 @@ export function renderPlot(
     if (!spec.marks.some((mark) => Y_BANDS.has(mark.kind)))
       options.y = withDomain(options.y, spec.marks, Y_CHANNELS);
   }
+  if (zoom.x) options.x = zoomed(options.x, zoom.x);
+  if (zoom.y) options.y = zoomed(options.y, zoom.y);
+  if (zoom.x || zoom.y) options.clip = true;
   if (palette.length > 0 && usesCategoricalColor(spec)) {
     // Named series need a key; a figure with none keeps the legend off.
     const legend = spec.marks.some((mark) => mark.series !== undefined);
@@ -122,7 +127,11 @@ const SUPERSCRIPT: Record<string, string> = {
 /** Labels a decade as 10ⁿ; any other value keeps a short general format. */
 function powerOfTen(value: number): string {
   const exponent = Math.log10(value);
-  if (!Number.isInteger(exponent)) return value.toPrecision(2);
+  // A zoomed log axis can span less than a decade and tick at 300, 400...
+  if (!Number.isInteger(exponent))
+    return value >= 1e-3 && value < 1e5
+      ? String(Number(value.toPrecision(2)))
+      : value.toPrecision(2);
   if (exponent >= 0 && exponent <= 3) return String(value);
   return `10${[...String(exponent)].map((c) => SUPERSCRIPT[c]).join("")}`;
 }
@@ -135,6 +144,20 @@ function withLogTicks(scale: unknown): unknown {
   const options = (scale ?? {}) as Record<string, unknown>;
   if (options.type !== "log") return scale;
   return { ticks: 4, tickFormat: powerOfTen, ...options };
+}
+
+/** Ticks the article listed outside a zoomed domain would draw off the frame. */
+function zoomed(scale: unknown, domain: unknown[]): unknown {
+  const options = (scale ?? {}) as Record<string, unknown>;
+  const [low, high] = [+(domain[0] as number), +(domain[1] as number)].toSorted(
+    (a, b) => a - b,
+  );
+  const ticks = Array.isArray(options.ticks)
+    ? options.ticks.filter((tick) => +tick >= low && +tick <= high)
+    : options.ticks;
+  // Too few listed ticks left: let Plot choose them for the new domain.
+  const kept = Array.isArray(ticks) && ticks.length < 2 ? undefined : ticks;
+  return { ...options, domain, ticks: kept };
 }
 
 function withDomain(

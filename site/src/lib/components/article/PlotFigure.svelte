@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { readPalette, renderPlot } from '#lib/article/plot.js';
 	import type { PlotSpec } from '#lib/article/types.js';
+	import { attachZoom, type Zoom } from '#lib/article/zoom.js';
 
 	import Player from './Player.svelte';
 
@@ -23,14 +24,28 @@
 		typeof spec.options.height === 'number' ? spec.options.height : spec.options.aspectRatio ? 0 : 400
 	);
 
+	let zoom: Zoom = $state({});
+	const zoomedIn = $derived(zoom.x !== undefined || zoom.y !== undefined);
+
 	$effect(() => {
 		if (!canvas || width === 0) return;
-		canvas.replaceChildren(renderPlot(spec, frame, plotWidth, readPalette(canvas)));
+		const chart = renderPlot(spec, frame, plotWidth, readPalette(canvas), zoom);
+		canvas.replaceChildren(chart);
+		return attachZoom(chart, (next) => (zoom = { ...zoom, ...next }));
 	});
 </script>
 
 <div class="plot" bind:clientWidth={width}>
-	<div class="plot__canvas" bind:this={canvas} style:min-height="{reserved}px"></div>
+	{#if zoomedIn}
+		<button type="button" class="plot__reset" onclick={() => (zoom = {})}>Reset zoom</button>
+	{/if}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="plot__canvas"
+		bind:this={canvas}
+		style:min-height="{reserved}px"
+		ondblclick={() => (zoom = {})}
+	></div>
 	{#if spec.frames && player}
 		<Player labels={spec.frames.labels} fps={spec.frames.fps} bind:frame maxWidth={plotWidth} />
 	{/if}
@@ -38,7 +53,29 @@
 
 <style>
 	.plot {
+		position: relative;
 		min-width: 0;
+	}
+	.plot__reset {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 1;
+		padding: 0.25rem 0.5rem;
+		background: var(--page);
+		border: 1px solid var(--content-secondary);
+		border-radius: var(--radius);
+		color: var(--content);
+		font: var(--text-label) var(--font-mono);
+		cursor: pointer;
+		transition: background 150ms ease-out;
+	}
+	.plot__reset:hover {
+		background: var(--code-bg);
+	}
+	.plot__reset:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
 	}
 	.plot__canvas :global(figure) {
 		width: fit-content;
