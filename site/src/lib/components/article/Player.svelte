@@ -7,7 +7,30 @@
 	}: { labels: string[]; fps: number; frame?: number; maxWidth?: number } = $props();
 
 	let playing = $state(false);
+	let touched = false;
+	let root: HTMLDivElement | undefined = $state();
 	const last = $derived(labels.length - 1);
+
+	// Plays once, the first time most of the figure is on screen, unless the
+	// reader asked for less motion or already moved the player.
+	$effect(() => {
+		const figure = root?.parentElement;
+		if (!figure || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				// A figure taller than the screen counts once it fills most of it.
+				const screen = entry.rootBounds?.height ?? innerHeight;
+				const seen =
+					entry.intersectionRatio >= 0.6 || entry.intersectionRect.height >= 0.6 * screen;
+				if (!seen) return;
+				observer.disconnect();
+				if (!touched) playing = true;
+			},
+			{ threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }
+		);
+		observer.observe(figure);
+		return () => observer.disconnect();
+	});
 
 	$effect(() => {
 		if (!playing) return;
@@ -28,12 +51,13 @@
 	});
 
 	function toggle() {
+		touched = true;
 		if (!playing && frame >= last) frame = 0;
 		playing = !playing;
 	}
 </script>
 
-<div class="player" style:max-width={maxWidth ? `${maxWidth}px` : null}>
+<div class="player" bind:this={root} style:max-width={maxWidth ? `${maxWidth}px` : null}>
 	<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
 		{#if playing}
 			<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
@@ -47,7 +71,10 @@
 		min="0"
 		max={last}
 		bind:value={frame}
-		oninput={() => (playing = false)}
+		oninput={() => {
+			touched = true;
+			playing = false;
+		}}
 		aria-label="Frame"
 	/>
 	<output class="player__label">{labels[frame]}</output>
