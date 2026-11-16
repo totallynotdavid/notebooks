@@ -1,33 +1,17 @@
 <script lang="ts">
-	/** Longer fences start folded so the prose stays readable. */
-	const FOLD_LINES = 14;
-
 	let { html }: { html: string } = $props();
-
-	const lines = $derived((html.match(/class="line"/g) ?? []).length);
 </script>
 
-{#if lines > FOLD_LINES}
-	<details class="code">
-		<summary lang="en">Show code ({lines} lines)</summary>
-		<!-- Highlighted at build time by Shiki. -->
-		{@html html}
-	</details>
-{:else}
-	<div class="code">{@html html}</div>
-{/if}
+<!-- Highlighted at build time by Shiki. -->
+<div class="code">{@html html}</div>
 
 <style>
 	.code {
 		margin: 0 0 1.5rem;
 	}
-	summary {
-		width: fit-content;
-		padding: 0.3rem 0;
-		font-family: var(--font-mono);
-		font-size: var(--text-label);
-		color: var(--accent);
-		cursor: pointer;
+	/* Code shows only when the reader turns it on; see lib/article/code.ts. */
+	:global(html:not([data-code])) .code {
+		display: none;
 	}
 	.code :global(pre) {
 		overflow-x: auto;
@@ -36,9 +20,6 @@
 		background: var(--code-bg) !important;
 		border-radius: var(--radius);
 		font: 0.85rem / 1.55 var(--font-mono);
-	}
-	details[open] summary {
-		margin-bottom: 0.5rem;
 	}
 	.code :global(.shiki span) {
 		color: var(--shiki-light);

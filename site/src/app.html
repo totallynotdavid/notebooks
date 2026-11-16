@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="text-scale" content="scale" />
     <link rel="icon" href="data:," />
+    <script>
+      // Restores the code toggle before the first paint; src/lib/article/code.ts owns the key.
+      try {
+        if (localStorage.getItem("notebooks:code") === "shown")
+          document.documentElement.setAttribute("data-code", "");
+      } catch {}
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

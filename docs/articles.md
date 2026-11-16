@@ -38,8 +38,9 @@ P.figure(P.line(x=t, y=np.sin(t), series="sin"), x={"label": "t [s]"})
 ````
 
 A `python` fence shows its code and then its outputs. A `python hidden` fence
-shows only its outputs. The site folds code longer than 14 lines behind a "Show
-code" button.
+shows only its outputs. The site hides all code until the reader presses "Show
+code" in the header, and remembers that choice across articles. The prose must
+read without the code.
 
 A fence has up to two outputs: what it printed, then the value of its last
 expression. A value of `None` shows nothing. The value becomes:

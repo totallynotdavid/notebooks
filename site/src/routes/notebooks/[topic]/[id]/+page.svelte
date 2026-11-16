@@ -6,6 +6,7 @@
 
 	import Navbar from '#lib/components/Navbar.svelte';
 	import CodeBlock from '#lib/components/article/CodeBlock.svelte';
+	import CodeToggle from '#lib/components/article/CodeToggle.svelte';
 	import LazyFigure from '#lib/components/article/LazyFigure.svelte';
 	import Output from '#lib/components/article/Output.svelte';
 	import { site } from '#lib/catalog.generated.js';
@@ -13,6 +14,8 @@
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+
+	const hasCode = $derived(data.blocks.some((block) => block.type !== 'html' && block.html));
 
 	const figureUrl = (figure: number) => {
 		const [topic, id] = data.notebook.slug.split('/');
@@ -29,12 +32,16 @@
 	<meta name="description" content={data.notebook.summary} />
 </svelte:head>
 
-<Navbar title={site.title} />
+<Navbar
+	title={site.title}
+	section={{ title: data.topic.title, href: `${resolve('/')}?topic=${data.topic.id}` }}
+>
+	{#if hasCode}
+		<CodeToggle />
+	{/if}
+</Navbar>
 
 <main class="article" lang="es">
-	<p class="eyebrow" lang="en">
-		<a href="{resolve('/')}?topic={data.topic.id}">{data.topic.title}</a>
-	</p>
 	{#each data.blocks as block, i (i)}
 		{#if block.type === 'html'}
 			<!-- Rendered at build time from the article's own Markdown. -->
@@ -77,13 +84,6 @@
 	}
 	.article > :global(.wide) {
 		grid-column: wide;
-	}
-	.eyebrow {
-		margin: 0 0 0.75rem;
-		font-family: var(--font-mono);
-		font-size: var(--text-label);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
 	}
 	.source {
 		display: flex;
