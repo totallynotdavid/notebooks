@@ -135,7 +135,7 @@ title = "Solid Earth and hazards"
 [[topics.notebooks]]
 id = "sac-processing"
 title = "Processing SAC records with ObsPy"
-file = "procesamiento_sac.py"
+file = "procesamiento_sac.md"
 summary = "Records of the 2007 Pisco earthquake: a record section by distance, spectra, and P-wave picking with STA/LTA."
 
 [[topics.notebooks]]
