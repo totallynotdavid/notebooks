@@ -147,5 +147,5 @@ summary = "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, c
 [[topics.notebooks]]
 id = "ancash-landslides"
 title = "Mass movements in Ancash"
-file = "peligros_geologicos_ancash.py"
+file = "peligros_geologicos_ancash.md"
 summary = "INGEMMET's geological hazard inventory for Ancash: types of mass movement, the most affected provinces, a map, and the factors behind debris flows."

@@ -248,10 +248,10 @@ export const topics: Topic[] = [
         "title": "Mass movements in Ancash",
         "summary": "INGEMMET's geological hazard inventory for Ancash: types of mass movement, the most affected provinces, a map, and the factors behind debris flows.",
         "slug": "geophysics/ancash-landslides",
-        "path": "packages/geophysics/peligros_geologicos_ancash.py",
-        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.py",
+        "path": "packages/geophysics/peligros_geologicos_ancash.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.md",
         "assetPath": "/notebooks/geophysics/ancash-landslides/",
-        "kind": "marimo"
+        "kind": "article"
       }
     ]
   }
