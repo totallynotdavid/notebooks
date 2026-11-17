@@ -39,7 +39,7 @@ def _execute(path: Path, use_cache: bool) -> tuple[list[dict], dict]:
     namespace: dict[str, object] = {"__name__": "__quire__", "__file__": str(path)}
     rendered: list[dict] = []
     cache_dir = path.parent / CACHE_DIR if use_cache else None
-    with _article_context(path.parent), caching_in(cache_dir):
+    with _article_context(path.parent), caching_in(cache_dir, path.parent):
         for block in blocks:
             if isinstance(block, Prose):
                 rendered.append({"type": "prose", "text": block.text})

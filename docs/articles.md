@@ -151,12 +151,12 @@ def simulate(size, temperature, sweeps):
 ```
 
 A result is stored in `.quire-cache/` beside the article, keyed by the
-function's arguments and its source. For a function defined in a fence, the
-source is its own lines; for a function imported from a module, it is the whole
-module file. Globals the function reads and helpers in other modules are not
-part of the key: pass a value as an argument, or build with `--no-cache` to run
-every function again. Arguments and results must pickle. Outside a quire build,
-a cached function runs as usual.
+function's arguments, its own source, and every `.py` file in the article's
+package outside `tests/`. Editing a module the article imports therefore runs
+the function again; editing prose does not. Globals the function reads and
+installed libraries are not part of the key: pass a value as an argument, or
+build with `--no-cache` to run every function again. Arguments and results must
+pickle. Outside a quire build, a cached function runs as usual.
 
 ## Publish
 

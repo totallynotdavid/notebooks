@@ -9,6 +9,7 @@ import sys
 import time
 from pathlib import Path
 
+from quire.cache import module_files
 from quire.execute import ArticleError, run_article
 
 
@@ -34,9 +35,7 @@ def watch(article: Path, output: Path, *, use_cache: bool) -> None:
     seen: dict[Path, float] = {}
     while True:
         current = {
-            p: p.stat().st_mtime
-            for p in [article, *article.parent.glob("**/*.py")]
-            if "__pycache__" not in p.parts
+            p: p.stat().st_mtime for p in [article, *module_files(article.parent)]
         }
         if current != seen:
             seen = current

@@ -56,6 +56,10 @@ run = [
 description = "Run every test suite"
 depends = ["test:*"]
 
+[tasks."test:quire"]
+description = "Test the article runner"
+run = "uv run --locked --package quire python -m unittest discover -s lib/quire/tests"
+
 [tasks."test:numerical-methods"]
 description = "Run the numerical methods notebooks and check their results"
 run = "uv run --locked --package numerical-methods python -m unittest discover -s packages/numerical-methods/tests"
