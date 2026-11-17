@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
+from quire import thin
 from quire.encode import DIGITS, compact, is_array, plain
 
 
@@ -51,6 +52,57 @@ class Mark:
         if "series" in self.options:
             spec["series"] = str(self.options["series"])
         return spec
+
+    def thinned(self, x_axis: dict, y_axis: dict) -> Mark:
+        """This mark without the points the screen cannot show: a static line
+        keeps the vertices that bend it by half a pixel, and opaque dots with
+        no other channel keep one dot per half-pixel cell."""
+        arrays = {
+            name: np.asarray(value)
+            for name, value in self.options.items()
+            if name != "series" and is_array(value)
+        }
+        x, y = arrays.get("x"), arrays.get("y")
+        if self.data is not None or x is None or y is None or x.ndim != 1:
+            return self
+        # Bands, names and dates sit on an ordinal or time scale.
+        if x.dtype.kind not in "iuf" or y.dtype.kind not in "iuf":
+            return self
+        if "since" in arrays or any(a.shape != x.shape for a in arrays.values()):
+            return self
+        ux, uy = thin.unit(x, x_axis), thin.unit(y, y_axis)
+        if self.kind == "line":
+            keep = self._line_points(ux, uy, arrays)
+        elif (
+            self.kind == "dot"
+            and arrays.keys() == {"x", "y"}
+            and not ({"opacity", "fillOpacity", "strokeOpacity"} & self.options.keys())
+        ):
+            keep = thin.dot_points(ux, uy, thin.TOLERANCE)
+        else:
+            return self
+        if keep.size == x.size:
+            return self
+        options = {
+            name: arrays[name][keep] if name in arrays else value
+            for name, value in self.options.items()
+        }
+        return Mark(self.kind, None, options)
+
+    def _line_points(self, ux, uy, arrays: dict) -> np.ndarray:
+        # Plot splits a line into one per value of z, or of stroke or fill
+        # when z is absent; z=None keeps one line.
+        if "z" in self.options:
+            groups = arrays.get("z")
+        else:
+            groups = arrays.get("stroke", arrays.get("fill"))
+        if groups is None:
+            return thin.line_points(ux, uy, thin.TOLERANCE)
+        kept = [
+            members[thin.line_points(ux[members], uy[members], thin.TOLERANCE)]
+            for members in (np.flatnonzero(groups == g) for g in np.unique(groups))
+        ]
+        return np.sort(np.concatenate(kept))
 
 
 def _mark(kind: str):
@@ -98,7 +150,12 @@ class Figure:
         count = None if self.frames is None else len(self.frames)
         spec: dict[str, object] = {
             "type": "plot",
-            "marks": [mark.encode(count, self.digits) for mark in self.marks],
+            "marks": [
+                mark.thinned(
+                    self.options.get("x") or {}, self.options.get("y") or {}
+                ).encode(count, self.digits)
+                for mark in self.marks
+            ],
             "options": plain(self.options, self.digits),
         }
         if self.frames is not None:

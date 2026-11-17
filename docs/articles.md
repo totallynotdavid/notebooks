@@ -82,6 +82,15 @@ still shrinks with the page.
 Numbers are rounded to 5 significant digits. Pass `digits=` to `P.figure` to
 change it.
 
+A figure sends only the points a reader can see. A `line` with numeric `x` and
+`y` keeps the vertices that move it by more than half a pixel of an 800 px
+figure, measured on the axis `domain` and `type`, so a log axis thins in log
+space. Each `z` group, or each `stroke` or `fill` value when `z` is absent,
+thins as its own line. A `dot` with only `x` and `y` channels and no opacity
+keeps one dot per half-pixel cell. Animated channels and `since` marks are sent
+whole. [`quire.thin`](../lib/quire/src/quire/thin.py) does the thinning, so a
+long integration can go to `P.line` as it is.
+
 ## Animations
 
 A figure with `frames` animates. `frames` holds one label per frame, and `fps`
