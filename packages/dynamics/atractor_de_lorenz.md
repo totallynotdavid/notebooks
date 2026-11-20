@@ -1,6 +1,6 @@
 ```python hidden
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -204,28 +204,64 @@ por $e$ cada {1 / lambda_1:.1f} unidades de tiempo.
 
 ### Separación sin renormalizar
 
-Un solo par de trayectorias, sin renormalizar, muestra las dos fases: un
-crecimiento exponencial y la saturación en el tamaño del atractor. La recta es
-$d_0 e^{\lambda_1 t}$ con el $\lambda_1$ de arriba.
+Un par de trayectorias sin renormalizar muestra las dos fases: un crecimiento
+exponencial y la saturación en el tamaño del atractor. La recta es $d_0
+e^{\lambda_1 t}$ con el $\lambda_1$ de arriba. La figura repite el par con
+distancias iniciales $d_0$ de $10^{-2}$ a $10^{-12}$ a lo largo de $x$.
 
 ```python hidden
+SUPERINDICE = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+exponentes = np.arange(2, 13)
 a0 = en_atractor[:, 0]
-par = integrar(np.stack([a0, a0 + [D0, 0.0, 0.0]], axis=1), DT, 4000, PARAMETROS)
-distancia = np.linalg.norm(par[:, :, 1] - par[:, :, 0], axis=1)
-t_par = DT * np.arange(distancia.size)
-recta = np.array([0.0, 22.0])
+# Columna 0: la trayectoria de referencia; las demás, desplazadas d₀ en x.
+inicios = np.tile(a0[:, None], (1, exponentes.size + 1))
+inicios[0, 1:] += 10.0**-exponentes
+pares = integrar(inicios, DT, 4000, PARAMETROS)
+separaciones = np.linalg.norm(pares[:, :, 1:] - pares[:, :, :1], axis=1).T
+t_par = DT * np.arange(pares.shape[0])
+t_10 = t_par[np.argmax(separaciones > 10, axis=1)]
+par = pares[:, :, [0, np.flatnonzero(exponentes == 8)[0] + 1]]
+distancia = separaciones[exponentes == 8][0]
 
+d0 = parameter(
+    "d₀",
+    ["10" + str(-k).translate(SUPERINDICE) for k in exponentes],
+    value="10⁻⁸",
+)
+md(f"""
+Arrastra la distancia inicial: con $d_0 =$ {d0} la distancia supera 10 en
+$t \\approx$ {d0.each(t_10):.1f}, y $\\ln(10/d_0)/\\lambda_1$ predice
+{d0.each(np.log(10 / 10.0**-exponentes) / lambda_1):.1f}. Cada factor 10 en
+$d_0$ suma en promedio {np.log(10) / lambda_1:.1f} unidades de tiempo, pero los
+tiempos medidos avanzan a saltos alrededor de esa recta, porque $d(t)$ crece
+más rápido en unos tramos del atractor que en otros.
+""")
+```
+
+```python hidden
+muestra = slice(None, None, 5)
+recta = np.array([0.0, 40.0])
 P.figure(
-    P.line(x=t_par[::5], y=distancia[::5], series="d(t)"),
+    P.line(
+        x=np.tile(t_par[muestra], exponentes.size),
+        y=separaciones[:, muestra].ravel(),
+        z=np.repeat(exponentes, t_par[muestra].size),
+        stroke="currentColor",
+        strokeOpacity=0.2,
+        tip=False,
+    ),
+    P.line(x=t_par[muestra], y=separaciones[:, muestra], series="d(t)"),
     P.line(
         x=recta,
-        y=D0 * np.exp(lambda_1 * recta),
+        y=10.0 ** -exponentes[:, None] * np.exp(lambda_1 * recta),
         series="d₀ e^(λ₁ t)",
         strokeDasharray="6 4",
+        clip=True,
     ),
-    title="Separación de dos trayectorias que empiezan a d₀ = 10⁻⁸",
+    frames=d0,
+    title="Separación de dos trayectorias según la distancia inicial d₀",
     x={"label": "t"},
-    y={"label": "d(t)", "type": "log", "domain": [1e-9, 1e3]},
+    y={"label": "d(t)", "type": "log", "domain": [1e-13, 1e3]},
     grid=True,
 )
 ```
@@ -233,8 +269,9 @@ P.figure(
 ```python hidden
 t_visible = t_par[np.argmax(distancia > 10)]
 md(f"""
-La animación recorre el tramo en que la separación se hace visible: las dos
-trayectorias en el plano $x$–$z$, sobre el atractor en gris. Van superpuestas
+La animación sigue el par con $d_0 = 10^{{-8}}$ en el tramo en que la separación
+se hace visible: las dos trayectorias en el plano $x$–$z$, sobre el atractor en
+gris. Van superpuestas
 mientras $d$ es pequeña frente al atractor; en $t \\approx {t_visible:.1f}$ la
 distancia supera 10 y cada una sigue su propio camino.
 """)
