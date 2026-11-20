@@ -77,9 +77,18 @@ md(
 
 ## Tipos de movimiento en masa
 
-`COD_PELIGRO` vale `1000` (movimientos en masa) en todos los registros de Áncash
-de esta capa. `TIP_PELIGRO` separa los tipos y `NOM_PELIGRO` los subtipos. Los
-nombres son los del dominio, sin tildes.
+```python hidden
+codigos = Counter(r["COD_PELIGRO"] for r in registros)
+reparto = ", ".join(f"`{c}` en {n}" for c, n in codigos.most_common())
+md(
+    f"""
+    {"`COD_PELIGRO` vale `1000` (movimientos en masa) en todos los registros." if set(codigos) == {"1000"} else f"`COD_PELIGRO` vale {reparto} registros."}
+    `TIP_PELIGRO` separa los tipos y `NOM_PELIGRO` los subtipos. Los nombres se
+    copian tal cual del dominio, que escribe algunos sin tilde, como *Caida* y
+    *Reptacion*.
+    """
+)
+```
 
 ```python hidden
 por_tipo = Counter(tipo).most_common()
@@ -262,8 +271,8 @@ de los huaicos cita cada factor, junto al porcentaje de los demás movimientos e
 masa, para ver cuáles distinguen a los huaicos.
 
 - `FACT_SITIO`: condiciones del terreno (roca, suelo, pendiente).
-- `FACT_GEOGR`: entorno geográfico, donde están las lluvias y otros
-  desencadenantes.
+- `FACT_GEOGR`: entorno geográfico, que incluye las lluvias, el deshielo y la
+  sismicidad.
 - `FACT_ANTRO`: intervención humana.
 
 ```python
@@ -337,7 +346,15 @@ P.grid(
 )
 ```
 
-Pocos registros citan factores antrópicos, así que basta una tabla:
+```python hidden
+con_antro = sum(1 for r in registros if (r["FACT_ANTRO"] or "").strip())
+md(
+    f"""
+    Solo {con_antro} de los {len(registros)} registros citan algún factor
+    antrópico, así que basta una tabla:
+    """
+)
+```
 
 ```python hidden
 tabla(
@@ -385,8 +402,8 @@ md(
       con {brecha_geografia:.0f} puntos.
     - Las lluvias intensas figuran en el {lluvia["Lluvias intensas"]:.0f} % de
       los huaicos y las prolongadas en el
-      {lluvia["Lluvias prolongadas"]:.0f} %. Es poco para un flujo que se asocia
-      a lluvias. El código `11` de `FACT_GEOGR` lo citan el
+      {lluvia["Lluvias prolongadas"]:.0f} %. El código `11` de `FACT_GEOGR` lo
+      citan el
       {geografia[codigo_11]["Huaicos"]:.0f} % de los huaicos y el dominio de la
       capa no lo define, así que no se puede leer como lluvia ni como ningún
       otro factor.
