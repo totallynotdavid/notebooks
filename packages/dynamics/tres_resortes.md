@@ -258,8 +258,9 @@ En la mezcla, cada masa muestra las dos frecuencias a la vez.
 ## Los modos en la serie temporal
 
 Proyectar la serie numérica de la mezcla sobre los modos, $q_i(t)=\mathbf
-v_i^{T}M\,\mathbf x(t)$, recupera dos cosenos puros. Y el espectro de $x_1(t)$
-tiene exactamente dos picos, en las frecuencias de los modos.
+v_i^{T}M\,\mathbf x(t)$, recupera dos cosenos puros. El espectro de $x_1(t)$
+tiene dos picos, en las frecuencias de los modos. Su ancho lo fija la duración
+de la serie, 20 s, y no el sistema, que no tiene amortiguamiento.
 
 ```python
 mezcla = trayectorias["x₁(0) = 1, x₂(0) = 0"]
