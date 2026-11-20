@@ -1,6 +1,11 @@
 import katexPluginModule from "@vscode/markdown-it-katex";
 import katex, { type KatexOptions } from "katex";
-import type { MarkdownIt, RendererRule, StateInline } from "markdown-it";
+import type {
+  MarkdownIt,
+  RendererRule,
+  StateCore,
+  StateInline,
+} from "markdown-it";
 
 // The package is CommonJS with an `__esModule` default. Node's ESM loader hands
 // back the whole `module.exports`, while the types promise the plugin itself.
@@ -45,19 +50,19 @@ function group(latex: string, start: number): [string, number] {
 
 /**
  * `\note{label}{tex}` in display math: the term takes note i's color, and
- * the label goes under the formula in the same color.
+ * legend under the formula repeats the term in that color beside its label.
  */
 export function extractNotes(latex: string): {
   latex: string;
-  notes: string[];
+  notes: { label: string; term: string }[];
 } {
-  const notes: string[] = [];
+  const notes: { label: string; term: string }[] = [];
   let out = "";
   let at = 0;
   for (let found = latex.indexOf("\\note{"); found !== -1;) {
     const [label, afterLabel] = group(latex, found + "\\note".length);
     const [term, end] = group(latex, afterLabel);
-    notes.push(label);
+    notes.push({ label, term });
     out += `${latex.slice(at, found)}\\htmlData{note=${notes.length}}{${term}}`;
     at = end;
     found = latex.indexOf("\\note{", at);
@@ -81,10 +86,36 @@ function value(state: StateInline, silent: boolean): boolean {
   return true;
 }
 
+const TRAILING_PUNCTUATION = /^[,.;:!?)\]»]+/;
+
+/**
+ * Wraps inline math and the punctuation right after it in one nowrap span, so
+ * a line never starts with the comma that closes a formula.
+ */
+function keepPunctuation(state: StateCore): void {
+  for (const block of state.tokens) {
+    const children = block.children;
+    if (block.type !== "inline" || !children) continue;
+    for (let i = children.length - 2; i >= 0; i--) {
+      const next = children[i + 1];
+      const mark = TRAILING_PUNCTUATION.exec(next.content);
+      if (children[i].type !== "math_inline" || next.type !== "text" || !mark)
+        continue;
+      const open = new state.Token("html_inline", "", 0);
+      open.content = '<span class="nowrap">';
+      const close = new state.Token("html_inline", "", 0);
+      close.content = `${state.md.utils.escapeHtml(mark[0])}</span>`;
+      next.content = next.content.slice(mark[0].length);
+      children.splice(i, 1, open, children[i], close);
+    }
+  }
+}
+
 /** Math through KaTeX, with notes in display math and draggable values. */
 export function math(md: MarkdownIt): void {
   md.use(katexPlugin);
   md.inline.ruler.before("escape", "quire_value", value);
+  md.core.ruler.push("quire_punctuation", keepPunctuation);
 
   md.renderer.rules.quire_value = (tokens, idx) => {
     const { index, text } = tokens[idx].meta as { index: string; text: string };
@@ -99,7 +130,8 @@ export function math(md: MarkdownIt): void {
     if (notes.length === 0) return `${formula}\n`;
     const items = notes
       .map(
-        (note, i) => `<li data-note="${i + 1}">${md.renderInline(note)}</li>`,
+        ({ label, term }, i) =>
+          `<li><span class="formula__term" data-note="${i + 1}">${render(term, false)}</span><span>${md.renderInline(label)}</span></li>`,
       )
       .join("");
     return `<div class="formula">${formula}<ol class="formula__notes">${items}</ol></div>\n`;

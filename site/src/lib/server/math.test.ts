@@ -11,7 +11,7 @@ const attributes = (html: string, attribute: string) =>
     (match) => match[1],
   );
 
-test("a note colors its term and writes its label under the formula", () => {
+test("a note colors its term and repeats it beside its label under the formula", () => {
   const html = md.render(
     "$$\nT = \\note{el período}{2\\pi} \\note{con $\\omega$}{/\\omega}\n$$\n",
   );
@@ -19,8 +19,20 @@ test("a note colors its term and writes its label under the formula", () => {
   expect(formula).toMatch(/^<div class="formula"><p class="katex-block">/);
   expect(attributes(formula, "data-note")).toEqual(["1", "2"]);
   expect(attributes(notes, "data-note")).toEqual(["1", "2"]);
-  expect(notes).toContain('<li data-note="1">el período</li>');
-  expect(notes).toMatch(/<li data-note="2">con <span class="katex">/);
+  expect(notes).toMatch(
+    /<li><span class="formula__term" data-note="1"><span class="katex">.*π.*<\/span><span>el período<\/span><\/li>/,
+  );
+  expect(notes).toMatch(/<span>con <span class="katex">/);
+});
+
+test("inline math keeps the punctuation that closes it on its line", () => {
+  const html = md.render("Si $x > 0$, entonces $y$; y $z$ no.\n");
+  expect(html).toMatch(
+    /<span class="nowrap"><span class="katex">.*?<\/span>,<\/span> entonces/,
+  );
+  expect(html).toMatch(
+    /<span class="nowrap"><span class="katex">.*?<\/span>;<\/span> y <span class="katex">/,
+  );
 });
 
 test("a formula without notes stays a plain block", () => {

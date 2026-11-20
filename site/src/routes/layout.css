@@ -40,6 +40,12 @@
   --text-label: 0.9rem;
 }
 
+@media (max-width: 640px) {
+  :root {
+    --gutter: 1.25rem;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;

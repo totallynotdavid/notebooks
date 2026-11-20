@@ -1,25 +1,43 @@
 /*
  * Prose in an article: the Markdown between fences and the Markdown a fence
  * outputs. Both render as `.prose` inside `.article`, in different components.
+ *
+ * Every gap is a step of 0.25, 0.5, 0.75, 1, 1.5, 2.5 or 4rem. Margins collapse
+ * inside one `.prose` block, so where two meet the larger one wins.
  */
 
+.article .prose {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+.article .prose p {
+  margin: 0 0 1rem;
+  text-wrap: pretty;
+}
+
 .article .prose h1 {
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem;
+  font-size: 2.25rem;
+  line-height: 1.15;
   text-wrap: balance;
 }
 .article .prose h2 {
-  margin: 2.75rem 0 1.5rem;
+  margin: 4rem 0 1rem;
+  font-size: 1.5rem;
+  line-height: 1.25;
   text-wrap: balance;
 }
 .article .prose h3 {
-  margin: 2rem 0 1rem;
+  margin: 2.5rem 0 0.5rem;
+  font-size: 1.1875rem;
+  line-height: 1.35;
   text-wrap: balance;
 }
 
 /* Tailwind's preflight removes list markers. */
 .article .prose ul,
 .article .prose ol {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1rem;
   padding-left: 1.5rem;
   list-style: disc;
 }
@@ -27,10 +45,45 @@
   list-style: decimal;
 }
 .article .prose li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
 }
 
+/* lib/server/math.ts wraps inline math with the punctuation that closes it.
+   The formula itself still breaks after a relation or an operator. */
+.article .prose .nowrap {
+  white-space: nowrap;
+}
+.article .prose .nowrap .katex {
+  white-space: normal;
+}
+
+/* A file name or an ID has no spaces to break at. */
+.article .prose :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+/* A command in the prose, as opposed to a fence that runs (CodeBlock.svelte). */
+.article .prose pre {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--code-bg) !important;
+  border-radius: var(--radius);
+  font: 0.85rem / 1.55 var(--font-mono);
+}
+.article .prose .shiki span {
+  color: var(--shiki-light);
+}
+@media (prefers-color-scheme: dark) {
+  .article .prose .shiki span {
+    color: var(--shiki-dark);
+  }
+}
+
+.article .prose .katex-block {
+  margin: 1.5rem 0;
+}
 .article .prose .katex-display {
+  margin: 0;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.25rem 0;
@@ -41,26 +94,97 @@
   overflow-x: auto;
   width: fit-content;
   max-width: 100%;
-  margin: 0 0 1.5rem;
+  margin: 1.5rem 0;
   border-collapse: collapse;
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+  line-height: 1.45;
 }
 .article .prose th,
 .article .prose td {
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--line);
-  white-space: nowrap;
+  vertical-align: top;
 }
-/* Headers wrap so a long label does not push the table past the column. */
+/* A cell holds a short label: it wraps between words, never inside one. */
+.article .prose td {
+  hyphens: manual;
+}
+.article .prose td code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.article .prose :is(th, td):first-child {
+  padding-left: 0;
+}
+.article .prose :is(th, td):last-child {
+  padding-right: 0;
+}
+/* Headers are prose and wrap, so a long label does not widen the table. */
 .article .prose th {
   min-width: 6ch;
   vertical-align: bottom;
   white-space: normal;
   text-wrap: balance;
-  font-weight: 600;
-  border-bottom-color: var(--content-secondary);
+  /* One long word such as "deslizamiento" would set the column's width. */
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+  font-weight: 400;
+  border-bottom-color: var(--content);
+}
+/* A column without `:---` alignment holds labels, which start at the left. */
+.article .prose th:not([style]) {
+  text-align: left;
+}
+/* An article right-aligns its numeric columns (`---:`). Only they are mono and
+   only they stay on one line: a text cell wraps so the table fits a phone. */
+.article .prose td[style*="right"] {
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * On a phone the column is about 21rem. A display formula or table wider than
+ * that scrolls in a strip that reaches both screen edges, and a table keeps
+ * its first column in view as the labels of its rows.
+ */
+@media (max-width: 640px) {
+  .article .prose {
+    font-size: 1rem;
+    line-height: 1.65;
+    hyphens: auto;
+  }
+  .article .prose h1 {
+    margin-top: 0;
+    font-size: 1.75rem;
+  }
+  .article .prose h2 {
+    margin-top: 3rem;
+    font-size: 1.3125rem;
+  }
+  .article .prose .katex-display,
+  .article .prose table {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+  }
+  /* The pinned cell carries the gutter itself, so its background covers the
+     columns that scroll under it all the way to the screen edge. */
+  .article .prose table {
+    padding-left: 0;
+  }
+  .article .prose :is(th, td) {
+    padding-inline: 0.5rem;
+  }
+  .article .prose :is(th, td):first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    padding-inline: var(--gutter) 0.5rem;
+    background: var(--page);
+  }
 }
 
 /*
@@ -76,11 +200,12 @@
 .article .qv--held {
   color: var(--accent);
 }
-/* The parameter itself: drag sideways, or focus and use the arrow keys. */
+/* The parameter itself: drag sideways, or focus and use the arrow keys. A
+   border, unlike an underline, keeps clear of a KaTeX exponent. */
 .article .qv--input {
+  padding-bottom: 0.0625rem;
+  border-bottom: 0.125rem dotted var(--accent);
   color: var(--accent);
-  text-decoration: underline dotted;
-  text-underline-offset: 0.2em;
   cursor: ew-resize;
   touch-action: pan-y;
   user-select: none;
@@ -92,43 +217,40 @@
 }
 
 /*
- * A formula with `\note{label}{term}` (lib/server/math.ts): each term and its
- * label share a chart color, and pointing at either dims the other notes.
+ * A formula with `\note{label}{term}` (lib/server/math.ts): the legend repeats
+ * each term in its chart color beside its label, and pointing at a term dims
+ * the other notes.
  */
-.article .formula {
-  margin: 0 0 1.25rem;
+.article .prose .formula {
+  margin: 1.5rem 0;
 }
-.article .formula .katex-block {
-  margin-bottom: 0.25rem;
+.article .prose .formula .katex-block {
+  margin: 0 0 0.75rem;
 }
 /* `.formula` outranks the prose list rules above. */
-.article .formula .formula__notes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.25rem 1.25rem;
-  margin: 0;
+.article .prose .formula .formula__notes {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 0.75rem;
+  width: fit-content;
+  margin: 0 auto;
   padding: 0;
   list-style: none;
-  font-size: var(--text-label);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--content-secondary);
 }
-.article .formula .formula__notes li {
-  margin: 0;
+.article .prose .formula .formula__notes li {
+  display: contents;
 }
-.article .formula .formula__notes li::before {
-  content: "";
-  display: inline-block;
-  width: 0.6em;
-  height: 0.6em;
-  margin-right: 0.4em;
-  border-radius: 2px;
-  background: currentColor;
+.article .formula__term {
+  justify-self: end;
 }
 .article .formula [data-note] {
   transition: opacity 150ms ease-out;
 }
-/* --chart-1 is the light theme's accent, close to the text color, so a term
-   colored with it reads as uncolored. Notes start at --chart-2. */
+/* --chart-1 is the light theme's accent, which marks what the reader can
+   move, so notes start at --chart-2. */
 .article .formula [data-note="1"] {
   color: var(--chart-2);
 }
