@@ -86,10 +86,11 @@ tabla(
 ## Temperatura superficial mensual
 
 MOD11A1 da la temperatura superficial diurna cada día con píxeles de 1 km. Se
-conservan solo los píxeles cuyo `QC_Day` tiene los bits 0-1 en 00 (calidad
-buena) y el bit 2 en 0. Los valores se multiplican por la escala de 0.02 K y se
-pasan a °C. Cada punto es la media, en un radio de 5 km, del compuesto de
-mediana del mes.
+conservan solo los píxeles cuyo `QC_Day` tiene los bits 0-1 en 00 (temperatura
+producida con buena calidad) y el bit 2 en 0, que descarta el valor 1 («otra
+calidad») de la bandera de calidad de datos de los bits 2-3. Los valores se
+multiplican por la escala de 0.02 K y se pasan a °C. Cada punto es la media, en
+un radio de 5 km, del compuesto de mediana del mes.
 
 ```python
 MESES = "enero febrero marzo abril mayo junio julio agosto septiembre octubre noviembre diciembre".split()
@@ -119,12 +120,19 @@ P.figure(
 
 ```python hidden
 sin_datos = [MESES[i] for i in np.flatnonzero(np.isnan(lst["Lima"]))]
+altura = {e["place"]: e["elevation_m"] for e in DATOS["elevation"]}
+otros = np.array([lst[lugar] for lugar in lugares if lugar != "Cusco"])
+cusco_mas_frio = bool(np.all(lst["Cusco"] < np.nanmin(otros, axis=0)))
+rango = {lugar: np.nanmax(lst[lugar]) - np.nanmin(lst[lugar]) for lugar in lugares}
 md(
     f"""
-    Lima no tiene píxeles válidos en {", ".join(sin_datos[:-1])} y {sin_datos[-1]}: la niebla costera
-    del invierno cubre la ciudad y el filtro de calidad descarta esos días.
-    Cusco, a más de 3000 m, es el más frío de los tres todo el año. Iquitos, en
-    la Amazonía, varía poco entre meses.
+    En {", ".join(sin_datos[:-1])} y {sin_datos[-1]} ningún día pasa el filtro
+    de calidad en el radio de Lima, así que esos meses quedan vacíos. Cusco, a
+    {altura["Cusco"]} m, es
+    {"el más frío de los tres en cada mes con datos" if cusco_mas_frio else "más frío que los otros dos solo en algunos meses"}.
+    Entre el mes más cálido y el más frío, Cusco varía {rango["Cusco"]:.1f} °C,
+    Iquitos {rango["Iquitos"]:.1f} °C y Lima, sin sus meses vacíos,
+    {rango["Lima"]:.1f} °C.
     """
 )
 ```
