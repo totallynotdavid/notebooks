@@ -6,6 +6,12 @@ from quire import plot as P
 
 # Atractor de Lorenz
 
+Lorenz (_J. Atmos. Sci._ 20, 130, 1963) redujo la convección en una capa de
+fluido calentada desde abajo a tres variables: $x$ es proporcional a la
+intensidad de la convección, $y$ a la diferencia de temperatura entre la
+corriente que sube y la que baja, y $z$ a cuánto se aparta de una recta el
+perfil vertical de temperatura.
+
 $$
 \begin{aligned}
 \dot x &= \sigma (y - x),\\
@@ -14,10 +20,13 @@ $$
 \end{aligned}
 $$
 
-Con $\sigma = 10$, $\beta = 8/3$ y $\rho = 28$ el sistema es caótico. Integramos
-con Runge–Kutta de cuarto orden (RK4) escrito con NumPy y calculamos tres cosas
-sobre el atractor: el mayor exponente de Lyapunov, el mapa de Lorenz y el
-diagrama de bifurcación en $\rho$.
+$\sigma$ es el número de Prandtl, $\rho$ es el número de Rayleigh dividido entre
+el de inicio de la convección, y $\beta = 4/(1 + a^2)$ depende de la razón de
+aspecto $a$ de las celdas. Tomamos los valores de Lorenz: $\sigma = 10$ y
+$\beta = 8/3$, y $\rho = 28$, algo por encima de $\rho_H = 470/19 \approx
+24.74$, donde la convección estacionaria deja de ser estable. Integramos con
+Runge–Kutta de cuarto orden (RK4) con el paso adimensional de Lorenz, $\Delta
+t = 0.01$.
 
 ```python
 SIGMA, RHO, BETA = 10.0, 28.0, 8.0 / 3.0
@@ -52,10 +61,20 @@ def integrar(s0, dt, pasos, p):
 
 ## El atractor
 
-Desde $(0.1, 0, 0)$, cerca del origen inestable, la trayectoria sale en espiral
-y en pocas unidades de tiempo cae en el atractor. Ahí gira alrededor de uno de
-los dos puntos fijos $(\pm\sqrt{\beta(\rho-1)}, \pm\sqrt{\beta(\rho-1)},
-\rho-1)$ y salta al otro sin un patrón que se repita. El color marca el tiempo.
+La divergencia del campo es $-(\sigma + \beta + 1) = -41/3$ en todo punto, así
+que cualquier volumen del espacio de fases se contrae como $e^{-41t/3}$ y las
+trayectorias acaban en un conjunto de volumen nulo, el atractor. Para $\rho > 1$
+el origen, que es el fluido en reposo, es inestable, y aparecen dos puntos
+fijos, uno por sentido de giro de la convección:
+
+$$
+C_\pm = \left(\pm\sqrt{\beta(\rho-1)},\ \pm\sqrt{\beta(\rho-1)},\ \rho-1\right)
+= (\pm 6\sqrt{2},\ \pm 6\sqrt{2},\ 27).
+$$
+
+Con $\rho > \rho_H$ también son inestables. La trayectoria que sale de $(0.1, 0,
+0)$ se aleja en espiral de uno de ellos y pasa al otro. El color marca el
+tiempo.
 
 ```python hidden
 ESTADO_INICIAL = (0.1, 0.0, 0.0)
@@ -81,6 +100,31 @@ P.grid(
     proyeccion(x, z, "x", "z", "Plano x–z: las dos alas"),
     proyeccion(x, y, "x", "y", "Plano x–y"),
 )
+```
+
+```python hidden
+# Una vuelta termina en un máximo de z; el signo de x dice alrededor de qué
+# punto fijo fue.
+picos = np.flatnonzero((z[1:-1] > z[:-2]) & (z[1:-1] >= z[2:])) + 1
+lados = np.sign(x[picos])
+cambios = np.flatnonzero(np.diff(lados)) + 1
+vueltas = np.diff(np.concatenate([[0], cambios, [lados.size]]))[1:-1]
+lista = ", ".join(str(v) for v in vueltas[1:13])
+z_picos = z[picos][:-1]
+cambia = lados[1:] != lados[:-1]
+# La primera racha es la espiral que sale de C₊; el umbral se mide después.
+despues = picos[:-1] > picos[cambios[0]]
+cambio_min = z_picos[cambia & despues].min()
+sigue_max = z_picos[~cambia & despues].max()
+md(f"""
+Cada vuelta termina en un máximo de $z$, y el signo de $x$ en ese máximo dice
+alrededor de cuál punto fijo fue. La primera racha, la espiral que se aleja de
+$C_+$, dura {vueltas[0]} vueltas; las siguientes duran {lista}. Lorenz notó que
+la trayectoria cambia de lado justo después de un máximo de $z$ mayor que un
+umbral, cerca de 38.5 en estas unidades. Aquí todo cambio sigue a un máximo de
+al menos {cambio_min:.2f}, y todo máximo sin cambio queda por debajo de
+{sigue_max:.2f}.
+""")
 ```
 
 ## Orden del integrador
@@ -324,15 +368,14 @@ P.figure(
 
 ## Mapa de Lorenz
 
-Si $z_n$ es el $n$-ésimo máximo local de $z(t)$, el gráfico de $z_{n+1}$ frente
-a $z_n$ cae casi sobre una curva con un solo pico. Esa curva es un mapa
-unidimensional: para la sucesión de máximos, el flujo tridimensional se reduce a
-una función de una variable. Guckenheimer y Williams (_Publ. Math. IHÉS_ 50,
-1979, doi 10.1007/bf02684769) hacen lo mismo con su modelo geométrico del
-atractor: la sección de Poincaré se reduce a un mapa $f$ de un intervalo en sí
-mismo, y su dinámica simbólica determina la del atractor. Aquí el mapa se
-obtiene numéricamente de las ecuaciones de Lorenz. Cada máximo se refina con la
-parábola que pasa por los tres puntos que lo rodean.
+Si $z_n$ es el $n$-ésimo máximo local de $z(t)$, los puntos $(z_n, z_{n+1})$
+caen casi sobre una curva con un solo pico (Lorenz 1963, fig. 4): cada máximo
+determina el siguiente, y el flujo tridimensional se reduce, para esta sucesión,
+a una función de una variable. Lorenz la idealizó como el mapa tienda $M_{n+1} =
+2M_n$ si $M_n < 1/2$ y $M_{n+1} = 2 - 2M_n$ si $M_n > 1/2$, cuyas dos ramas
+tienen pendiente de valor absoluto 2. Con esa pendiente, una diferencia entre
+dos sucesiones se duplica en cada máximo. Cada máximo se refina con la parábola
+que pasa por los tres puntos que lo rodean.
 
 ```python
 historia_z = integrar(en_atractor, DT, 10_000, PARAMETROS)[:, 2, :]
@@ -377,10 +420,13 @@ fijo = xs[i] - (ys[i] - xs[i]) * (xs[i + 1] - xs[i]) / (
 cerca = np.abs(xs - fijo) < 0.5
 pendiente = np.polyfit(xs[cerca], ys[cerca], 1)[0]
 md(f"""
-Son {zn.size} pares de máximos. La curva tiene un pico agudo en
-$z_n \\approx {critico:.1f}$ y cruza la diagonal en $z^* \\approx {fijo:.1f}$,
-donde su pendiente ajustada es {pendiente:.2f}. Como $|f'(z^*)| > 1$, el punto
-fijo es inestable: las sucesiones de máximos vecinas se separan en cada paso.
+Son {zn.size} pares de máximos de los 32 puntos de partida. La curva tiene un
+pico agudo en $z_n \\approx {critico:.1f}$, el umbral de cambio de lado de la
+sección anterior, y cruza la diagonal en $z^* \\approx {fijo:.1f}$, donde su
+pendiente ajustada es {pendiente:.2f}, cerca del $-2$ de la rama derecha del
+mapa tienda. Como $|f'(z^*)| > 1$, ese punto fijo del
+mapa es inestable: dos sucesiones de máximos que empiezan cerca de $z^*$ se
+separan en cada paso.
 """)
 ```
 
@@ -390,14 +436,16 @@ Para cada $\rho$ integramos desde las cercanías del punto fijo
 $(\sqrt{\beta(\rho-1)}, \sqrt{\beta(\rho-1)}, \rho - 1)$, descartamos 30
 unidades de tiempo y registramos los máximos de $z$ en las 60 siguientes. Un
 punto fijo estable aparece como un solo punto, una órbita periódica como pocos
-puntos y el caos como una nube. Los puntos fijos pierden su estabilidad en la
-bifurcación de Hopf,
+puntos y el caos como una nube. Los puntos fijos $C_\pm$ pierden su estabilidad
+cuando dos raíces de su ecuación característica cruzan el eje imaginario (Lorenz
+1963, ec. 34), una bifurcación de Hopf, en
 
 $$
-\rho_H = \frac{\sigma(\sigma + \beta + 3)}{\sigma - \beta - 1},
+\rho_H = \frac{\sigma(\sigma + \beta + 3)}{\sigma - \beta - 1}.
 $$
 
-que existe cuando $\sigma > \beta + 1$.
+Si $\sigma < \beta + 1$, ningún $\rho$ positivo cumple la condición y $C_\pm$
+son estables para todo $\rho > 1$.
 
 ```python
 rhos = np.linspace(20.0, 230.0, 700)
