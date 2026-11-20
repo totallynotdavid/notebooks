@@ -28,12 +28,12 @@ Integrar $E$ entre el ángulo máximo $\theta_0$ y $0$ da el período como una
 integral elíptica completa de primera especie:
 
 $$
-T = \note{$T_0$ dividido entre $\pi/2$}{\frac{4}{\omega_0}}\,
-\note{vale $\pi/2$ en $m=0$ y crece con la amplitud}{K\!\left(m\right)},
-\qquad
-K(m)=\int_0^{\pi/2}\frac{d\phi}{\sqrt{1-m\sin^2\phi}},
-\qquad
-m=\note{va de 0 en reposo a 1 con el péndulo invertido}{\sin^2\frac{\theta_0}{2}}.
+\begin{aligned}
+T &= \note{$T_0$ dividido entre $\pi/2$}{\frac{4}{\omega_0}}\,
+\note{vale $\pi/2$ en $m=0$ y crece con la amplitud}{K\!\left(m\right)},\\
+K(m) &= \int_0^{\pi/2}\frac{d\phi}{\sqrt{1-m\sin^2\phi}},\\
+m &= \note{va de 0 en reposo a 1 con el péndulo invertido}{\sin^2\frac{\theta_0}{2}}.
+\end{aligned}
 $$
 
 Para $\theta_0\to0$, $K(0)=\pi/2$ y se recupera $T_0$. Calculamos $K$ con la

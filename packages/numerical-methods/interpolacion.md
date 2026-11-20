@@ -56,7 +56,7 @@ def newton(x, y, t, terminos=None):
 
 ## Lagrange con cuatro puntos
 
-Datos $x=1,2,3,4$ con $y=0.671,\ 0.620,\ 0.567,\ 0.520$, interpolados en
+Datos $x=1,2,3,4$ con $y=0.671$, $0.620$, $0.567$, $0.520$, interpolados en
 $x=2.8$. Cada $L_i$ vale 1 en $x_i$ y 0 en los demás nodos.
 
 ```python
@@ -180,8 +180,10 @@ polinomio queda en términos de las diferencias finitas. Con $s=(x-x_0)/h$, haci
 adelante
 
 $$
-p(x)=\sum_{k=0}^n\binom sk\Delta^kf_0,\qquad
-\binom sk=\frac{s(s-1)\cdots(s-k+1)}{k!},
+\begin{aligned}
+p(x) &= \sum_{k=0}^n\binom sk\Delta^kf_0,\\
+\binom sk &= \frac{s(s-1)\cdots(s-k+1)}{k!},
+\end{aligned}
 $$
 
 y con $s=(x-x_n)/h$, hacia atrás (con $\nabla f_i=f_i-f_{i-1}$)
@@ -190,11 +192,12 @@ $$
 p(x)=\sum_{k=0}^n\binom{s+k-1}{k}\nabla^kf_n .
 $$
 
-Dos tablas con paso constante. La primera, $x=150,160,\ldots,210$ con
-$y=35.5,37.8,43.6,45.7,47.3,50.1,51.2$, se interpola en $x=162$ con la fórmula
-hacia adelante. La segunda, $x=500,700,\ldots,1900$ con
-$y=365,361.6,370.74,379.68,384.46,395.5,395.95,397$, se interpola en $x=1000$
-con la fórmula hacia atrás. Ambas se comparan con las diferencias divididas.
+Dos tablas con paso constante. La primera, $x=150,160,\ldots,210$ con $y=35.5$,
+$37.8$, $43.6$, $45.7$, $47.3$, $50.1$, $51.2$, se interpola en $x=162$ con la
+fórmula hacia adelante. La segunda, $x=500,700,\ldots,1900$ con $y=365$,
+$361.6$, $370.74$, $379.68$, $384.46$, $395.5$, $395.95$, $397$, se interpola en
+$x=1000$ con la fórmula hacia atrás. Ambas se comparan con las diferencias
+divididas.
 
 ```python
 def binomial_generalizado(s, k):

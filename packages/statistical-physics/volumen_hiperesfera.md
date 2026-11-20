@@ -24,16 +24,19 @@ dimensiones, $$\int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x = (\sqrt{\pi})^n = \pi^{n
 
 En coordenadas hiperesféricas,
 
-$$ \int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x
-= S_{n-1}\int_0^{\infty} e^{-r^2}r^{n-1}dr
-= S_{n-1}\,\frac{1}{2}\Gamma\!\left(\frac{n}{2}\right),$$
+$$ \begin{aligned}
+\int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x
+&= S_{n-1}\int_0^{\infty} e^{-r^2}r^{n-1}dr\\
+&= S_{n-1}\,\frac{1}{2}\Gamma\!\left(\frac{n}{2}\right),
+\end{aligned}$$
 de donde
 $$S_{n-1}=\frac{2\pi^{n/2}}{\Gamma(n/2)}.$$
 
 Integrando el área radialmente, el volumen de radio $R$ es
-$$V_n(R)=\frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}R^n,
-\qquad
-V_n(1)=\frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}.$$
+$$\begin{aligned}
+V_n(R) &= \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}R^n,\\
+V_n(1) &= \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}.
+\end{aligned}$$
 
 ## Monte Carlo por rechazo
 

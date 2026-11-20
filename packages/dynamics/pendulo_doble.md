@@ -13,26 +13,32 @@ $y=(\theta_1,\omega_1,\theta_2,\omega_2)$. Con $\delta=\theta_1-\theta_2$, las
 ecuaciones de Lagrange dan
 
 $$
-\dot\omega_1 =
-\frac{-g(2m_1+m_2)\sin\theta_1 - m_2 g\sin(\theta_1-2\theta_2)
-- 2\sin\delta\,m_2\left(\omega_2^2\ell_2+\omega_1^2\ell_1\cos\delta\right)}
-{\ell_1\left(2m_1+m_2-m_2\cos 2\delta\right)},
+\dot\omega_1 = \frac{N_1}{\ell_1 D},
+\qquad
+\dot\omega_2 = \frac{N_2}{\ell_2 D},
 $$
 
+con
+
 $$
-\dot\omega_2 =
-\frac{2\sin\delta\left(\omega_1^2\ell_1(m_1+m_2)
-+ g(m_1+m_2)\cos\theta_1+\omega_2^2\ell_2 m_2\cos\delta\right)}
-{\ell_2\left(2m_1+m_2-m_2\cos 2\delta\right)}.
+\begin{aligned}
+D &= 2m_1+m_2-m_2\cos 2\delta,\\
+N_1 &= -g(2m_1+m_2)\sin\theta_1\\
+&{}- m_2 g\sin(\theta_1-2\theta_2)\\
+&{}- 2m_2\sin\delta\,\bigl(\omega_2^2\ell_2+\omega_1^2\ell_1\cos\delta\bigr),\\
+N_2 &= 2\sin\delta\,\bigl(\omega_1^2\ell_1(m_1+m_2)\\
+&{}+ g(m_1+m_2)\cos\theta_1+\omega_2^2\ell_2 m_2\cos\delta\bigr).
+\end{aligned}
 $$
 
 No hay disipación, así que la energía
 
 $$
 \begin{aligned}
-E ={}& \tfrac12(m_1+m_2)\ell_1^2\omega_1^2 + \tfrac12 m_2\ell_2^2\omega_2^2
-+ m_2\ell_1\ell_2\,\omega_1\omega_2\cos\delta \\
-&- (m_1+m_2)g\ell_1\cos\theta_1 - m_2 g\ell_2\cos\theta_2
+E ={}& \tfrac12(m_1+m_2)\ell_1^2\omega_1^2 + \tfrac12 m_2\ell_2^2\omega_2^2\\
+&+ m_2\ell_1\ell_2\,\omega_1\omega_2\cos\delta\\
+&- (m_1+m_2)g\ell_1\cos\theta_1\\
+&- m_2 g\ell_2\cos\theta_2
 \end{aligned}
 $$
 

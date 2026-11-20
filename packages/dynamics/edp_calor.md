@@ -9,9 +9,11 @@ from quire import plot as P
 Una barra de longitud $L$ con difusividad $\alpha$ evoluciona según
 
 $$
-\frac{\partial T}{\partial t}=\alpha\frac{\partial^2T}{\partial x^2},
-\qquad
-T(0,t)=0,\quad T(L,t)=T_b,\quad T(x,0)=0\ \ (0\le x<L).
+\begin{gathered}
+\frac{\partial T}{\partial t}=\alpha\frac{\partial^2T}{\partial x^2},\\
+T(0,t)=0,\quad T(L,t)=T_b,\\
+T(x,0)=0\ \ (0\le x<L).
+\end{gathered}
 $$
 
 Hay una solución analítica. Con $T=T_b\,x/L+u$, $u$ cumple la ecuación con
@@ -19,9 +21,11 @@ extremos en cero y condición inicial $u(x,0)=-T_b\,x/L$, y el desarrollo en
 senos da
 
 $$
-T(x,t)=T_b\frac{x}{L}+\sum_{n=1}^{\infty}
-\frac{2T_b(-1)^n}{n\pi}\,
-\sin\frac{n\pi x}{L}\;e^{-\alpha(n\pi/L)^2t}.
+\begin{aligned}
+T(x,t) &= T_b\frac{x}{L}
++ \sum_{n=1}^{\infty} b_n \sin(k_n x)\,e^{-\alpha k_n^2 t},\\
+b_n &= \frac{2T_b(-1)^n}{n\pi},\qquad k_n = \frac{n\pi}{L}.
+\end{aligned}
 $$
 
 Cada modo decae con su propia constante de tiempo. Para $t>0$ la serie converge
@@ -67,10 +71,10 @@ oscilante no decae.
 **Crank–Nicolson** promedia el laplaciano entre $n$ y $n+1$:
 
 $$
-T_i^{n+1}-\tfrac r2\,\delta^2T_i^{n+1}
-=T_i^{n}+\tfrac r2\,\delta^2T_i^{n},
-\qquad
-\delta^2T_i=T_{i-1}-2T_i+T_{i+1}.
+\begin{aligned}
+T_i^{n+1}-\tfrac r2\,\delta^2T_i^{n+1} &= T_i^{n}+\tfrac r2\,\delta^2T_i^{n},\\
+\delta^2T_i &= T_{i-1}-2T_i+T_{i+1}.
+\end{aligned}
 $$
 
 Cada paso resuelve un sistema tridiagonal. El factor de amplificación

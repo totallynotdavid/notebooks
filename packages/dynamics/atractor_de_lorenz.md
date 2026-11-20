@@ -7,9 +7,11 @@ from quire import plot as P
 # Atractor de Lorenz
 
 $$
-\dot x = \sigma (y - x),\qquad
-\dot y = x(\rho - z) - y,\qquad
-\dot z = xy - \beta z.
+\begin{aligned}
+\dot x &= \sigma (y - x),\\
+\dot y &= x(\rho - z) - y,\\
+\dot z &= xy - \beta z.
+\end{aligned}
 $$
 
 Con $\sigma = 10$, $\beta = 8/3$ y $\rho = 28$ el sistema es caótico. Integramos

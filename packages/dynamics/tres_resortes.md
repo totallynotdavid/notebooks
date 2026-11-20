@@ -12,17 +12,19 @@ resorte $k_2$ une $m_2$ con la pared derecha. Con $x_1,x_2$ los desplazamientos
 desde el equilibrio,
 
 $$
-m_1\ddot x_1 = -k_1x_1 + k\,(x_2-x_1),
-\qquad
-m_2\ddot x_2 = -k_2x_2 - k\,(x_2-x_1),
+\begin{aligned}
+m_1\ddot x_1 &= -k_1x_1 + k\,(x_2-x_1),\\
+m_2\ddot x_2 &= -k_2x_2 - k\,(x_2-x_1),
+\end{aligned}
 $$
 
 o en forma matricial $M\ddot{\mathbf x} = -K\mathbf x$ con
 
 $$
-M=\begin{pmatrix} m_1 & 0\\ 0 & m_2\end{pmatrix},
-\qquad
-K=\begin{pmatrix} k_1+k & -k\\ -k & k_2+k\end{pmatrix}.
+\begin{aligned}
+M &= \begin{pmatrix} m_1 & 0\\ 0 & m_2\end{pmatrix},\\[0.5em]
+K &= \begin{pmatrix} k_1+k & -k\\ -k & k_2+k\end{pmatrix}.
+\end{aligned}
 $$
 
 ## Modos normales
@@ -80,8 +82,10 @@ md(
     mayor. Los dos vectores son ortogonales respecto de $M$:
 
     $$
-    {M1}\cdot{formas[0, 0]:.3f}\cdot{formas[0, 1]:.3f}
-    + {M2}\cdot{formas[1, 0]:.3f}\cdot({formas[1, 1]:.3f}) = 0.
+    \begin{{aligned}}
+    &{M1}\cdot{formas[0, 0]:.3f}\cdot{formas[0, 1]:.3f}\\
+    &+ {M2}\cdot{formas[1, 0]:.3f}\cdot({formas[1, 1]:.3f}) = 0.
+    \end{{aligned}}
     $$
     """
 )

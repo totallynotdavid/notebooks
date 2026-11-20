@@ -48,11 +48,27 @@ expression. A value of `None` shows nothing. The value becomes:
 | Value                 | Output                                                                        |
 | --------------------- | ----------------------------------------------------------------------------- |
 | `md(text)`            | Markdown and math, so an f-string puts computed numbers into prose and tables |
+| `table(header, rows)` | A Markdown table built from computed rows                                     |
 | `P.figure(...)`       | A chart drawn in the browser                                                  |
 | `P.grid(figure, ...)` | Charts side by side, one column on a narrow page                              |
 | anything else         | Its `repr` as plain text                                                      |
 
 `md` removes the common indentation of its text.
+
+## Math and tables on a phone
+
+The article column is about 21rem wide on a phone, and nothing in it scales
+down to fit.
+
+- Write a display formula that fits that width. Stack equations with `aligned`
+  on `=` or with `gathered`, and give a long term a name defined on its own
+  line. KaTeX breaks inline math only after a relation or an operator, so write
+  a list of values as separate inline formulas: `$y=0.671$, $0.620$`.
+- A right-aligned column (`---:`) holds numbers. It is set in mono and stays on
+  one line. Any other column wraps between words. `table` right-aligns every
+  column after the first whose cells are all numbers.
+- A table still wider than the column scrolls sideways with its first column
+  pinned. Drop or split columns before relying on that.
 
 ## Figures
 

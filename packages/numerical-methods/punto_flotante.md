@@ -14,10 +14,10 @@ Un número real se guarda como $(-1)^s\,(1.m)_2\times2^{e}$: un signo, un
 exponente y una mantisa de longitud fija. Solo unos cuantos reales caben, y el
 resto se redondea al más cercano. De ahí salen todos los errores que siguen.
 
-| tipo   | NumPy     | signo |       exponente | mantisa |
-| ------ | --------- | ----: | --------------: | ------: |
-| simple | `float32` |     1 |   8 (sesgo 127) |      23 |
-| doble  | `float64` |     1 | 11 (sesgo 1023) |      52 |
+| tipo   | NumPy     | signo | exponente | sesgo | mantisa |
+| ------ | --------- | ----: | --------: | ----: | ------: |
+| simple | `float32` |     1 |         8 |   127 |      23 |
+| doble  | `float64` |     1 |        11 |  1023 |      52 |
 
 El `float` de Python es un `float64`.
 

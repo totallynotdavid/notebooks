@@ -16,11 +16,13 @@ Sea $\Omega$ una región de volumen $V_\Omega$ y $X_1,\ldots,X_N$ puntos
 independientes y uniformes en $\Omega$. Entonces
 
 $$
-I=\int_\Omega f(x)\,dx \approx \hat I_N = V_\Omega\,\note{la media muestral de
-$f$}{\frac1N\sum_{i=1}^N f(X_i)},
-\qquad
-\sigma_{\hat I}=V_\Omega\,\note{no depende de la dimensión de
+\begin{aligned}
+I &= \int_\Omega f(x)\,dx \approx \hat I_N,\\
+\hat I_N &= V_\Omega\,\note{la media muestral de
+$f$}{\frac1N\sum_{i=1}^N f(X_i)},\\
+\sigma_{\hat I} &= V_\Omega\,\note{no depende de la dimensión de
 $\Omega$}{\frac{1}{\sqrt N}}\sqrt{\operatorname{Var}f(X)},
+\end{aligned}
 $$
 
 y $\operatorname{Var}f(X)$ se estima con la varianza muestral $s_f^2$ (`ddof=1`
@@ -272,10 +274,11 @@ $\sqrt{\operatorname{Var}}$. Si se muestrea con una densidad $p(x)$ en lugar de
 la uniforme,
 
 $$
-I=\int f(x)\,dx=\int \frac{f(x)}{p(x)}\,p(x)\,dx
-=\mathbb E_p\!\left[\frac{f(X)}{p(X)}\right],
-\qquad
-\hat I_N=\frac1N\sum_{i=1}^N\frac{f(X_i)}{p(X_i)},\ \ X_i\sim p.
+\begin{aligned}
+I &= \int f(x)\,dx=\int \frac{f(x)}{p(x)}\,p(x)\,dx\\
+&= \mathbb E_p\!\left[\frac{f(X)}{p(X)}\right],\\
+\hat I_N &= \frac1N\sum_{i=1}^N\frac{f(X_i)}{p(X_i)},\ \ X_i\sim p.
+\end{aligned}
 $$
 
 La varianza se anula si $p\propto f$, y crece si $p$ se aparta de $f$ o es menor

@@ -27,12 +27,13 @@ de frontera periódicas, a muchas temperaturas, y se estiman, con $m=\sum_i
 s_i/N$ y $e=E/N$,
 
 $$
-\langle |m| \rangle,\qquad
-\langle e \rangle,\qquad
+\begin{gathered}
+\langle |m| \rangle,\qquad \langle e \rangle,\\
 \chi = \beta N\note{la varianza de $|m|$}{\left(\langle m^2\rangle -
-\langle |m|\rangle^2\right)},\qquad
+\langle |m|\rangle^2\right)},\\
 C = \beta^2 N\note{la varianza de $e$}{\left(\langle e^2\rangle -
 \langle e\rangle^2\right)},
+\end{gathered}
 $$
 
 $$

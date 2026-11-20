@@ -285,8 +285,10 @@ vecinos. La aproximación del segundo momento de la banda de enlace fuerte lo
 recoge con una raíz cuadrada:
 
 $$
-E = \sum_i \Big[ A \sum_{j\neq i} e^{-p\,(r_{ij}/r_0 - 1)}
-- \sqrt{\textstyle\sum_{j\neq i} \xi^2\, e^{-2q\,(r_{ij}/r_0 - 1)}}\;\Big].
+\begin{aligned}
+E = \sum_i \Big[\, & A \sum_{j\neq i} e^{-p\,(r_{ij}/r_0 - 1)}\\
+& - \sqrt{\textstyle\sum_{j\neq i} \xi^2\, e^{-2q\,(r_{ij}/r_0 - 1)}}\;\Big].
+\end{aligned}
 $$
 
 El primer término es una repulsión de pares y el segundo la energía de banda.
