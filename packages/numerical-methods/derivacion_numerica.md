@@ -78,9 +78,26 @@ for h in (0.1, 0.05, 0.02):
 md("\n".join(["| $h$ | fórmula | $D$ | error (%) |", "|---|---|---:|---:|", *filas]))
 ```
 
-Al pasar de $h=0.1$ a $0.05$ el error de las fórmulas de orden 1 se divide entre
-2, y el de las de orden 2 entre 4. Esa es la definición práctica de orden:
-$e(h)\approx C\,h^p$.
+```python hidden
+def cociente(nombre):
+    formula = formulas[nombre]
+    return (formula(f, X0, 0.1) - exacta) / (formula(f, X0, 0.05) - exacta)
+
+
+orden_1 = [cociente(n) for n in ("atrás", "adelante")]
+orden_2 = [cociente(n) for n in ("centrada", "3 puntos atrás", "3 puntos adelante")]
+md(
+    rf"""
+    Al pasar de $h=0.1$ a $0.05$ el error de las fórmulas de orden 1 se divide
+    entre {min(orden_1):.2f} y {max(orden_1):.2f}, y el de las de orden 2 entre
+    {min(orden_2):.2f} y {max(orden_2):.2f}. El orden $p$ predice $2^p$, es
+    decir 2 y 4, cuando $e(h)\approx C\,h^p$. Con $h=0.1$ los términos siguientes
+    del desarrollo aún pesan, sobre todo en las fórmulas de 3 puntos, cuyo
+    siguiente término es $O(h^3)$; en la gráfica de abajo las pendientes se
+    miden con $h$ menores.
+    """
+)
+```
 
 ## Error contra $h$: el orden y el piso del redondeo
 
@@ -314,10 +331,17 @@ md(
 )
 ```
 
-Las pendientes, ajustadas en $0.02\le h\le0.2$, son 2, 4 y 6, como predice la
-teoría. Richardson no cambia el redondeo, $\varepsilon|f|/h$, pero reduce el
-truncamiento, así que el mínimo se alcanza con un $h$ mayor, donde el redondeo
-es menor. Por eso el error mínimo baja.
+```python hidden
+md(
+    rf"""
+    Las pendientes, ajustadas en $0.02\le h\le0.2$, son
+    {", ".join(f"{p:.2f}" for p in pendientes_rich.values())}, cerca de los
+    órdenes 2, 4 y 6. Richardson no cambia el redondeo, $\varepsilon|f|/h$, pero
+    reduce el truncamiento, así que el mínimo se alcanza con un $h$ mayor, donde
+    el redondeo es menor. Por eso el error mínimo baja.
+    """
+)
+```
 
 ## Derivada a partir de una tabla de diferencias
 
