@@ -8,7 +8,7 @@ const katexPlugin =
   (katexPluginModule as unknown as { default?: typeof katexPluginModule })
     .default ?? katexPluginModule;
 
-/** Colors a note can take: the palette's `--chart-1` to `--chart-6`. */
+/** Colors a note can take: the six `--chart-*` colors; see prose.css. */
 export const MAX_NOTES = 6;
 
 const OPTIONS: KatexOptions = {

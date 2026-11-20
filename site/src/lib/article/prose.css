@@ -127,23 +127,25 @@
 .article .formula [data-note] {
   transition: opacity 150ms ease-out;
 }
+/* --chart-1 is the light theme's accent, close to the text color, so a term
+   colored with it reads as uncolored. Notes start at --chart-2. */
 .article .formula [data-note="1"] {
-  color: var(--chart-1);
-}
-.article .formula [data-note="2"] {
   color: var(--chart-2);
 }
-.article .formula [data-note="3"] {
+.article .formula [data-note="2"] {
   color: var(--chart-3);
 }
-.article .formula [data-note="4"] {
+.article .formula [data-note="3"] {
   color: var(--chart-4);
 }
-.article .formula [data-note="5"] {
+.article .formula [data-note="4"] {
   color: var(--chart-5);
 }
-.article .formula [data-note="6"] {
+.article .formula [data-note="5"] {
   color: var(--chart-6);
+}
+.article .formula [data-note="6"] {
+  color: var(--chart-1);
 }
 .article .formula:has([data-note="1"]:hover) [data-note]:not([data-note="1"]),
 .article .formula:has([data-note="2"]:hover) [data-note]:not([data-note="2"]),
