@@ -515,10 +515,17 @@ md(
 )
 ```
 
-El error real de la bisección no baja de forma monótona (la raíz puede quedar
-cerca de un punto medio por azar), pero la cota sí, y es lo que se garantiza.
-Falsa posición baja casi como una recta, más rápido que la bisección. Newton lo
-hace en 5 pasos.
+```python hidden
+pasos_newton = primero(errores["Newton ($x_0=-6$)"], 1e-12)
+md(
+    f"""
+    El error real de la bisección no baja de forma monótona (la raíz puede
+    quedar cerca de un punto medio por azar), pero la cota sí, y es lo que se
+    garantiza. Falsa posición baja casi como una recta, más rápido que la
+    bisección. Newton baja de $10^{{-12}}$ en {pasos_newton} pasos.
+    """
+)
+```
 
 ## Orden de convergencia observado
 
@@ -574,10 +581,17 @@ md(
 )
 ```
 
-La bisección y falsa posición dan $p=1$ (convergencia lineal) con razones $0.5$
-y $\approx0.28$: la segunda es una constante de la función y el intervalo, la
-primera no depende de ellos. Newton da $p=2$ y las razones $e_{k+1}/e_k$ no se
-estabilizan: tienden a cero.
+```python hidden
+md(
+    f"""
+    La bisección y falsa posición dan $p=1$ (convergencia lineal) con razones
+    {razones["bisección (cota)"][-1]:.2f} y
+    {razones["falsa posición"][-1]:.2f}: la segunda depende de la función y del
+    intervalo, la primera no. Newton da $p=2$ y las razones $e_{{k+1}}/e_k$ no se
+    estabilizan: tienden a cero.
+    """
+)
+```
 
 En falsa posición uno de los extremos queda fijo en todas las iteraciones (la
 función es cóncava en el intervalo y la cuerda siempre corta del mismo lado),
@@ -589,8 +603,8 @@ sirve; se mide $|f|$ o el cambio entre iterados.
 **Punto inicial.** Con el mismo $f$ y $x_0=-1$ se tiene $f(-1)=6$ y $f'(-1)=-7$,
 así que $x_1=-1-6/(-7)\approx-0.143$: el primer paso cae cerca de $x=0$, donde
 $f'=0$ y las tangentes son casi horizontales, y los iterados siguientes saltan
-sin acercarse a la raíz. Con $x_0=-6$ converge en 5 pasos. Newton no exige un
-corchete y por eso no garantiza nada lejos de la raíz.
+sin acercarse a la raíz. Con $x_0=-6$ converge, como se vio arriba. Newton no
+exige un corchete y por eso no garantiza nada lejos de la raíz.
 
 **Raíz múltiple.** Si $f(x)=(x-1)^2(x+2)$, la raíz $x=1$ es doble: $f'(1)=0$ y
 la convergencia baja a lineal con razón $\tfrac12$. Para una raíz de
@@ -640,7 +654,8 @@ md(
     f"""
     Con la raíz doble el error de Newton clásico se reduce a la mitad en cada
     paso (de {e[0]:.2e} a {e[-1]:.2e} en 14 pasos, razón {e[-1] / e[-2]:.3f}).
-    Con $m=2$ el error cae a cero (se anula en `float64`) en 5 pasos. El precio
+    Con $m=2$ el error llega a cero en `float64` en
+    {np.flatnonzero(error_doble["Newton con $m=2$"] == 0)[0] + 1} pasos. El precio
     es saber $m$ de antemano.
     """
 )
