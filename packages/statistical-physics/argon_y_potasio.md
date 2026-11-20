@@ -78,11 +78,14 @@ md(
 
 ## Conservación de la energía
 
-Velocity Verlet es simpléctico: la energía total $E = K + U$ no crece ni decae,
-solo oscila alrededor de un valor fijo. En la producción no hay termostato, así
-que $E(t)$ es la comprobación de que las fuerzas y el integrador son coherentes.
-El truncamiento con fuerza desplazada evita los saltos de energía cuando un par
-cruza $r_c$.
+Velocity Verlet es simpléctico. Para un hamiltoniano suave, su error en la
+energía total $E = K + U$ queda acotado por $C\,\Delta t^2$ durante tiempos muy
+largos, sin deriva sistemática (Hairer, Lubich y Wanner 2003, teorema 5.1). El
+potencial truncado tiene fuerza continua pero no derivadas continuas en $r_c$,
+así que el teorema no se aplica tal cual, y la corrida lo comprueba. En la
+producción no hay termostato, así que $E(t)$ es la prueba de que las fuerzas y
+el integrador son coherentes. El truncamiento con fuerza desplazada evita los
+saltos de energía cuando un par cruza $r_c$.
 
 ```python hidden
 cada_5 = slice(None, None, 5)
@@ -292,10 +295,11 @@ E = \sum_i \Big[\, & A \sum_{j\neq i} e^{-p\,(r_{ij}/r_0 - 1)}\\
 $$
 
 El primer término es una repulsión de pares y el segundo la energía de banda.
-Para K se usa $A=1.51$ mRy, $\xi=19.3$ mRy, $r_0=8.253\,a_0$, $p=10.58$ y
-$q=1.34$. Los cúmulos regulares de 2, 3 y 4 átomos (dímero, triángulo y
-tetraedro) permiten ver la dependencia con la coordinación: la energía por átomo
-baja al pasar de 1 a 3 vecinos.
+Para K se usan los parámetros de Li, Blaisten-Barojas y Papaconstantopoulos
+(1998, tabla II), ajustados a energías LDA de redes bcc y fcc: $A=1.51$ mRy,
+$\xi=19.3$ mRy, $r_0=8.253\,a_0$, $p=10.58$ y $q=1.34$. Los cúmulos regulares de
+2, 3 y 4 átomos (dímero, triángulo y tetraedro) dan a cada átomo 1, 2 y 3
+vecinos, y permiten ver la dependencia con la coordinación.
 
 ```python
 distancias = np.linspace(3.3, 6.0, 300)
@@ -332,8 +336,8 @@ P.figure(
 El mismo esquema de velocity Verlet, con fuerzas analíticas del potencial, mueve
 un tetraedro de K perturbado. Como en el caso de Lennard-Jones, la energía total
 es la comprobación: la cinética y la potencial se intercambian y la suma
-permanece constante. Unidades: eV, Å y masa atómica; el paso es 0.5 en unidades
-de 10.18 fs.
+permanece casi constante. Unidades: eV, Å y masa atómica; el paso es 0.5 en
+unidades de 10.18 fs.
 
 ```python
 rng = np.random.default_rng(4)
@@ -369,8 +373,24 @@ P.figure(
 )
 ```
 
+```python hidden
+md(
+    f"""
+    En los 2000 pasos la energía total oscila en {np.ptp(total_k):.1e} eV de
+    pico a pico, {np.ptp(total_k) / np.ptp(cinetica_k):.1e} veces la oscilación
+    de la cinética.
+    """
+)
+```
+
 ## Referencias
 
 - L. Verlet, _Computer "Experiments" on Classical Fluids. I. Thermodynamical
   Properties of Lennard-Jones Molecules_, Phys. Rev. **159**, 98 (1967).
   doi:10.1103/PhysRev.159.98
+- Y. Li, E. Blaisten-Barojas y D. A. Papaconstantopoulos, _Structure and
+  dynamics of alkali-metal clusters and fission of highly charged clusters_,
+  Phys. Rev. B **57**, 15519 (1998). doi:10.1103/PhysRevB.57.15519
+- E. Hairer, Ch. Lubich y G. Wanner, _Geometric numerical integration
+  illustrated by the Störmer–Verlet method_, Acta Numerica **12**, 399 (2003).
+  doi:10.1017/S0962492902000144
