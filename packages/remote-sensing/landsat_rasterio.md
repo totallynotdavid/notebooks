@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 import rasterio
 from quire import md
+from rasterio.transform import array_bounds
+from rasterio.warp import transform_bounds
 from quire import plot as P
 
 ESCENA = (
@@ -43,6 +45,14 @@ with rasterio.open(ESCENA) as dataset:
 
 ```python hidden
 t = metadata["transform"]
+epsg = metadata["crs"].to_epsg()
+hemisferio = {326: "norte", 327: "sur"}[epsg // 100]
+y_negativa = (
+    ". El recorte está al sur del ecuador, así que en esta zona su coordenada"
+    " $y$ es negativa"
+    if hemisferio == "norte" and t.f < 0
+    else ""
+)
 md(
     f"""
     - Producto: `{metadata["tags"]["LANDSAT_PRODUCT_ID"]}`, de la colección
@@ -50,7 +60,7 @@ md(
     - Dimensiones: {metadata["width"]} columnas por {metadata["height"]} filas.
     - Bandas: {metadata["count"]}, llamadas `{", ".join(metadata["descriptions"])}`.
     - Tipo de dato: `{metadata["dtype"]}`. Valor NoData: `{nodata}`.
-    - CRS: `{metadata["crs"]}` (UTM zona 18 sur).
+    - CRS: `{metadata["crs"]}`, UTM zona {epsg % 100} {hemisferio}{y_negativa}.
     - Píxel de {metadata["res"][0]:.0f} m. La esquina superior izquierda está en
       ({t.c:.0f}, {t.f:.0f}) m.
     """
@@ -126,8 +136,9 @@ que la hoja refleja:
 
 $$\mathrm{NDVI} = \frac{\mathrm{NIR} - \mathrm{rojo}}{\mathrm{NIR} + \mathrm{rojo}}$$
 
-Con DN el índice es solo aproximado, porque cada banda tiene su propia
-calibración; basta para separar la vegetación del suelo y del agua.
+Con DN el índice no es el NDVI de reflectancia: cada banda tiene su propia
+ganancia y su propio desplazamiento, así que el valor de un píxel cambia y los
+umbrales publicados para reflectancia no se aplican tal cual.
 
 ```python
 rojo = enmascaradas[3].astype(float)
@@ -161,17 +172,20 @@ P.figure(
 ```
 
 ```python hidden
-vegetacion = float((ndvi > 0.3).mean())
+limites = array_bounds(metadata["height"], metadata["width"], metadata["transform"])
+oeste, sur, este, norte = transform_bounds(metadata["crs"], "EPSG:4326", *limites)
+fecha = metadata["tags"]["LANDSAT_PRODUCT_ID"].split("_")[3]
 negativos = float((ndvi < 0).mean())
 md(
     f"""
-    El recorte cubre unos 13 km por 11 km de los Andes centrales, cerca de
-    11.6° S y 76.3° O, a fines de abril, cuando empieza la estación seca. La
-    mediana del NDVI es {float(np.ma.median(ndvi)):.2f}: domina la vegetación
-    rala, y solo el {vegetacion:.0%} de los píxeles supera 0.3, el
-    valor usual de la vegetación densa. Esos píxeles forman franjas angostas. El
-    {negativos:.1%} tiene un NDVI negativo, propio de superficies
-    que reflejan más en el rojo que en el NIR, como el agua.
+    El recorte cubre {(limites[2] - limites[0]) / 1000:.1f} km por
+    {(limites[3] - limites[1]) / 1000:.1f} km de los Andes del centro del
+    Perú, con centro en {-(sur + norte) / 2:.2f}° S y
+    {-(oeste + este) / 2:.2f}° O, y la escena se tomó el
+    {fecha[6:]}/{fecha[4:6]}/{fecha[:4]}. La mediana del índice es
+    {float(np.ma.median(ndvi)):.2f}, y el {float((ndvi > 0.3).mean()):.0%} de
+    los píxeles pasa de 0.3. El {negativos:.1%} tiene un índice negativo: en
+    esos píxeles el DN del rojo supera al del NIR.
     """
 )
 ```
