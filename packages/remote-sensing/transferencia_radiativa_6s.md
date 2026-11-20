@@ -75,6 +75,7 @@ def run_6s(wavelength_um, aod=0.2, water=2.5, solar_z=40.0):
         transmittance_total_scattering=o.transmittance_total_scattering.total,
         transmittance_water=o.transmittance_water.total,
         spherical_albedo=o.spherical_albedo.total,
+        aerosol_optical_depth=o.optical_depth_total.aerosol,
     )
 ```
 
@@ -219,15 +220,22 @@ P.figure(
 ```python hidden
 azul = aod_table["azul (0.485 µm)"]
 nir = aod_table["NIR (0.865 µm)"]
+atenua = azul[-1] < azul[0] and nir[-1] < nir[0]
+tau_azul = grid["azul (0.485 µm)", AOD_VALUES[-1], 2.5, 40.0].aerosol_optical_depth
+tau_nir = grid["NIR (0.865 µm)", AOD_VALUES[-1], 2.5, 40.0].aerosol_optical_depth
 md(
     f"""
     El AOD actúa de dos formas. Aumenta la luz que la atmósfera dispersa hacia
     el sensor sin tocar la superficie, y atenúa la luz que viene de ella. Sobre
-    una superficie de reflectancia {SURFACE_REFLECTANCE} domina la atenuación:
-    de AOD 0.05 a 1.0 la reflectancia aparente baja de {azul[0]:.4f} a
-    {azul[-1]:.4f} en el azul y de {nir[0]:.4f} a {nir[-1]:.4f} en el NIR. El
-    efecto es mayor en el azul porque los aerosoles dispersan más en longitudes
-    de onda cortas. Las caídas a 0.76 µm y 0.94 µm, presentes en todos los
+    una superficie de reflectancia {SURFACE_REFLECTANCE}
+    {"domina la atenuación" if atenua else "el efecto neto depende de la banda"}:
+    de AOD {AOD_VALUES[0]} a {AOD_VALUES[-1]} la reflectancia aparente pasa de
+    {azul[0]:.4f} a {azul[-1]:.4f} en el azul y de {nir[0]:.4f} a
+    {nir[-1]:.4f} en el NIR. El cambio en el azul es
+    {abs(azul[-1] - azul[0]) / abs(nir[-1] - nir[0]):.1f} veces el del NIR. El
+    AOD se fija a 550 nm, y el aerosol continental de 6S tiene más espesor
+    óptico en longitudes de onda cortas: con AOD {AOD_VALUES[-1]}, vale
+    {tau_azul:.2f} a 0.485 µm y {tau_nir:.2f} a 0.865 µm. Las caídas a 0.76 µm y 0.94 µm, presentes en todos los
     espectros, son la absorción del oxígeno y del vapor de agua.
     """
 )
@@ -235,9 +243,9 @@ md(
 
 ## Efecto del vapor de agua
 
-El vapor de agua absorbe en bandas puntuales. A 0.94 µm la absorción es fuerte,
-mientras que en el azul y el rojo es despreciable. Esto se ve en la
-transmitancia del agua para un AOD de 0.2 y un ángulo cenital solar de 40°:
+El vapor de agua absorbe en bandas de longitud de onda definidas. La tabla da la
+transmitancia del agua que calcula 6S en cada banda, para un AOD de 0.2 y un
+ángulo cenital solar de 40°:
 
 ```python hidden
 tabla(
@@ -252,6 +260,22 @@ tabla(
         ]
         for water in WATER_VALUES
     ],
+)
+```
+
+```python hidden
+transmitancia = {
+    band: [grid[band, 0.2, w, 40.0].transmittance_water for w in WATER_VALUES]
+    for band in BANDS_UM
+}
+banda_agua = "vapor de agua (0.94 µm)"
+minima_otras = min(min(transmitancia[b]) for b in BANDS_UM if b != banda_agua)
+md(
+    f"""
+    Con {WATER_VALUES[-1]} g/cm² de vapor, la transmitancia del agua a 0.94 µm es
+    {transmitancia[banda_agua][-1]:.2f}. En las otras tres bandas
+    {"es 1 en toda la tabla: 6S no les asigna absorción por vapor de agua" if minima_otras == 1 else f"no baja de {minima_otras:.4f}"}.
+    """
 )
 ```
 
