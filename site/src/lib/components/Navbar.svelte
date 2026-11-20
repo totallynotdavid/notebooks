@@ -58,18 +58,17 @@
 		flex-shrink: 0;
 		align-items: center;
 		gap: 0.5rem;
-		font-size: 1.125rem;
+		font-size: 1rem;
 		font-weight: 700;
 		color: var(--content);
 	}
-	/* The section reads as a label after the brand, so the article's h1 stays
-	   the only large serif line on the page. */
+	/* The section shares the brand's size and family and differs only in
+	   weight and colour, so the bar reads as one line of the same type. */
 	.topbar__section {
 		overflow: hidden;
 		padding-left: 0.875rem;
 		border-left: 1px solid var(--line);
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
+		font-size: 1rem;
 		line-height: 1.5rem;
 		color: var(--content-secondary);
 		text-overflow: ellipsis;
