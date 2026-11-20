@@ -57,8 +57,8 @@ expression. A value of `None` shows nothing. The value becomes:
 
 ## Math and tables on a phone
 
-The article column is about 21rem wide on a phone, and nothing in it scales
-down to fit.
+The article column is about 21rem wide on a phone, and nothing in it scales down
+to fit.
 
 - Write a display formula that fits that width. Stack equations with `aligned`
   on `=` or with `gathered`, and give a long term a name defined on its own
