@@ -9,18 +9,20 @@ from quire import plot as P
 
 # Volumen de la hiperesfera en $n$ dimensiones
 
-Objetivo: estimar numéricamente el volumen de la bola
-unitaria $$B_n(1)=\{x\in\mathbb{R}^n:\|x\|\le 1\}$$ con Monte Carlo por rechazo
-en el cubo $[-1,1]^n$, compararlo con la fórmula exacta y entender por qué el
-método falla cuando $n$ crece.
+La bola unitaria $B_n=\{x\in\mathbb{R}^n:\|x\|\le 1\}$ tiene un volumen conocido
+en forma cerrada. Aquí se estima con Monte Carlo por rechazo en el cubo
+$[-1,1]^n$ y se compara con esa fórmula. El método funciona en pocas dimensiones
+y deja de funcionar al crecer $n$, por una razón que se puede calcular.
 
 ## Resultado analítico
 
-La integral gaussiana en una dimensión
-es $$\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}.$$
+La integral gaussiana en una dimensión es $\int_{-\infty}^{\infty}
+e^{-x^2}\,dx = \sqrt{\pi}$, y como $e^{-\|x\|^2}$ es un producto de factores de
+una variable,
 
-En $n$
-dimensiones, $$\int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x = (\sqrt{\pi})^n = \pi^{n/2}.$$
+$$
+\int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x = \pi^{n/2}.
+$$
 
 En coordenadas hiperesféricas,
 
@@ -319,14 +321,18 @@ md(
 )
 ```
 
-Esto es una muestra de la *maldición de la dimensionalidad*. Hinrichs, Prochno y
-Ullrich (J. Complexity 50, 2019) demuestran que, para integrar funciones suaves
-sobre dominios como el cubo o las bolas $\ell_p$, el número de evaluaciones que
-necesita un algoritmo lineal determinista en el peor caso crece
-exponencialmente con la dimensión. Su técnica usa que el volumen de un cuerpo
-convexo isótropo se concentra en una capa delgada alrededor de su radio típico.
-Ese resultado no trata el rechazo en el cubo; es el marco general en el que este
-fallo encaja.
+El nombre general es _maldición de la dimensionalidad_, pero aquí la causa es
+concreta: el cubo es una mala caja para la bola, y la tasa de aciertos $p_n$ cae
+más rápido que cualquier exponencial. Monte Carlo en sí no tiene ese problema,
+porque su error es $\sigma/\sqrt N$ en cualquier dimensión; lo que crece aquí es
+$\sigma/V_n$. Para algoritmos deterministas la maldición sí es inevitable:
+Hinrichs, Prochno y Ullrich (_J. Complexity_ 50, 2019) demuestran que, para
+funciones de clase $C^1$ con derivadas acotadas sobre los cuerpos convexos
+isótropos que cumplen sus hipótesis, entre ellos las bolas $\ell_p$ con $2\le p\le\infty$ normalizadas a
+volumen 1 (el cubo es $p=\infty$), el número de evaluaciones necesario en el
+peor caso crece exponencialmente con la dimensión. Su prueba usa que el volumen
+de esos cuerpos se concentra en una capa delgada alrededor de su radio típico,
+el mismo efecto que muestra la figura de $\|x\|$.
 
 ## Convergencia con $N$
 
