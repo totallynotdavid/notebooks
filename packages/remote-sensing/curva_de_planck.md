@@ -19,13 +19,18 @@ Con $\lambda$ en metros, la fórmula da W/(m²·sr·m). En todo el artículo se 
 $10^{-9}$, de modo que valores, etiquetas y límites de los ejes comparten una
 sola unidad.
 
-Boyer deduce este espectro solo con termodinámica aplicada al oscilador
-armónico: las dos primeras leyes dan el teorema de desplazamiento de Wien (la
-energía del oscilador es función de $T/\omega$) y la tercera ley, con la
-entropía como función analítica, fija la forma de Planck. A alta temperatura la
-energía del oscilador coincide con el resultado de equipartición, que es el
-límite de Rayleigh–Jeans (Boyer, _Eur. J. Phys._ 40, 2019, doi
-10.1088/1361-6404/aaf45b; se leyó la versión arXiv:1809.09093).
+Boyer obtiene esta forma solo con termodinámica aplicada a un oscilador armónico
+clásico, que es la forma de cada modo del campo. Las dos primeras leyes dan el
+teorema de desplazamiento de Wien: $U/\omega$ es función solo de $T/\omega$. Si
+la entropía es función analítica de $U/\omega$ y se exige la tercera ley, la
+energía del oscilador resulta
+$U=\tfrac{\hbar\omega}{2}\coth\!\left(\tfrac{\hbar\omega}{2kT}\right)$, que a
+alta temperatura tiende a la equipartición $kT$ (el límite de Rayleigh–Jeans) y
+a baja temperatura a la energía de punto cero $\hbar\omega/2$. Esa $U$ es la
+energía de Planck más $\hbar\omega/2$. La fórmula de arriba es la parte térmica,
+sin el punto cero, que es la que emite un cuerpo negro por encima del fondo
+(Boyer, _Eur. J. Phys._ 40, 025101, 2019, doi 10.1088/1361-6404/aaf45b; se leyó
+la versión arXiv:1809.09093).
 
 ```python
 # Constantes SI exactas.
