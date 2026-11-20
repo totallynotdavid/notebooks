@@ -157,8 +157,8 @@ programa que imprime el último $e$ del bucle informa $\varepsilon/2$, la mitad
 del épsilon de máquina.
 
 `numpy.finfo` da $\varepsilon$ directamente. `tiny` es el menor normal positivo,
-`max` el mayor número finito y `cifras` las cifras decimales que el tipo
-garantiza.
+`max` el mayor número finito y `cifras` el número aproximado de cifras decimales
+del tipo (`finfo.precision`).
 
 El épsilon es la separación solo cerca de $1$. En general la separación entre
 vecinos crece con $|x|$, `numpy.spacing(x)`, de modo que el error _relativo_ se
@@ -410,8 +410,18 @@ md(
 )
 ```
 
-La fórmula directa pierde cifras al reducir $x$ y acaba en $0$ cuando $\cos x$
-se redondea a $1$ (alrededor de $x\lesssim\sqrt{\varepsilon}$: $10^{-4}$ en
-`float32`, $10^{-8}$ en `float64`). La forma con $\sin^2$ da $0.5$ con todas sus
-cifras. Es la misma causa que el piso de redondeo en la derivación numérica:
-restar valores casi iguales y dividir entre un número pequeño.
+```python hidden
+umbral = {t: np.sqrt(np.finfo(t).eps / 2) for t in (np.float32, np.float64)}
+md(
+    rf"""
+    La fórmula directa pierde cifras al reducir $x$ y acaba en $0$ cuando
+    $\cos x$ se redondea a $1$. Justo debajo de $1$ los números están separados
+    por $\varepsilon/2$, así que $\cos x\approx1-x^2/2$ se redondea a $1$ cuando
+    $x^2/2<\varepsilon/4$, es decir $x<\sqrt{{\varepsilon/2}}$:
+    {umbral[np.float32]:.1e} en `float32` y {umbral[np.float64]:.1e} en
+    `float64`. La forma con $\sin^2$ da $0.5$ con todas sus cifras. Es la misma
+    causa que el piso de redondeo en la derivación numérica: restar valores casi
+    iguales y dividir entre un número pequeño.
+    """
+)
+```
