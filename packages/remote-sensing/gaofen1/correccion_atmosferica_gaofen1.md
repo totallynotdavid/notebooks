@@ -17,23 +17,11 @@ from gf1pms import BANDS
 from Py6S import Wavelength
 from quire import cache, md
 from quire import plot as P
+from quire import table as tabla
 
 # Py6S borra la entrada temporal al terminar cada corrida. Usa el directorio
 # del artículo para no escribir en el directorio temporal del sistema.
 tempfile.tempdir = str(Path(__file__).resolve().parent)
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 
 
 def colores(rgb, bajo, alto):

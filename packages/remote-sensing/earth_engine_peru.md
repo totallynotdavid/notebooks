@@ -5,23 +5,11 @@ from pathlib import Path
 import numpy as np
 from quire import md
 from quire import plot as P
+from quire import table as tabla
 
 DATOS = json.loads(
     (Path(__file__).resolve().parent / "data" / "peru_earth_engine.json").read_text()
 )
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 ```
 
 # Earth Engine en el Perú

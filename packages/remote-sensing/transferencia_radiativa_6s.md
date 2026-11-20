@@ -8,6 +8,7 @@ import numpy as np
 from Py6S import AeroProfile, AtmosProfile, GroundReflectance, SixS, Wavelength
 from quire import cache, md, parameter
 from quire import plot as P
+from quire import table as tabla
 
 # Python 3.14 no puede importar `6s-bin`, así que se localiza su ejecutable.
 SIXS_PATH = (
@@ -18,19 +19,6 @@ SIXS_PATH = (
 # Py6S borra la entrada temporal al terminar cada corrida. Usa el directorio
 # del artículo para no escribir en el directorio temporal del sistema.
 tempfile.tempdir = str(Path(__file__).resolve().parent)
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 ```
 
 # Transferencia radiativa con 6S

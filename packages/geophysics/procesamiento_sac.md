@@ -8,24 +8,12 @@ from obspy.signal.trigger import classic_sta_lta
 from obspy.taup import TauPyModel
 from quire import md
 from quire import plot as P
+from quire import table as tabla
 
 # ObsPy redondea el delta de precisión simple de SAC y emite esta advertencia.
 warnings.filterwarnings("ignore", message="Sample spacing read from SAC file")
 
 DATOS = Path(__file__).resolve().parent / "data" / "sac"
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 
 
 def etiqueta(tr):

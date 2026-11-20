@@ -5,6 +5,7 @@ import contourpy
 import numpy as np
 from quire import md
 from quire import plot as P
+from quire import table as tabla
 from tsunamis import mansinha, okada
 from tsunamis.faults import (
     InversionFormat,
@@ -19,19 +20,6 @@ from tsunamis.grid import read_grid
 from tsunamis.kajiura import kajiura_filter
 
 DATOS = Path(__file__).resolve().parent / "data"
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 
 
 def campo(valores, x, y, paso, decimales=2, **opciones):

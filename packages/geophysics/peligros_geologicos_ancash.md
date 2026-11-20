@@ -8,21 +8,9 @@ import numpy as np
 import shapely
 from quire import md
 from quire import plot as P
+from quire import table as tabla
 
 DATOS = Path(__file__).resolve().parent / "data" / "ancash"
-
-
-def tabla(encabezado, filas):
-    """Tabla Markdown con la primera columna a la izquierda y el resto a la derecha."""
-    return md(
-        "\n".join(
-            [
-                "| " + " | ".join(encabezado) + " |",
-                "| --- |" + " ---: |" * (len(encabezado) - 1),
-                *("| " + " | ".join(map(str, fila)) + " |" for fila in filas),
-            ]
-        )
-    )
 
 
 def envolver(texto, ancho=34):
