@@ -1,6 +1,6 @@
 ```python hidden
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -401,6 +401,72 @@ P.figure(
     color={"legend": True},
     aspectRatio=1,
     width=560,
+)
+```
+
+## Cuánto dura el parecido
+
+Si la separación crece como $\delta\,e^{\lambda t}$, la diferencia inicial
+$\delta$ alcanza 10 cm al cabo de $t \approx \ln(0.1/\delta)/\lambda$: dividir
+$\delta$ entre 10 retrasa la divergencia solo $\ln 10/\lambda$. La figura repite
+el experimento anterior con diferencias de $10^{-2}$ a $10^{-12}$ rad,
+integrando todas las parejas a la vez.
+
+```python hidden
+SUPERINDICE = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+DT_SEP, TIEMPO_SEP, CADA_SEP = 0.01, 16.0, 5
+exponentes = np.arange(2, 13)
+desvios = 10.0**-exponentes
+# rhs y step_rk4 operan sobre la primera dimensión, así que una columna por
+# péndulo integra todos a la vez: la de referencia y una por diferencia.
+y = np.tile(y0[:, None], (1, len(desvios) + 1))
+y[0, 1:] += desvios
+estados = [y]
+for _ in range(round(TIEMPO_SEP / DT_SEP)):
+    y = step_rk4(y, DT_SEP)
+    estados.append(y)
+_, _, x2, y2 = posiciones(np.moveaxis(np.array(estados), 1, -1))
+t_par = np.arange(len(estados)) * DT_SEP
+d_par = np.hypot(x2[:, 1:] - x2[:, :1], y2[:, 1:] - y2[:, :1]).T
+t_10cm = t_par[np.argmax(d_par > 0.1, axis=1)]
+pendiente = -np.polyfit(np.log10(desvios), t_10cm, 1)[0]
+
+desvio = parameter(
+    "δ",
+    ["10" + str(-k).translate(SUPERINDICE) for k in exponentes],
+    value="10⁻³",
+)
+md(
+    rf"""
+    Arrastra la diferencia: con $\delta =$ {desvio} rad las segundas masas se
+    separan más de 10 cm a los {desvio.each(t_10cm):.1f} s. En promedio cada
+    factor 10 en $\delta$ suma {pendiente:.2f} s, cerca de los
+    {np.log(10) / lam_grande:.2f} s que da $\ln 10/\lambda$ con
+    $\lambda =$ {lam_grande:.2f} 1/s.
+    Con $10^{{-10}}$ rad la segunda masa empieza desplazada el tamaño de un
+    átomo, y aun así se separa 10 cm a los {t_10cm[exponentes == 10][0]:.1f} s.
+    """
+)
+```
+
+```python hidden
+muestra = slice(None, None, CADA_SEP)
+P.figure(
+    P.line(
+        x=np.tile(t_par[muestra], len(desvios)),
+        y=d_par[:, muestra].ravel(),
+        z=np.repeat(exponentes, t_par[muestra].size),
+        stroke="currentColor",
+        strokeOpacity=0.2,
+        tip=False,
+    ),
+    P.ruleY([0.1], strokeDasharray="6 4"),
+    P.line(x=t_par[muestra], y=d_par[:, muestra], strokeWidth=2),
+    frames=desvio,
+    title="Distancia entre las segundas masas según la diferencia inicial",
+    x={"label": "t [s]"},
+    y={"label": "distancia [m]", "type": "log"},
+    grid=True,
 )
 ```
 
