@@ -64,9 +64,10 @@ def divergente(limite, etiqueta, esquema="RdBu"):
 
 # Condición inicial de un tsunami
 
-Un terremoto de subducción levanta y hunde el fondo marino en segundos. Ese
-movimiento empuja la columna de agua y da la condición inicial del tsunami. El
-artículo la calcula para el terremoto de Pisco de 2007 en tres pasos:
+Un terremoto de subducción levanta y hunde el fondo marino durante la ruptura.
+Ese movimiento empuja la columna de agua y da la condición inicial del tsunami.
+Aquí se trata como instantáneo, con la deformación estática final. El artículo
+la calcula para el terremoto de Pisco de 2007 en tres pasos:
 
 1. la deformación vertical del fondo con el modelo de Okada (1985), comprobado
    contra el de Mansinha y Smylie (1971);
@@ -79,7 +80,8 @@ artículo la calcula para el terremoto de Pisco de 2007 en tres pasos:
 Los dos modelos dan el desplazamiento de la superficie de un semiespacio
 elástico cuando una falla rectangular desliza. Mansinha y Smylie suponen un
 sólido de Poisson (λ = μ). Okada admite cualquier relación entre las constantes
-elásticas. Con la misma falla se esperan campos casi idénticos.
+elásticas. Con un sólido de Poisson los dos deben dar el mismo campo. Abajo se
+mide también cuánto difieren con otra corteza.
 
 ```python
 largo, ancho, tope = 160e3, 70e3, 5e3
@@ -173,8 +175,9 @@ md(
 
 Las relaciones de escala de Papazachos et al. (2004) para fallas inversas en
 zonas de subducción dan el largo y el ancho de la ruptura a partir de la
-magnitud, para 6.7 ≤ Mw ≤ 9.2. El deslizamiento sale del momento sísmico con una
-rigidez de 4 × 10¹⁰ N/m².
+magnitud, para 6.7 ≤ Mw ≤ 9.2: $\log L = 0.55M-2.19$ y $\log W = 0.31M-0.63$,
+con $L$ y $W$ en km. El deslizamiento sale de $M_0=\mu L W u$ con una rigidez
+$\mu = 4\times10^{10}$ N/m².
 
 ```python hidden
 escalas = [(mw, papazachos_scaling(mw)) for mw in (7.0, 7.5, 8.0, 8.5, 9.0)]
@@ -190,6 +193,22 @@ tabla(
         ]
         for mw, e in escalas
     ],
+)
+```
+
+```python hidden
+cociente_u = [e.slip_m / 10 ** (0.64 * mw - 2.78 - 2) for mw, e in escalas]
+rango_u = (
+    f"{cociente_u[0]:.2f} veces el de esa relación en todas las filas"
+    if np.ptp(cociente_u) < 0.005
+    else f"de {min(cociente_u):.2f} a {max(cociente_u):.2f} veces el de esa relación"
+)
+md(
+    f"""
+    Papazachos et al. dan también $\\log u = 0.64M - 2.78$, con $u$ en cm, que
+    combina $M_0=\\mu S u$ con su propia relación para el área $S$. El
+    deslizamiento de la tabla es {rango_u}.
+    """
 )
 ```
 
@@ -395,13 +414,14 @@ km = distancia / 1e3
 z = en_perfil(grilla.elevation)
 costa_km = km[np.flatnonzero(np.diff(np.sign(z)))[0]]
 dominio = [km[0], km[-1]]
+cima = en_perfil(uplift).argmax()
 md(
     f"""
     El perfil pasa por el centro de la fuente en la dirección del buzamiento
     (azimut rumbo + 90° = {azimut:.0f}°). La línea vertical punteada marca la
     costa, a {costa_km:.0f} km del centro hacia tierra. El levantamiento
-    máximo del perfil está a {km[en_perfil(uplift).argmax()]:.0f} km, en el
-    mar.
+    máximo del perfil está a {km[cima]:.0f} km, donde
+    {f"el mar tiene {-z[cima]:.0f} m de profundidad" if z[cima] < 0 else f"el terreno está a {z[cima]:.0f} m sobre el nivel del mar"}.
     """
 )
 ```
@@ -460,20 +480,26 @@ P.figure(
 
 ```python hidden
 profundidad_fuente = grilla.depth[mar & (np.abs(uplift) > 0.1)].max()
+lado = primera.length
+kh = 2 * np.pi * profundidad_fuente / lado
+gy, gx = np.gradient(uplift)
+pendiente = np.hypot(gx, gy)
+peor = np.unravel_index(np.where(mar, np.abs(cambio), -1).argmax(), cambio.shape)
 md(
-    f"""
-    Sobre el mar, la condición inicial filtrada llega a
-    {condicion_inicial[mar].max():.3f} m y {condicion_inicial[mar].min():.3f} m,
-    los mismos extremos que el fondo ({uplift[mar].max():.3f} m y
-    {uplift[mar].min():.3f} m). Las subfallas miden 45 km y donde el fondo se mueve más de 10 cm el agua
-    no pasa de {profundidad_fuente / 1e3:.1f} km de profundidad. La longitud de
-    onda de la deformación es mucho mayor que la profundidad ($kh \\ll 1$) y el
-    filtro cambia poco el campo. La
-    diferencia llega a {np.abs(cambio[mar]).max():.0f} cm y se concentra en los
-    bordes de la ruptura, donde el levantamiento cambia más rápido. El filtro
-    pesa más con fuentes pequeñas o aguas profundas. Esta elevación es la
-    condición inicial que un modelo de propagación, por ejemplo de aguas
-    someras lineales, recibiría para seguir el tsunami hasta la costa.
+    rf"""
+    Sobre el mar, la condición inicial filtrada va de
+    {condicion_inicial[mar].min():.3f} m a {condicion_inicial[mar].max():.3f} m,
+    y el fondo, de {uplift[mar].min():.3f} m a {uplift[mar].max():.3f} m. Donde
+    el fondo se mueve más de 10 cm el agua no pasa de
+    {profundidad_fuente / 1e3:.1f} km de profundidad. Una onda de
+    {lado / 1e3:.0f} km, el lado de una subfalla, tiene ahí
+    $kh={kh:.2f}$ y el filtro la multiplica por $1/\cosh(kh)={1 / np.cosh(kh):.2f}$.
+    Sobre toda la grilla, el filtro cambia la elevación a lo sumo en {np.abs(cambio[mar]).max():.0f} cm. Ese
+    máximo cae donde la pendiente del levantamiento supera a la del
+    {(pendiente[mar] < pendiente[peor]).mean():.0%} de las celdas del mar. El
+    filtro pesa más con fuentes pequeñas o aguas profundas. Esta elevación es la
+    condición inicial que un modelo de propagación, por ejemplo de aguas someras
+    lineales, recibiría para seguir el tsunami hasta la costa.
     """
 )
 ```
