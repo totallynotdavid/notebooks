@@ -10,11 +10,11 @@ uv run --locked --package dynamics quire watch packages/dynamics/pendulo_simple.
 bun run --cwd site dev
 ```
 
-Open `/notebooks/dynamics/simple-pendulum/` on the development server. The
-output path is `site/.articles/<slug>.json`, where the slug is
-`topic-id/notebook-id` from the catalog. `quire build` takes the same arguments
-and runs the article once. A fence that raises stops the build and prints the
-traceback with line numbers of the Markdown file.
+Open `/dynamics/simple-pendulum/` on the development server. The output path is
+`site/.articles/<slug>.json`, where the slug is `topic-id/notebook-id` from the
+catalog. `quire build` takes the same arguments and runs the article once. A
+fence that raises stops the build and prints the traceback with line numbers of
+the Markdown file.
 
 ## Format
 
@@ -234,4 +234,4 @@ Add the article to the catalog with its `.md` file, as in
 [notebooks](notebooks.md#catalog-entries), and add `quire` to the package's
 dependencies with `{ workspace = true }` in `[tool.uv.sources]`. The export
 command builds every article in the catalog into `site/.articles`, and the site
-prerenders one page per article at `/notebooks/<topic>/<notebook>/`.
+prerenders one page per article at `/<topic>/<notebook>/`.

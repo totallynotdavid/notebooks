@@ -22,7 +22,7 @@
 
 	const figureUrl = (figure: number) => {
 		const [topic, id] = data.notebook.slug.split('/');
-		return resolve('/notebooks/[topic]/[id]/figures/[figure].json', {
+		return resolve('/[topic]/[id]/figures/[figure].json', {
 			topic,
 			id,
 			figure: String(figure)

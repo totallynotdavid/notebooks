@@ -7,7 +7,7 @@
 	const [topic, id] = $derived(notebook.slug.split('/'));
 </script>
 
-<a class="card" href={resolve('/notebooks/[topic]/[id]', { topic, id })}>
+<a class="card" href={resolve('/[topic]/[id]', { topic, id })}>
 	<div class="card__body">
 		<h4 class="card__title">{notebook.title}</h4>
 		<p class="card__summary">{notebook.summary}</p>
