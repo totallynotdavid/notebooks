@@ -110,18 +110,8 @@ P.figure(
 )
 ```
 
-When the frames are values of a parameter rather than steps in time, name the
-parameter. The reader then picks a value with a slider that starts at frame
-`start`, and nothing plays:
-
-```python
-P.figure(
-    P.line(x=malla, y=curvas),  # curvas has shape (len(grados), len(malla))
-    frames=[f"n = {n}" for n in grados],
-    parameter="grado",
-    start=6,
-)
-```
+When the frames are values of a parameter rather than steps in time, pass the
+parameter as `frames`; see [Parameters](#parameters).
 
 A channel whose element count changes between frames is padded with NaN to the
 longest frame; Plot skips the NaN points.
@@ -144,6 +134,56 @@ x = {"domain": [[c - w, c + w] for c, w in zip(centros, semianchos)]}
 Every frame is stored in the article, so keep frames few and rounded. A figure
 larger than 16 KB loads from its own file as it nears the view; see
 [architecture.md](architecture.md).
+
+## Parameters
+
+`quire.parameter` makes a number the reader drags. Put it in an `md` f-string
+and it shows as an underlined value inside the prose or the math; the reader
+drags it sideways, or focuses it and uses the arrow keys, Page Up, Page Down,
+Home and End. `each` gives a value per parameter value that follows the drag. A
+figure with the parameter as `frames` shows the frame of the current value, with
+a slider under it instead of play.
+
+```python
+grado = parameter("n", grados, value=14, format="{}")
+
+md(f"""
+Con $n = {grado}$ el error máximo es {grado.each(errores):.2g}.
+""")
+
+P.figure(
+    P.line(x=malla, y=curvas),  # curvas has shape (len(grados), len(malla))
+    frames=grado,
+)
+```
+
+`values` is the list of values, and `value` is the one the page starts at.
+`format` writes each value's label, which the prose and the figure's slider
+show; a format spec in the f-string, as in `{grado:.1f}`, replaces it in that
+sentence. `each` takes a function of the value or a list with one item per
+value. A value's text cannot hold `{`, `}`, `\` or `$`.
+
+Every value and figure of one parameter moves together across the article. While
+the reader drags, the values that follow it turn to the accent color, and each
+animated `line` keeps a dashed copy of where the drag started.
+
+Every value's text is stored for every parameter value, like a figure's frames.
+Keep the values few.
+
+## Formula notes
+
+`\note{label}{term}` in display math colors the term and writes the label under
+the formula in the same color. Pointing at a term or its label dims the other
+notes. The label is Markdown and may hold math.
+
+```markdown
+$$
+T = \note{$T_0$ dividido entre $\pi/2$}{\frac{4}{\omega_0}} K(m)
+$$
+```
+
+A formula holds at most 6 notes, one per chart color. Math renders with KaTeX at
+build time, and an error in any formula fails the build.
 
 ## Cache
 

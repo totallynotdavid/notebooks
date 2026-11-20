@@ -36,12 +36,20 @@ const Y_BANDS = new Set(["barX", "cell"]);
 const X_CHANNELS = ["x", "x1", "x2"];
 const Y_CHANNELS = ["y", "y1", "y2"];
 
+/** Animated lines that keep a dashed copy of the frame a drag started from. */
+const GHOSTED = new Set(["line", "lineX", "lineY"]);
+
+/**
+ * `reference` is the frame a reader's drag started from: each animated line
+ * also draws there, faint and dashed, so the change reads against it.
+ */
 export function renderPlot(
   spec: PlotSpec,
   frame: number,
   width: number,
   palette: string[],
   zoom: Zoom = {},
+  reference?: number,
 ): SVGSVGElement | HTMLElement {
   const options: Record<string, unknown> = { ...spec.options };
   options.x = withLogTicks(atFrame(options.x, frame));
@@ -72,7 +80,12 @@ export function renderPlot(
     // A figure's own width caps the column width: a square raster would
     // otherwise grow taller than the screen.
     width: Math.min(width, (spec.options.width as number) ?? width),
-    marks: spec.marks.map((mark) => buildMark(mark, frame)),
+    marks: [
+      ...(reference === undefined || reference === frame
+        ? []
+        : spec.marks.filter(isGhosted).map((mark) => ghost(mark, reference))),
+      ...spec.marks.map((mark) => buildMark(mark, frame)),
+    ],
     style: {
       background: "transparent",
       color: "var(--content)",
@@ -81,6 +94,25 @@ export function renderPlot(
       overflow: "visible",
     },
   });
+}
+
+function isGhosted(mark: MarkSpec): boolean {
+  return GHOSTED.has(mark.kind) && Object.keys(mark.animated ?? {}).length > 0;
+}
+
+function ghost(mark: MarkSpec, frame: number): Plot.Markish {
+  return buildMark(
+    {
+      ...mark,
+      options: {
+        ...mark.options,
+        strokeDasharray: "4 3",
+        strokeOpacity: 0.45,
+        tip: false,
+      },
+    },
+    frame,
+  );
 }
 
 function buildMark(mark: MarkSpec, frame: number): Plot.Markish {

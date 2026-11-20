@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getParameters } from '#lib/article/parameters.svelte.js';
 	import type { Frames } from '#lib/article/types.js';
 
 	let {
@@ -7,9 +8,17 @@
 		maxWidth
 	}: { frames: Frames; frame?: number; maxWidth?: number } = $props();
 
+	const page = getParameters();
 	const labels = $derived(frames.labels);
 	// A parameter slider picks one precomputed run; it has nothing to play.
 	const parameter = $derived(frames.parameter);
+	const name = $derived(parameter === undefined ? undefined : page.specs[parameter].name);
+	const position = $derived(parameter === undefined ? frame : page.current[parameter]);
+
+	function moveTo(index: number) {
+		if (parameter === undefined) frame = index;
+		else page.set(parameter, index);
+	}
 	let playing = $state(false);
 	let touched = false;
 	let root: HTMLDivElement | undefined = $state();
@@ -64,7 +73,7 @@
 
 <div class="player" bind:this={root} style:max-width={maxWidth ? `${maxWidth}px` : null}>
 	{#if parameter !== undefined}
-		<span class="player__name">{parameter}</span>
+		<span class="player__name">{name}</span>
 	{:else}
 		<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
 			{#if playing}
@@ -79,15 +88,18 @@
 		type="range"
 		min="0"
 		max={last}
-		bind:value={frame}
+		bind:value={() => position, moveTo}
 		oninput={() => {
 			touched = true;
 			playing = false;
 		}}
-		aria-label={parameter ?? 'Frame'}
-		aria-valuetext={labels[frame]}
+		onpointerdown={() => parameter !== undefined && page.hold(parameter)}
+		onpointerup={() => parameter !== undefined && page.release(parameter)}
+		onpointercancel={() => parameter !== undefined && page.release(parameter)}
+		aria-label={name ?? 'Frame'}
+		aria-valuetext={labels[position]}
 	/>
-	<output class="player__label">{labels[frame]}</output>
+	<output class="player__label">{labels[position]}</output>
 </div>
 
 <style>

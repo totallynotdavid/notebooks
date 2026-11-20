@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getParameters } from '#lib/article/parameters.svelte.js';
 	import { readPalette, renderPlot } from '#lib/article/plot.js';
 	import type { PlotSpec } from '#lib/article/types.js';
 	import { attachZoom, type Zoom } from '#lib/article/zoom.js';
@@ -8,9 +9,15 @@
 	// A grid that shares one player passes `frame` in and turns `player` off.
 	let {
 		spec,
-		frame = $bindable(spec.frames?.start ?? 0),
+		frame = $bindable(0),
 		player = true
 	}: { spec: PlotSpec; frame?: number; player?: boolean } = $props();
+
+	const page = getParameters();
+	// A figure bound to a page parameter shows that parameter's value.
+	const parameter = $derived(spec.frames?.parameter);
+	const shown = $derived(parameter === undefined ? frame : page.current[parameter]);
+	const reference = $derived(parameter === undefined ? undefined : (page.held[parameter] ?? undefined));
 
 	let width = $state(0);
 	let canvas: HTMLDivElement | undefined = $state();
@@ -29,7 +36,7 @@
 
 	$effect(() => {
 		if (!canvas || width === 0) return;
-		const chart = renderPlot(spec, frame, plotWidth, readPalette(canvas), zoom);
+		const chart = renderPlot(spec, shown, plotWidth, readPalette(canvas), zoom, reference);
 		canvas.replaceChildren(chart);
 		return attachZoom(chart, (next) => (zoom = { ...zoom, ...next }));
 	});

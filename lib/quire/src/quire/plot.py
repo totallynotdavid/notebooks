@@ -8,7 +8,7 @@ A figure with `frames` animates. A channel with one row per frame, shape
 (frames, n), changes with the frame; every other channel is drawn once.
 A `since` channel holds the frame that first draws each element, so points
 that accumulate are sent once. Animated figures in one `grid` share a player.
-With `parameter`, the frames are values the reader picks with a slider.
+With a `quire.parameter` as `frames`, the frames are its values.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ import numpy as np
 
 from quire import thin
 from quire.encode import DIGITS, compact, is_array, plain
+from quire.parameter import Parameter
 
 
 @dataclass
@@ -140,14 +141,15 @@ tickY = _mark("tickY")
 class Figure:
     marks: list[Mark]
     options: dict
-    frames: list[str] | None = None
+    frames: list[str] | Parameter | None = None
     fps: float = 20
     digits: int = DIGITS
-    parameter: str | None = None
-    start: int = 0
 
     def __quire__(self) -> dict:
-        count = None if self.frames is None else len(self.frames)
+        labels = (
+            self.frames.labels if isinstance(self.frames, Parameter) else self.frames
+        )
+        count = None if labels is None else len(labels)
         spec: dict[str, object] = {
             "type": "plot",
             "marks": [
@@ -158,34 +160,29 @@ class Figure:
             ],
             "options": plain(self.options, self.digits),
         }
-        if self.frames is not None:
-            frames: dict[str, object] = {"labels": list(self.frames), "fps": self.fps}
-            if self.parameter is not None:
-                frames |= {"parameter": self.parameter, "start": self.start}
+        if labels is not None:
+            frames: dict[str, object] = {"labels": list(labels), "fps": self.fps}
+            if isinstance(self.frames, Parameter):
+                if self.frames.index is None:
+                    raise ValueError(f"{self.frames.name} was made outside a build")
+                frames["parameter"] = self.frames.index
             spec["frames"] = frames
         return spec
 
 
 def figure(
     *marks: Mark,
-    frames: list[str] | None = None,
+    frames: list[str] | Parameter | None = None,
     fps: float = 20,
     digits: int = DIGITS,
-    parameter: str | None = None,
-    start: int = 0,
     **options: object,
 ) -> Figure:
     """A Plot figure. `frames` labels each frame; options go to Plot.plot.
 
-    With `parameter`, each frame is one value of that parameter: the reader
-    picks it with a slider that starts at frame `start`, and nothing plays.
+    With a `quire.parameter` as `frames`, each frame is one of its values: the
+    figure shows the value the reader picks, and nothing plays.
     """
-    if parameter is not None:
-        if frames is None:
-            raise ValueError("parameter needs frames, one per value")
-        if not 0 <= start < len(frames):
-            raise ValueError(f"start {start} is outside the {len(frames)} frames")
-    return Figure(list(marks), options, frames, fps, digits, parameter, start)
+    return Figure(list(marks), options, frames, fps, digits)
 
 
 @dataclass

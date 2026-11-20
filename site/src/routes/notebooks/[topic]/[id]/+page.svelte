@@ -10,10 +10,13 @@
 	import LazyFigure from '#lib/components/article/LazyFigure.svelte';
 	import Output from '#lib/components/article/Output.svelte';
 	import { site } from '#lib/catalog.generated.js';
+	import { attachValues, PageParameters, setParameters } from '#lib/article/parameters.svelte.js';
 
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+
+	const page = setParameters(new PageParameters(() => data));
 
 	const hasCode = $derived(data.blocks.some((block) => block.type !== 'html' && block.html));
 
@@ -41,7 +44,9 @@
 	{/if}
 </Navbar>
 
-<main class="article" lang="es">
+<!-- A new article is a new tree: the values attach to its own prose. -->
+{#key data.notebook.slug}
+<main class="article" lang="es" {@attach attachValues(page)}>
 	{#each data.blocks as block, i (i)}
 		{#if block.type === 'html'}
 			<!-- Rendered at build time from the article's own Markdown. -->
@@ -64,6 +69,7 @@
 		<a href={resolve('/')}>All notebooks</a>
 	</footer>
 </main>
+{/key}
 
 <style>
 	.article {

@@ -65,9 +65,10 @@ The route
 [`notebooks/[topic]/[id]`](../site/src/routes/notebooks/[topic]/[id]/+page.server.ts)
 prerenders one page per article. At build time,
 [`site/src/lib/server/article.ts`](../site/src/lib/server/article.ts) reads the
-article's document, renders prose with markdown-it and KaTeX, and highlights
-code with Shiki. The page ships no Python and no markdown parser. A figure whose
-spec exceeds 16 KB leaves the page data: the route
+article's document, renders prose with markdown-it and KaTeX
+([`math.ts`](../site/src/lib/server/math.ts)), and highlights code with Shiki.
+The page ships no Python and no markdown parser. A figure whose spec exceeds 16
+KB leaves the page data: the route
 [`figures/[figure].json`](../site/src/routes/notebooks/[topic]/[id]/figures/[figure].json/+server.ts)
 prerenders it as its own file, and
 [`LazyFigure.svelte`](../site/src/lib/components/article/LazyFigure.svelte)
@@ -77,6 +78,14 @@ view. In the browser,
 draws each chart spec with Observable Plot
 ([`plot.ts`](../site/src/lib/article/plot.ts)), with the colors of the site
 theme, and plays its frames.
+
+An article's parameters ([`parameter.py`](../lib/quire/src/quire/parameter.py))
+reach the page as the document's `parameters` and `values`. The page holds the
+current value of each parameter in one
+[`PageParameters`](../site/src/lib/article/parameters.svelte.ts), which its
+prose values and its figures read. The values in the prose are spans the
+Markdown renderer wrote; the page turns them into text that follows the
+parameter, and the parameter's own spans into sliders.
 
 [`site/src/routes/+layout.ts`](../site/src/routes/+layout.ts) enables
 prerendering. The SvelteKit adapter produces a static site in `site/build`. The

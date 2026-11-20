@@ -24,6 +24,6 @@ export const load: PageServerLoad = async ({ params }) => {
   return {
     topic: { id: entry.topic.id, title: entry.topic.title },
     notebook: entry.notebook,
-    blocks: await loadArticle(slug),
+    ...(await loadArticle(slug)),
   };
 };

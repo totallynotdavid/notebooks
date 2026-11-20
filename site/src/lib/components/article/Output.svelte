@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
-
 	import type { Output } from '#lib/article/types.js';
 
 	import Player from './Player.svelte';
@@ -14,8 +12,7 @@
 			? output.figures[0].frames
 			: undefined
 	);
-	// The player owns the frame after the first render.
-	let frame = $state(untrack(() => shared?.start ?? 0));
+	let frame = $state(0);
 </script>
 
 {#if output.type === 'html'}

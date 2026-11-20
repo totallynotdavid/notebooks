@@ -16,10 +16,24 @@ export interface MarkSpec {
 export interface Frames {
   labels: string[];
   fps: number;
-  /** Names what the frames vary; the reader picks a value and nothing plays. */
-  parameter?: string;
-  /** The frame shown first when `parameter` is set. */
-  start?: number;
+  /** The page parameter whose values the frames are; nothing plays. */
+  parameter?: number;
+}
+
+/** A number the reader drags; `quire.parameter` in lib/quire. */
+export interface ParameterSpec {
+  name: string;
+  labels: string[];
+  start: number;
+}
+
+/** Text that follows a parameter: `\qv{k}{...}` in the article is entry k. */
+export interface ValueSpec {
+  parameter: number;
+  /** One string per parameter value. */
+  text: string[];
+  /** The parameter itself, which the reader drags. */
+  input: boolean;
 }
 
 export interface PlotSpec {
@@ -48,6 +62,8 @@ export type QuireBlock =
 export interface QuireDocument {
   version: 1;
   blocks: QuireBlock[];
+  parameters?: ParameterSpec[];
+  values?: ValueSpec[];
 }
 
 /** A large figure the page fetches from `figures/{figure}.json` near the view. */
@@ -67,3 +83,9 @@ export type Output =
 export type Block =
   | { type: "html"; html: string }
   | { type: "code"; html: string | null; outputs: Output[] };
+
+export interface Article {
+  blocks: Block[];
+  parameters: ParameterSpec[];
+  values: ValueSpec[];
+}

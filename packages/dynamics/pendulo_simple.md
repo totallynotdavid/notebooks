@@ -1,6 +1,6 @@
 ```python hidden
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -28,11 +28,12 @@ Integrar $E$ entre el ángulo máximo $\theta_0$ y $0$ da el período como una
 integral elíptica completa de primera especie:
 
 $$
-T = \frac{4}{\omega_0}\,K\!\left(m\right),
+T = \note{$T_0$ dividido entre $\pi/2$}{\frac{4}{\omega_0}}\,
+\note{vale $\pi/2$ en $m=0$ y crece con la amplitud}{K\!\left(m\right)},
 \qquad
 K(m)=\int_0^{\pi/2}\frac{d\phi}{\sqrt{1-m\sin^2\phi}},
 \qquad
-m=\sin^2\frac{\theta_0}{2}.
+m=\note{va de 0 en reposo a 1 con el péndulo invertido}{\sin^2\frac{\theta_0}{2}}.
 $$
 
 Para $\theta_0\to0$, $K(0)=\pi/2$ y se recupera $T_0$. Calculamos $K$ con la
@@ -131,11 +132,20 @@ grados = np.linspace(1, 175, 300)
 exacto = periodo_exacto(np.radians(grados))
 serie = periodo_serie(np.radians(grados))
 
+amplitud = parameter("θ₀", np.arange(5, 176, 5), value=60, format="{}°")
+# Una columna por cuadro: la marca sigue a la amplitud elegida.
+elegida = amplitud.values[:, None]
+t_elegida = periodo_exacto(np.radians(elegida))
+s_elegida = periodo_serie(np.radians(elegida))
+
 P.grid(
     P.figure(
         P.ruleY([1], series="pequeñas oscilaciones", strokeDasharray="2 3"),
         P.line(x=grados, y=exacto / T0, series="exacto, K(m)"),
         P.line(x=grados, y=serie / T0, series="1 + θ₀²/16", strokeDasharray="6 4"),
+        P.ruleX(x=elegida, strokeOpacity=0.3),
+        P.dot(x=elegida, y=t_elegida / T0, r=4, fill="currentColor"),
+        frames=amplitud,
         title="Período en función de la amplitud",
         x={"label": "θ₀ [°]"},
         y={"label": "T/T₀", "domain": [0.95, 3.0]},
@@ -150,12 +160,40 @@ P.grid(
             series="T₀(1 + θ₀²/16)",
             strokeDasharray="6 4",
         ),
+        P.ruleX(x=elegida, strokeOpacity=0.3),
+        P.dot(
+            x=elegida, y=np.abs(T0 - t_elegida) / t_elegida, r=4, fill="currentColor"
+        ),
+        P.dot(
+            x=elegida,
+            y=np.abs(s_elegida - t_elegida) / t_elegida,
+            r=4,
+            fill="currentColor",
+        ),
+        frames=amplitud,
         title="Error de las aproximaciones",
         x={"label": "θ₀ [°]"},
         y={"label": "error relativo del período", "type": "log"},
         color={"legend": True},
         grid=True,
     ),
+)
+```
+
+```python hidden
+periodo = amplitud.each(lambda d: periodo_exacto(np.radians(d)))
+lineal = [100 * abs(T0 - e) / e for e in periodo.results]
+corregido = [
+    100 * abs(periodo_serie(np.radians(d)) - e) / e
+    for d, e in zip(amplitud.values, periodo.results, strict=True)
+]
+md(
+    rf"""
+    Arrastra la amplitud: con $\theta_0 = {amplitud}$ el período exacto es
+    {periodo:.3f} s, {amplitud.each([e / T0 for e in periodo.results]):.2f} veces
+    $T_0$. La aproximación lineal falla en {amplitud.each(lineal):.2f} % y la
+    corrección $1+\theta_0^2/16$ en {amplitud.each(corregido):.2f} %.
+    """
 )
 ```
 
@@ -242,6 +280,7 @@ entre dos, el error de Verlet baja unas 4 veces y el de RK4 unas 30.
 ```python
 TRAMOS = 1000  # intervalos de 2 s
 pasos_dt = [0.025, 0.05, 0.1, 0.2]
+paso = parameter("Δt", pasos_dt, value=DT, format="{} s")
 t_fin = np.arange(1, TRAMOS + 1) * DURACION / TRAMOS
 t_medio = t_fin - DURACION / TRAMOS / 2
 
@@ -277,15 +316,23 @@ P.grid(
             series="velocity Verlet",
         ),
         P.line(x=t_fin, y=np.array([np.abs(t[:, -1]) for t in rk4]), series="RK4"),
-        frames=[f"Δt = {dt} s" for dt in pasos_dt],
-        parameter="Δt",
-        start=pasos_dt.index(DT),
+        frames=paso,
         title="Escala logarítmica: máximo de |E − E₀|/E₀ en cada tramo",
         x={"label": "t [s]", "type": "log"},
         y={"label": "|E − E₀|/E₀", "type": "log"},
         color={"legend": True},
         grid=True,
     ),
+)
+```
+
+```python hidden
+md(
+    rf"""
+    Con $\Delta t = {paso}$, el error de Verlet no pasa de
+    {paso.each([np.abs(t).max() for t in verlet]):.1e} y el de RK4 llega a
+    {paso.each([np.abs(t).max() for t in rk4]):.1e} a los 2000 s.
+    """
 )
 ```
 

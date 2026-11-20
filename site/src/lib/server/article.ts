@@ -1,18 +1,19 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import katexModule from "@vscode/markdown-it-katex";
 import MarkdownIt from "markdown-it";
 import { createHighlighter } from "shiki";
 
 import type {
-  Block,
+  Article,
   FigureSpec,
   Output,
   PlotSpec,
   QuireDocument,
   QuireOutput,
 } from "#lib/article/types.js";
+
+import { math } from "./math.js";
 
 /** `quire build` writes one document per article here; see scripts/export_notebooks.py. */
 const ARTICLES_DIR = resolve(".articles");
@@ -30,15 +31,7 @@ function highlight(code: string, lang: string): string {
   });
 }
 
-// The package is CommonJS with an `__esModule` default. Node's ESM loader hands
-// back the whole `module.exports`, while the types promise the plugin itself.
-const katex =
-  (katexModule as unknown as { default?: typeof katexModule }).default ??
-  katexModule;
-
-const markdown = new MarkdownIt({ highlight }).use(katex, {
-  throwOnError: true,
-});
+const markdown = new MarkdownIt({ highlight }).use(math);
 
 /**
  * A figure whose JSON is larger than this leaves the page data and loads from
@@ -81,7 +74,7 @@ function isLarge(figure: FigureSpec): boolean {
   return JSON.stringify(figure).length > INLINE_FIGURE_BYTES;
 }
 
-export async function loadArticle(slug: string): Promise<Block[]> {
+export async function loadArticle(slug: string): Promise<Article> {
   const document = await readDocument(slug);
   let index = 0;
 
@@ -100,15 +93,20 @@ export async function loadArticle(slug: string): Promise<Block[]> {
     }
   }
 
-  return document.blocks.map((block): Block => {
+  const blocks = document.blocks.map((block) => {
     if (block.type === "prose")
-      return { type: "html", html: markdown.render(block.text) };
+      return { type: "html" as const, html: markdown.render(block.text) };
     return {
-      type: "code",
+      type: "code" as const,
       html: block.hidden ? null : highlight(block.source, "python"),
       outputs: block.outputs.map(renderOutput),
     };
   });
+  return {
+    blocks,
+    parameters: document.parameters ?? [],
+    values: document.values ?? [],
+  };
 }
 
 /** Indexes of the figures that load from their own file. */

@@ -2,7 +2,7 @@
 from math import factorial
 
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -328,13 +328,24 @@ errores_centro = np.array(
 )
 ```
 
-Mueve el grado: con nodos equiespaciados el polinomio oscila cada vez más cerca
-de los extremos, y con nodos de Chebyshev se acerca a la función.
+```python hidden
+grados = GRADOS[GRADOS <= 20]
+grado = parameter("n", grados, value=14, format="{}")
+en_grados = np.isin(GRADOS, grados)
+md(
+    rf"""
+    Arrastra el grado: con $n = {grado}$ el error máximo es
+    {grado.each(errores_runge["equiespaciados"][en_grados]):.2g} con nodos
+    equiespaciados y {grado.each(errores_runge["Chebyshev"][en_grados]):.2g}
+    con nodos de Chebyshev. Los primeros oscilan cada vez más cerca de los
+    extremos; los segundos se acercan a la función.
+    """
+)
+```
 
 ```python hidden
 RHO = (1 + np.sqrt(26)) / 5
 malla = MALLA[::10]
-grados = GRADOS[GRADOS <= 20]
 
 
 def nodos_rellenos(n):
@@ -367,9 +378,7 @@ P.grid(
             r=3,
             series="nodos equiespaciados",
         ),
-        frames=[f"n = {n}" for n in grados],
-        parameter="grado",
-        start=int(np.flatnonzero(grados == 14)[0]),
+        frames=grado,
         title="Polinomio interpolante",
         x={"label": "x"},
         y={"domain": [-0.6, 1.4]},
@@ -386,6 +395,8 @@ P.grid(
             series="ρ⁻ⁿ, ρ = (1+√26)/5",
             strokeDasharray="1 3",
         ),
+        P.ruleX(x=grados[:, None], strokeOpacity=0.3),
+        frames=grado,
         title="Error máximo en [−1, 1]",
         x={"label": "grado n"},
         y={"type": "log"},

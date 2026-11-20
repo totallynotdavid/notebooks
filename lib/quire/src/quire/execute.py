@@ -13,6 +13,7 @@ from pathlib import Path
 from quire.cache import caching_in
 from quire.document import Code, Prose, parse
 from quire.outputs import to_output
+from quire.parameter import collecting
 
 VERSION = 1
 CACHE_DIR = ".quire-cache"
@@ -23,13 +24,15 @@ class ArticleError(Exception):
 
 
 def run_article(path: Path, *, use_cache: bool = True) -> dict:
-    blocks, _ = _execute(path, use_cache)
-    return {"version": VERSION, "blocks": blocks}
+    with collecting() as registry:
+        blocks, _ = _execute(path, use_cache)
+    return {"version": VERSION, "blocks": blocks} | registry.export()
 
 
 def article_namespace(path: Path, *, use_cache: bool = True) -> dict:
     """The names an article defines after its last fence, for tests."""
-    _, namespace = _execute(path, use_cache)
+    with collecting():
+        _, namespace = _execute(path, use_cache)
     return namespace
 
 
