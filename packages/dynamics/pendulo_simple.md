@@ -197,11 +197,33 @@ md(
 )
 ```
 
-El error de $T_0$ crece como $\theta_0^2/16$: 0.19 % a 10°, 6.8 % a 60° y 43 % a
-150°, donde el período real es 1.76 veces el lineal. El período RK4 coincide con
-el exacto en las cifras de la tabla. La corrección $1+\theta_0^2/16$ lo reduce a
-0.4 % a 60°, pero a 150° todavía falla en 19 %: la serie en $\theta_0$ converge
-mal cerca de $\pi$, y por eso existen aproximaciones analíticas más elaboradas.
+```python hidden
+def error_lineal(grados):
+    e = periodo_exacto(np.radians(grados))
+    return 100 * abs(T0 - e) / e
+
+
+def error_serie(grados):
+    e = periodo_exacto(np.radians(grados))
+    return 100 * abs(periodo_serie(np.radians(grados)) - e) / e
+
+
+diferencia_rk4 = np.abs(numerico - periodo_exacto(theta0)).max()
+md(
+    rf"""
+    Para amplitudes pequeñas el error de $T_0$ es cercano a $\theta_0^2/16$:
+    {error_lineal(10):.2f} % a 10°, {error_lineal(60):.1f} % a 60° y
+    {error_lineal(150):.0f} % a 150°, donde el período es
+    {periodo_exacto(np.radians(150)) / T0:.2f} veces $T_0$. El período medido con
+    RK4 difiere del exacto en a lo sumo {diferencia_rk4:.1e} s en toda la tabla. La
+    corrección $1+\theta_0^2/16$ baja el error a {error_serie(60):.1f} % a 60°,
+    pero a 150° todavía falla en {error_serie(150):.0f} %. Cerca de 180° ningún
+    polinomio en $\theta_0$ sirve: con $k' = \cos(\theta_0/2)$,
+    $K \approx \ln(4/k')$ cuando $k' \to 0$ (DLMF 19.12.1), así que el período
+    diverge como un logaritmo al acercarse al péndulo invertido.
+    """
+)
+```
 
 La animación suelta tres péndulos a la vez desde 30°, 90° y 150°, integrados con
 RK4. En la aproximación lineal oscilarían juntos; el de mayor amplitud se queda
@@ -245,10 +267,12 @@ integradores con $\theta_0=2$ rad, $\dot\theta_0=0$ y $\Delta t=0.1$ s durante
 2000 s (unas 700 oscilaciones):
 
 - Velocity Verlet, de segundo orden y simpléctico: una evaluación de la fuerza
-  por paso. Conserva exactamente una energía vecina a $E$, así que el error
-  oscila y queda acotado.
+  por paso. Su error de energía queda acotado por $C\,\Delta t^2$ durante
+  tiempos que crecen más rápido que cualquier potencia de $1/\Delta t$ (Hairer,
+  Lubich y Wanner, _Acta Numerica_ 12, 2003, teorema 5.1): el método conserva
+  una energía modificada que dista $O(\Delta t^2)$ de $E$.
 - RK4, de cuarto orden: cuatro evaluaciones por paso. Es más preciso en pocos
-  períodos, pero no es simpléctico y su error se acumula.
+  períodos, pero no es simpléctico, y la teoría anterior no se le aplica.
 
 ```python
 DURACION = 2000.0
@@ -274,8 +298,8 @@ error_verlet = error_energia(paso_verlet, DT)
 
 El error de Verlet oscila más rápido de lo que la página puede mostrar punto a
 punto, así que la figura lo dibuja como la franja entre su mínimo y su máximo en
-cada intervalo de 2 s. En la escala logarítmica, mueve $\Delta t$: al dividirlo
-entre dos, el error de Verlet baja unas 4 veces y el de RK4 unas 30.
+cada intervalo de 2 s. En la escala logarítmica, arrastra $\Delta t$ para ver
+cómo escala cada error.
 
 ```python
 TRAMOS = 1000  # intervalos de 2 s
@@ -327,11 +351,19 @@ P.grid(
 ```
 
 ```python hidden
+def maximo(errores, dt):
+    return np.abs(errores[pasos_dt.index(dt)]).max()
+
+
 md(
     rf"""
     Con $\Delta t = {paso}$, el error de Verlet no pasa de
     {paso.each([np.abs(t).max() for t in verlet]):.1e} y el de RK4 llega a
-    {paso.each([np.abs(t).max() for t in rk4]):.1e} a los 2000 s.
+    {paso.each([np.abs(t).max() for t in rk4]):.1e} a los 2000 s. Al pasar de
+    $\Delta t = 0.1$ s a $0.05$ s, el error máximo de Verlet baja
+    {maximo(verlet, 0.1) / maximo(verlet, 0.05):.1f} veces, cerca del 4 que
+    predice $\Delta t^2$, y el de RK4 {maximo(rk4, 0.1) / maximo(rk4, 0.05):.0f}
+    veces.
     """
 )
 ```
