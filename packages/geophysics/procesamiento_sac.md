@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 from obspy import UTCDateTime, read
+from obspy.signal.filter import bandpass
 from obspy.signal.trigger import classic_sta_lta
 from obspy.taup import TauPyModel
 from quire import md
@@ -127,8 +128,25 @@ seccion = sorted(
 
 La sección ordena las estaciones por distancia epicentral (campo `GCARC`) y
 normaliza cada traza por su máximo. El tiempo se mide desde el origen del
-terremoto. Tras el filtro no queda energía sobre 0.2 Hz, así que basta una
-muestra cada 2 s.
+terremoto. La figura toma una muestra cada 2 s, cuya frecuencia de Nyquist es
+0.25 Hz.
+
+```python hidden
+fs_seccion = seccion[0].stats.sampling_rate
+impulso = np.zeros(2**16)
+impulso[impulso.size // 2] = 1.0
+respuesta = bandpass(impulso, 0.01, 0.2, fs_seccion, corners=5, zerophase=True)
+ganancia = np.abs(np.fft.rfft(respuesta))
+frecuencias = np.fft.rfftfreq(impulso.size, 1 / fs_seccion)
+md(
+    f"""
+    El pasabanda de fase cero deja pasar
+    {np.interp(0.25, frecuencias, ganancia):.1%} de la amplitud a 0.25 Hz y
+    {np.interp(0.5, frecuencias, ganancia):.2%} a 0.5 Hz. Lo que queda sobre
+    0.25 Hz se pliega por debajo de esa frecuencia en la figura.
+    """
+)
+```
 
 ```python hidden
 tiempos, desplazadas, grupos = [], [], []
@@ -176,7 +194,7 @@ la primera muestra en que el cociente supera un umbral.
 Los parámetros son los mismos para todas las trazas:
 
 - Filtro: pasabanda Butterworth causal de 1 a 3 Hz, de cuatro polos. Un filtro
-  de fase cero adelantaría el pico.
+  de fase cero responde antes de la llegada y adelantaría el pick.
 - STA de 2 s, LTA de 20 s, umbral 3.
 - La búsqueda empieza a los 40 s (el doble de la LTA). Antes la LTA no está
   llena y el transitorio del filtro dispara falsas alarmas.
@@ -468,12 +486,48 @@ def espectros(nombre):
 P.grid(*(espectros(n) for n in ["G.MPG", "IU.TUC", "IU.TSUM"]))
 ```
 
-En las tres estaciones la densidad de amplitud de la señal es casi plana por
-debajo de unos 0.1 Hz y baja más de dos órdenes de magnitud entre 0.1 y 2 Hz,
-como corresponde a una fuente que radia sobre todo a periodos largos. La señal
-supera al ruido por un factor de decenas a miles bajo 1 Hz. Hacia 3 a 5 Hz las
-dos curvas se acercan: el detector STA/LTA de 1 a 3 Hz se apoya en la parte
-débil del espectro, y por eso falla en las estaciones ruidosas.
+```python hidden
+def mediana_en(f, a, f0, f1):
+    return float(np.median(a[(f >= f0) & (f <= f1)]))
+
+
+def bandas(nombre):
+    r = por_nombre[nombre]
+    tr = r["traza"]
+    fs = tr.stats.sampling_rate
+    i0 = int((r["picado"]["pick"] - tr.stats.sac.b + tr.stats.sac.o - 5) * fs)
+    fs_, s = densidad_amplitud(
+        tr.data[i0 : i0 + int(120 * fs)].astype(float), tr.stats.delta
+    )
+    fr, n = densidad_amplitud(tr.data[: int(40 * fs)].astype(float), tr.stats.delta)
+    snr = {
+        b: mediana_en(fs_, s, *b) / mediana_en(fr, n, *b)
+        for b in [(0.1, 1.0), (1.0, 3.0), (3.0, 5.0)]
+    }
+    return mediana_en(fs_, s, 0.08, 0.12) / mediana_en(fs_, s, 1.8, 2.2), snr
+
+
+ESPECTRALES = ["G.MPG", "IU.TUC", "IU.TSUM"]
+caida, snr = zip(*(bandas(n) for n in ESPECTRALES))
+
+
+def rango(valores, formato):
+    return f"{format(min(valores), formato)} a {format(max(valores), formato)}"
+
+
+md(
+    f"""
+    La densidad de amplitud de la señal cerca de 0.1 Hz es {rango(caida, ".0f")}
+    veces la de 2 Hz. El espectro está en cuentas, sin quitar la respuesta del
+    instrumento, así que esa caída mezcla la fuente, la atenuación en el camino
+    y el sensor. La mediana de la razón señal/ruido es {rango([s[0.1, 1.0] for s in snr], ".0f")}
+    entre 0.1 y 1 Hz, {rango([s[1.0, 3.0] for s in snr], ".0f")} en la banda de
+    1 a 3 Hz del detector y {rango([s[3.0, 5.0] for s in snr], ".1f")} entre 3
+    y 5 Hz. La ventana de ruido dura 40 s, así que no da información por debajo
+    de {1 / 40:.3f} Hz.
+    """
+)
+```
 
 Las alturas absolutas no se comparan entre estaciones: los instrumentos tienen
 sensibilidades distintas y el espectro está en cuentas.
