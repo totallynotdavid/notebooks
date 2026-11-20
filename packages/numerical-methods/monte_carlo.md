@@ -69,9 +69,10 @@ def estimador(muestra, rng, n):
 ```python
 N_TABLA = 10_000
 rng_tabla = np.random.default_rng(42)
-filas = []
+filas, cocientes = [], []
 for nombre, (muestra, exacto) in problemas.items():
     estimacion, se = estimador(muestra, rng_tabla, N_TABLA)
+    cocientes.append(abs(estimacion - exacto) / se)
     filas.append(
         f"| {nombre} | {estimacion:.5f} | {exacto:.5f} "
         f"| {abs(estimacion - exacto):.5f} | {se:.5f} |"
@@ -179,8 +180,16 @@ P.grid(
 )
 ```
 
-El error absoluto de una corrida es del tamaño del error estándar, pero fluctúa
-de una corrida a otra.
+```python hidden
+md(
+    f"""
+    En la tabla, el error de cada integral es
+    {", ".join(f"{c:.2f}" for c in cocientes)} veces su error estándar. El
+    error de una corrida fluctúa de una corrida a otra; el error estándar da su
+    tamaño típico, no una cota.
+    """
+)
+```
 
 ## Convergencia: error $\sim N^{-1/2}$
 
