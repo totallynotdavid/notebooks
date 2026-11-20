@@ -156,10 +156,18 @@ md(
 )
 ```
 
-Desde el grado 4 el error es del orden de $5\times10^{-6}$, el mismo que el
-redondeo de los datos a 5 decimales (hasta $5\times10^{-6}$ por dato): ya no
-mejora con más nodos. Cada fila agrega un término sin tocar los anteriores. En
-la forma de Lagrange habría que recalcular todos los $L_i$.
+```python hidden
+altos = [abs(p - exacto) for p in parciales[4:]]
+md(
+    rf"""
+    Desde el grado 4 el error queda entre {min(altos):.1e} y {max(altos):.1e},
+    del orden del redondeo de los datos a 5 decimales (hasta $5\times10^{{-6}}$
+    por dato): ya no mejora con más nodos. Cada fila agrega un término sin tocar
+    los anteriores. En la forma de Lagrange habría que recalcular todos los
+    $L_i$.
+    """
+)
+```
 
 Que Lagrange y Newton son el mismo polinomio se comprueba evaluando ambos en una
 malla:
