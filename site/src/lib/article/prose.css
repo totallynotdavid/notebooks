@@ -116,8 +116,10 @@
 .article .prose :is(th, td):first-child {
   padding-left: 0;
 }
+/* KaTeX draws a subscript 2px past its box, so a formula at the right edge of a
+   fit-content table would make the table scroll by that much. */
 .article .prose :is(th, td):last-child {
-  padding-right: 0;
+  padding-right: 2px;
 }
 /* Headers are prose and wrap, so a long label does not widen the table. */
 .article .prose th {
