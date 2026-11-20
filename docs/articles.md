@@ -184,7 +184,12 @@ the reader drags, the values that follow it turn to the accent color, and each
 animated `line` keeps a dashed copy of where the drag started.
 
 Every value's text is stored for every parameter value, like a figure's frames.
-Keep the values few.
+Step a continuous quantity finely enough that neighbouring frames look alike,
+which takes 80 to 120 values over its range; a figure loads lazily, so the size
+is paid only when the reader nears it. Each frame must follow from the one
+before it: a simulation continues from the previous value's state rather than
+starting again, and a grey trail of earlier curves keeps one curve in ten so it
+stays legible.
 
 ## Formula notes
 

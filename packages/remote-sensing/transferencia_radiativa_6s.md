@@ -171,10 +171,11 @@ tabla(
 ```
 
 La figura recorre el AOD de 0 a 1 sobre el espectro VNIR, con los mismos vapor
-de agua y ángulo. Los espectros de menor AOD quedan en gris.
+de agua y ángulo, en pasos de 0.01. Los espectros de menor AOD quedan en gris,
+uno cada 0.1.
 
 ```python hidden
-aod_barrido = np.round(np.arange(0.0, 1.0001, 0.05), 2)
+aod_barrido = np.round(np.arange(0.0, 1.0001, 0.01), 2)
 espesor = parameter("AOD", aod_barrido, value=0.2, format="{:.2f}")
 lam_espectro = np.round(np.linspace(0.40, 1.00, 61), 3)
 espectros = np.array(
@@ -195,12 +196,13 @@ md(
 ```
 
 ```python hidden
+trazos = np.flatnonzero(np.isin(aod_barrido, np.round(np.arange(0.0, 1.0001, 0.1), 2)))
 P.figure(
     P.line(
-        x=np.tile(lam_espectro, len(aod_barrido)),
-        y=espectros.ravel(),
-        z=np.repeat(aod_barrido, lam_espectro.size),
-        since=np.repeat(np.arange(len(aod_barrido)) + 1, lam_espectro.size),
+        x=np.tile(lam_espectro, trazos.size),
+        y=espectros[trazos].ravel(),
+        z=np.repeat(aod_barrido[trazos], lam_espectro.size),
+        since=np.repeat(trazos + 1, lam_espectro.size),
         stroke="currentColor",
         strokeOpacity=0.2,
         tip=False,

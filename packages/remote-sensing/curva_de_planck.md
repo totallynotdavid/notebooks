@@ -146,13 +146,13 @@ md(
 )
 ```
 
-La figura recorre la temperatura de 2000 a 14000 K. El punto marca el máximo
-numérico de la curva y la línea vertical, $b/T$: los dos se mueven juntos hacia
-el ultravioleta mientras la altura del máximo crece como $T^5$. Las curvas de
-menor temperatura quedan en gris.
+La figura recorre la temperatura de 2000 a 14000 K en pasos de 100 K. El punto
+marca el máximo numérico de la curva y la línea vertical, $b/T$: los dos se
+mueven juntos hacia el ultravioleta mientras la altura del máximo crece como
+$T^5$. Las curvas de menor temperatura quedan en gris, una cada 1000 K.
 
 ```python hidden
-T_BARRIDO = np.arange(2000, 14001, 500)
+T_BARRIDO = np.arange(2000, 14001, 100)
 temperatura = parameter("T", T_BARRIDO, value=6000, format="{} K")
 lam_barrido = np.geomspace(100.0, 5000.0, 160)
 picos = np.array(
@@ -179,13 +179,13 @@ md(
 ```
 
 ```python hidden
-cuadro = np.arange(len(T_BARRIDO))
+trazos = np.flatnonzero(T_BARRIDO % 1000 == 0)
 P.figure(
     P.line(
-        x=np.tile(lam_barrido, len(T_BARRIDO)),
-        y=curvas_barrido.ravel(),
-        z=np.repeat(T_BARRIDO, lam_barrido.size),
-        since=np.repeat(cuadro + 1, lam_barrido.size),
+        x=np.tile(lam_barrido, trazos.size),
+        y=curvas_barrido[trazos].ravel(),
+        z=np.repeat(T_BARRIDO[trazos], lam_barrido.size),
+        since=np.repeat(trazos + 1, lam_barrido.size),
         stroke="currentColor",
         strokeOpacity=0.2,
         tip=False,
