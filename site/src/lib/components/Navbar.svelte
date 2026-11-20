@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import type { Snippet } from 'svelte';
 
+	import Mark from '#lib/components/Mark.svelte';
+
 	let {
 		title,
 		section,
@@ -12,10 +14,12 @@
 <header class="topbar">
 	<div class="topbar__inner" class:topbar__inner--wrap={!section}>
 		<p class="topbar__trail">
-			<a class="topbar__brand" href={resolve('/')}>{title}</a>
+			<a class="topbar__brand" href={resolve('/')} aria-label={title}>
+				<Mark />
+				<span class="topbar__name">{title}</span>
+			</a>
 			{#if section}
-				<span class="topbar__slash" aria-hidden="true">/</span>
-				<a class="topbar__section" href={section.href}>{section.title.toLowerCase()}</a>
+				<a class="topbar__section" href={section.href}>{section.title}</a>
 			{/if}
 		</p>
 		{#if children}
@@ -44,27 +48,34 @@
 	}
 	.topbar__trail {
 		display: flex;
-		align-items: baseline;
-		gap: 0.5rem;
+		align-items: center;
+		gap: 0.875rem;
 		min-width: 0;
 		margin: 0;
-		font-size: var(--text-title);
 	}
 	.topbar__brand {
+		display: flex;
 		flex-shrink: 0;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 1.125rem;
 		font-weight: 700;
 		color: var(--content);
 	}
-	.topbar__slash {
-		color: var(--content-secondary);
-	}
+	/* The section reads as a label after the brand, so the article's h1 stays
+	   the only large serif line on the page. */
 	.topbar__section {
 		overflow: hidden;
+		padding-left: 0.875rem;
+		border-left: 1px solid var(--line);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.5rem;
 		color: var(--content-secondary);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	.topbar__brand:hover,
+	.topbar__brand:hover .topbar__name,
 	.topbar__section:hover {
 		color: var(--content);
 		text-decoration: underline;
@@ -90,6 +101,10 @@
 		}
 		.topbar__inner:not(.topbar__inner--wrap) .topbar__controls {
 			flex-shrink: 0;
+		}
+		/* On an article the mark alone links home, leaving the row to the section. */
+		.topbar__inner:not(.topbar__inner--wrap) .topbar__name {
+			display: none;
 		}
 	}
 </style>
