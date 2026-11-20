@@ -47,7 +47,9 @@ class IsingTest(unittest.TestCase):
         cls.defs = run_notebook("modelo_de_ising")
 
     def test_running_energy_matches_the_final_lattice(self):
-        e, m, spins = self.defs["simular"](6, 1 / 4.0, 50, 3)
+        rng = np.random.default_rng(3)
+        spins = rng.choice(np.array([-1, 1], dtype=np.int8), size=(6, 6, 6))
+        e, m = self.defs["simular"](spins, 1 / 4.0, 50)
         s = spins.astype(np.int64)
         energy = -sum((s * np.roll(s, 1, axis=a)).sum() for a in range(3))
         self.assertAlmostEqual(e[-1], energy / 6**3)

@@ -48,21 +48,28 @@ valores $0,\pm4,\pm8,\pm12$: los factores de Boltzmann se calculan una vez.
 
 ```python
 @njit
-def simular(L, beta, barridos, semilla):
-    """Metropolis desde la red ordenada.
+def simular(spins, beta, barridos):
+    """Metropolis sobre la red `spins`, que cambia en el sitio.
 
-    Devuelve e = E/N y m = M/N después de cada barrido, y la red final.
+    Devuelve e = E/N y m = M/N después de cada barrido.
     """
-    np.random.seed(semilla)
-    spins = np.ones((L, L, L), dtype=np.int8)
+    L = spins.shape[0]
     n_sitios = L * L * L
     # Vecinos con frontera periódica, sin módulo dentro del bucle.
     mas = (np.arange(L) + 1) % L
     menos = (np.arange(L) - 1) % L
     boltzmann = np.exp(-beta * np.array([0.0, 4.0, 8.0, 12.0]))
 
-    energia = -3 * n_sitios
-    magnetizacion = n_sitios
+    energia = 0
+    magnetizacion = 0
+    for i in range(L):
+        for j in range(L):
+            for k in range(L):
+                s = spins[i, j, k]
+                energia -= s * (
+                    spins[mas[i], j, k] + spins[i, mas[j], k] + spins[i, j, mas[k]]
+                )
+                magnetizacion += s
     e = np.empty(barridos, dtype=np.float64)
     m = np.empty(barridos, dtype=np.float64)
 
@@ -87,7 +94,7 @@ def simular(L, beta, barridos, semilla):
         e[t] = energia / n_sitios
         m[t] = magnetizacion / n_sitios
 
-    return e, m, spins
+    return e, m
 
 
 @njit
@@ -97,9 +104,9 @@ def barrer_temperaturas(L, temperaturas, replicas, barridos, semilla):
     m = np.empty((n_t, replicas, barridos), dtype=np.float64)
     for a in range(n_t):
         for r in range(replicas):
-            e[a, r], m[a, r], _ = simular(
-                L, 1.0 / temperaturas[a], barridos, semilla + 1000 * a + r
-            )
+            np.random.seed(semilla + 1000 * a + r)
+            red = np.ones((L, L, L), dtype=np.int8)
+            e[a, r], m[a, r] = simular(red, 1.0 / temperaturas[a], barridos)
     return e, m
 ```
 
@@ -277,17 +284,30 @@ md(
 
 ## Configuraciones en equilibrio
 
-La figura recorre la temperatura en una red de $L=32$. Cada valor muestra el
-plano $z=0$ después de 1500 barridos desde la red ordenada. Por debajo de $T_c$
-domina un solo signo, cerca de $T_c$ aparecen dominios de ambos signos de todos
-los tamaños, y por encima los espines son casi independientes.
+La figura calienta una red de $L=32$ desde la red ordenada en $T=3$, en pasos de
+$0.05$. Cada valor muestra el plano $z=0$ después de 300 barridos a esa
+temperatura, que parten de la red del valor anterior. Por debajo de $T_c$ domina
+un solo signo, cerca de $T_c$ aparecen dominios de ambos signos de todos los
+tamaños, y por encima los espines son casi independientes.
 
 ```python
+@njit
+def calentar(L, temperaturas, barridos, semilla):
+    """Calienta una red ordenada y guarda el plano z = 0 en cada temperatura."""
+    np.random.seed(semilla)
+    red = np.ones((L, L, L), dtype=np.int8)
+    planos = np.empty((temperaturas.shape[0], L * L), dtype=np.int8)
+    m_final = np.empty(temperaturas.shape[0])
+    for a in range(temperaturas.shape[0]):
+        _, m = simular(red, 1.0 / temperaturas[a], barridos)
+        planos[a] = red[:, :, 0].copy().ravel()
+        m_final[a] = m[-1]
+    return planos, m_final
+
+
 L_VISTA = 32
-TEMPERATURAS_VISTA = np.round(np.arange(3.0, 7.01, 0.25), 2)
-vistas = [simular(L_VISTA, 1.0 / T, 1500, 11) for T in TEMPERATURAS_VISTA]
-planos = np.array([spins[:, :, 0].ravel() for _, _, spins in vistas])
-m_vista = [m[-1] for _, m, _ in vistas]
+TEMPERATURAS_VISTA = np.round(np.arange(3.0, 7.001, 0.05), 2)
+planos, m_vista = calentar(L_VISTA, TEMPERATURAS_VISTA, 300, 11)
 ```
 
 ```python hidden
