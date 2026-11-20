@@ -3,7 +3,7 @@ import math
 
 import numba as nb
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -168,15 +168,23 @@ P.figure(
 
 La tasa de aceptación es la fracción del cubo que ocupa la bola, $p_n=V_n/2^n$.
 Con la aproximación de Stirling para $\Gamma(n/2+1)$,
-$$p_n \approx \frac{1}{\sqrt{\pi n}}\left(\frac{\pi e}{2n}\right)^{n/2},$$
-que cae más rápido que cualquier exponencial: el factor entre paréntesis ya es
-menor que 1 para $n\ge 5$.
+
+$$
+
+p_n \approx \frac{1}{\sqrt{\pi n}}\note{menor que 1 para $n\ge 5$, y decrece con
+$n$}{\left(\frac{\pi e}{2n}\right)^{n/2}},
+
+$$
+
+que cae más rápido que cualquier exponencial, porque la base del factor también
+decrece con $n$.
 
 Un punto uniforme del cubo cumple $\|x\|^2=\sum_i x_i^2\approx n/3$, que supera
 1 para $n>3$. La norma se concentra alrededor de $\sqrt{n/3}$ con un ancho que
 no crece con $n$: casi todo el volumen del cubo está en sus esquinas, fuera de
-la bola. La animación recorre $n$ con la distribución de $\|x\|$ para 100 000
-puntos del cubo; la parte a la izquierda de $\|x\|=1$ es la que acierta.
+la bola. La figura muestra la distribución de $\|x\|$ para 100 000 puntos del
+cubo; la parte a la izquierda de $\|x\|=1$ es la que acierta, y la línea de
+guiones marca $\sqrt{n/3}$.
 
 ```python hidden
 BORDES = np.arange(0.0, 4.55, 0.05)
@@ -188,6 +196,28 @@ for n in DIMENSIONES:
     densidades.append(np.histogram(normas, bins=BORDES, density=True)[0])
     dentro_medido.append(np.mean(normas <= 1.0))
 densidades = np.array(densidades)
+dimension = parameter("n", DIMENSIONES, value=3)
+
+
+def porcentajes(fracciones):
+    """Cada fracción en %, con dos cifras significativas y sin exponente."""
+    return [
+        np.format_float_positional(100 * f, precision=2, fractional=False, trim="-")
+        for f in fracciones
+    ]
+
+
+md(
+    rf"""
+    Arrastra la dimensión: con $n = {dimension}$ la norma se concentra cerca de
+    $\sqrt{{n/3}} = {dimension.each(np.sqrt(DIMENSIONES / 3)):.2f}$, y cae
+    dentro de la bola el {dimension.each(porcentajes(dentro_medido))} % de los
+    puntos, frente a un $p_n$ de {dimension.each(porcentajes(tasa))} %.
+    """
+)
+```
+
+```python hidden
 izquierda = BORDES[:-1] < 1.0 - 1e-9
 
 
@@ -206,21 +236,8 @@ P.figure(
     barras(izquierda, "dentro de la bola"),
     barras(~izquierda, "fuera"),
     P.ruleX(x=np.sqrt(DIMENSIONES / 3)[:, None], strokeDasharray="4 3"),
-    P.text(
-        x=[0.05],
-        y=[1.85],
-        text=np.array(
-            [
-                [f"n = {n}: dentro {d:.2%}\n√(n/3) = {np.sqrt(n / 3):.2f} (guiones)"]
-                for n, d in zip(DIMENSIONES, dentro_medido, strict=True)
-            ]
-        ),
-        textAnchor="start",
-        lineAnchor="top",
-    ),
     title="Distribución de ‖x‖ para puntos uniformes del cubo",
-    frames=[f"n = {n}" for n in DIMENSIONES],
-    fps=2,
+    frames=dimension,
     x={"domain": [0, 4.5], "label": "norma ‖x‖"},
     y={"domain": [0, 1.9], "label": "densidad"},
     digits=3,

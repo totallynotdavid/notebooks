@@ -1,6 +1,6 @@
 ```python hidden
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -9,7 +9,9 @@ from quire import plot as P
 La radiancia espectral de un cuerpo negro a temperatura $T$ es
 
 $$
-B_\lambda(T) = \frac{2hc^2}{\lambda^5}\,\frac{1}{e^{hc/(\lambda k T)} - 1}.
+B_\lambda(T) = \note{$2c/\lambda^4$, de la densidad de modos del campo, por la
+energía $hc/\lambda$ de un fotón}{\frac{2hc^2}{\lambda^5}}\,\note{la ocupación
+media de un modo, de Bose–Einstein}{\frac{1}{e^{hc/(\lambda k T)} - 1}}.
 $$
 
 Con $\lambda$ en metros, la fórmula da W/(m²·sr·m). En todo el artículo se usa
@@ -144,18 +146,39 @@ md(
 )
 ```
 
-La animación recorre la temperatura de 2000 a 14000 K. El punto marca el máximo
-numérico de cada curva y la línea vertical, $b/T$: los dos se mueven juntos
-hacia el ultravioleta mientras la altura del máximo crece como $T^5$. Las curvas
-ya recorridas quedan en gris.
+La figura recorre la temperatura de 2000 a 14000 K. El punto marca el máximo
+numérico de la curva y la línea vertical, $b/T$: los dos se mueven juntos hacia
+el ultravioleta mientras la altura del máximo crece como $T^5$. Las curvas de
+menor temperatura quedan en gris.
 
 ```python hidden
 T_BARRIDO = np.arange(2000, 14001, 500)
+temperatura = parameter("T", T_BARRIDO, value=6000, format="{} K")
 lam_barrido = np.geomspace(100.0, 5000.0, 160)
 picos = np.array(
     [maximo(lambda lam, T=T: planck(lam, T), 10.0, 20000.0) for T in T_BARRIDO]
 )
 curvas_barrido = np.array([planck(lam_barrido, T) for T in T_BARRIDO])
+
+
+def cientifico(valor):
+    """`valor` con dos cifras, como 1.3 × 10⁵."""
+    mantisa, exponente = f"{valor:.1e}".split("e")
+    return f"{mantisa} × 10{str(int(exponente)).translate(SUPERINDICES)}"
+
+
+SUPERINDICES = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+md(
+    rf"""
+    Arrastra la temperatura: con $T = {temperatura}$ el máximo está en
+    {temperatura.each(picos):.0f} nm, igual a $b/T$ al nanómetro, y vale
+    {temperatura.each([cientifico(b) for b in planck(picos, T_BARRIDO)])}
+    W/(m²·sr·nm).
+    """
+)
+```
+
+```python hidden
 cuadro = np.arange(len(T_BARRIDO))
 P.figure(
     P.line(
@@ -176,8 +199,7 @@ P.figure(
     P.dot(
         x=picos[:, None], y=planck(picos, T_BARRIDO)[:, None], r=5, fill="currentColor"
     ),
-    frames=[f"T = {T} K" for T in T_BARRIDO],
-    fps=12,
+    frames=temperatura,
     x={"label": "λ (nm)", "type": "log"},
     y={"label": "B_λ (W m⁻² sr⁻¹ nm⁻¹)", "type": "log", "domain": [1e2, 1e7]},
     clip=True,

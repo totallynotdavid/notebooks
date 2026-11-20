@@ -3,7 +3,7 @@ from itertools import pairwise
 
 import numpy as np
 from numba import njit
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -29,8 +29,10 @@ s_i/N$ y $e=E/N$,
 $$
 \langle |m| \rangle,\qquad
 \langle e \rangle,\qquad
-\chi = \beta N\left(\langle m^2\rangle - \langle |m|\rangle^2\right),\qquad
-C = \beta^2 N\left(\langle e^2\rangle - \langle e\rangle^2\right),
+\chi = \beta N\note{la varianza de $|m|$}{\left(\langle m^2\rangle -
+\langle |m|\rangle^2\right)},\qquad
+C = \beta^2 N\note{la varianza de $e$}{\left(\langle e^2\rangle -
+\langle e\rangle^2\right)},
 $$
 
 $$
@@ -274,7 +276,7 @@ md(
 
 ## Configuraciones en equilibrio
 
-La animación recorre la temperatura en una red de $L=32$. Cada cuadro es el
+La figura recorre la temperatura en una red de $L=32$. Cada valor muestra el
 plano $z=0$ después de 1500 barridos desde la red ordenada. Por debajo de $T_c$
 domina un solo signo, cerca de $T_c$ aparecen dominios de ambos signos de todos
 los tamaños, y por encima los espines son casi independientes.
@@ -288,6 +290,17 @@ m_vista = [m[-1] for _, m, _ in vistas]
 ```
 
 ```python hidden
+temperatura = parameter("T", TEMPERATURAS_VISTA, value=4.5, format="{:.2f}")
+md(
+    rf"""
+    Arrastra la temperatura: con $T = {temperatura}$, o
+    $T - T_c = {temperatura.each(TEMPERATURAS_VISTA - T_C):+.2f}$, la red
+    termina con $m = {temperatura.each(m_vista):+.2f}$.
+    """
+)
+```
+
+```python hidden
 x_red, y_red = np.indices((L_VISTA, L_VISTA)).reshape(2, -1)
 P.figure(
     P.cell(
@@ -298,11 +311,7 @@ P.figure(
         tip=False,
     ),
     title=f"Plano z = 0 de una red de {L_VISTA}³ espines",
-    frames=[
-        f"T = {T:.2f}, m = {m:+.2f}"
-        for T, m in zip(TEMPERATURAS_VISTA, m_vista, strict=True)
-    ],
-    fps=2,
+    frames=temperatura,
     x={"axis": None, "padding": 0},
     y={"axis": None, "padding": 0},
     width=480,

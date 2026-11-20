@@ -1,6 +1,6 @@
 ```python hidden
 import numpy as np
-from quire import md
+from quire import md, parameter
 from quire import plot as P
 ```
 
@@ -16,9 +16,11 @@ Sea $\Omega$ una región de volumen $V_\Omega$ y $X_1,\ldots,X_N$ puntos
 independientes y uniformes en $\Omega$. Entonces
 
 $$
-I=\int_\Omega f(x)\,dx \approx \hat I_N = V_\Omega\,\frac1N\sum_{i=1}^N f(X_i),
+I=\int_\Omega f(x)\,dx \approx \hat I_N = V_\Omega\,\note{la media muestral de
+$f$}{\frac1N\sum_{i=1}^N f(X_i)},
 \qquad
-\sigma_{\hat I}=\frac{V_\Omega}{\sqrt N}\sqrt{\operatorname{Var}f(X)},
+\sigma_{\hat I}=V_\Omega\,\note{no depende de la dimensión de
+$\Omega$}{\frac{1}{\sqrt N}}\sqrt{\operatorname{Var}f(X)},
 $$
 
 y $\operatorname{Var}f(X)$ se estima con la varianza muestral $s_f^2$ (`ddof=1`
@@ -85,10 +87,11 @@ md(
 )
 ```
 
-La animación sigue la primera integral. Cada cuadro agrega puntos uniformes en
-el cuadrado, de un color si caen en el círculo y de otro si no. A la derecha,
-$\hat I_N = 4\cdot(\text{fracción dentro})$ oscila y se acerca a $\pi$ dentro de
-la banda $\pi\pm2\sigma_{\hat I}$, que se estrecha como $N^{-1/2}$.
+La figura sigue la primera integral con los primeros $N$ puntos de una corrida,
+uniformes en el cuadrado, de un color si caen en el círculo y de otro si no. A
+la derecha, $\hat I_N = 4\cdot(\text{fracción dentro})$ oscila al crecer $N$ y
+se acerca a $\pi$ dentro de la banda $\pi\pm2\sigma_{\hat I}$, que se estrecha
+como $N^{-1/2}$.
 
 ```python hidden
 N_MAX = 5000
@@ -106,7 +109,20 @@ cuadro_punto = np.searchsorted(cortes, np.arange(N_MAX), side="right")
 cuadro_marca = np.searchsorted(cortes, marcas)
 angulo = np.linspace(0, 2 * np.pi, 200)
 
+muestras = parameter("N", cortes, value=cortes[len(cortes) // 2])
+estimacion_cortes = estimacion_pi[cortes - 1]
+sigma_cortes = 4.0 * np.sqrt(p_dentro * (1 - p_dentro) / cortes)
+md(
+    rf"""
+    Arrastra $N$: con $N = {muestras}$ puntos la estimación es
+    {muestras.each(estimacion_cortes):.4f}, a
+    {muestras.each(np.abs(estimacion_cortes - np.pi) / sigma_cortes):.1f}
+    $\sigma_{{\hat I}}$ de $\pi$.
+    """
+)
+```
 
+```python hidden
 def nube(cuales, nombre):
     return P.dot(
         x=puntos[cuales, 0],
@@ -124,8 +140,7 @@ P.grid(
         nube(~dentro, "fuera"),
         P.line(x=np.cos(angulo), y=np.sin(angulo), stroke="currentColor"),
         title="Puntos al azar en el cuadrado",
-        frames=[f"N = {c}" for c in cortes],
-        fps=15,
+        frames=muestras,
         x={"domain": [-1.05, 1.05], "label": None, "ticks": 5},
         y={"domain": [-1.05, 1.05], "label": None, "ticks": 5},
         aspectRatio=1,
@@ -149,21 +164,12 @@ P.grid(
         ),
         P.dot(
             x=cortes[:, None],
-            y=estimacion_pi[cortes - 1][:, None],
+            y=estimacion_cortes[:, None],
             r=4,
             series="estimación",
         ),
-        P.text(
-            x=[12],
-            y=[3.95],
-            text=np.array(
-                [[f"estimación = {estimacion_pi[c - 1]:.4f}"] for c in cortes]
-            ),
-            textAnchor="start",
-        ),
         title="4 · fracción dentro",
-        frames=[f"N = {c}" for c in cortes],
-        fps=15,
+        frames=muestras,
         x={"type": "log", "domain": [10, 1.25 * N_MAX], "label": "N"},
         y={"domain": [2.2, 4.1], "label": "estimación"},
         grid=True,

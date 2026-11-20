@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import numpy as np
 from Py6S import AeroProfile, AtmosProfile, GroundReflectance, SixS, Wavelength
-from quire import cache, md
+from quire import cache, md, parameter
 from quire import plot as P
 
 # Python 3.14 no puede importar `6s-bin`, así que se localiza su ejecutable.
@@ -182,11 +182,12 @@ tabla(
 )
 ```
 
-La animación recorre el AOD de 0 a 1 sobre el espectro VNIR, con los mismos
-vapor de agua y ángulo. Los espectros ya recorridos quedan en gris.
+La figura recorre el AOD de 0 a 1 sobre el espectro VNIR, con los mismos vapor
+de agua y ángulo. Los espectros de menor AOD quedan en gris.
 
 ```python hidden
 aod_barrido = np.round(np.arange(0.0, 1.0001, 0.05), 2)
+espesor = parameter("AOD", aod_barrido, value=0.2, format="{:.2f}")
 lam_espectro = np.round(np.linspace(0.40, 1.00, 61), 3)
 espectros = np.array(
     [
@@ -194,6 +195,18 @@ espectros = np.array(
         for aod in aod_barrido
     ]
 )
+azul_espectro = espectros[:, np.flatnonzero(lam_espectro == 0.48)[0]]
+nir_espectro = espectros[:, np.flatnonzero(lam_espectro == 0.86)[0]]
+md(
+    rf"""
+    Arrastra el AOD: con un AOD de {espesor} la radiancia en el sensor es
+    {espesor.each(azul_espectro):.1f} W/(m²·sr·µm) a 0.48 µm y
+    {espesor.each(nir_espectro):.1f} a 0.86 µm.
+    """
+)
+```
+
+```python hidden
 P.figure(
     P.line(
         x=np.tile(lam_espectro, len(aod_barrido)),
@@ -205,8 +218,7 @@ P.figure(
         tip=False,
     ),
     P.line(x=lam_espectro, y=espectros, strokeWidth=2),
-    frames=[f"AOD = {aod:.2f}" for aod in aod_barrido],
-    fps=6,
+    frames=espesor,
     title="Espectro VNIR según el espesor óptico de aerosoles",
     x={"label": "longitud de onda (µm)"},
     y={"label": "radiancia en el sensor (W m⁻² sr⁻¹ µm⁻¹)"},
