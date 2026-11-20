@@ -28,8 +28,9 @@ b_n &= \frac{2T_b(-1)^n}{n\pi},\qquad k_n = \frac{n\pi}{L}.
 \end{aligned}
 $$
 
-Cada modo decae con su propia constante de tiempo. Para $t>0$ la serie converge
-de inmediato, y la usamos como referencia exacta con 400 términos.
+El modo $n$ decae con la constante de tiempo $1/(\alpha k_n^2)$. Para $t>0$ el
+factor $e^{-\alpha k_n^2 t}$ hace que la serie converja rápido, y la cortamos en
+400 términos para usarla como referencia.
 
 ```python
 ALFA, LARGO, T_BORDE, NODOS = 10.0, 10.0, 100.0, 21
@@ -48,6 +49,17 @@ def fourier(t, terminos=400):
     return T_BORDE * x / LARGO + modos.sum(axis=0)
 ```
 
+```python hidden
+exponente = ALFA * (401 * np.pi / LARGO) ** 2 * 0.01
+md(
+    rf"""
+    En el primer instante que comparamos, $t=0.01$, el primer término omitido
+    lleva el factor $e^{{-{exponente:.0f}}}$, y los siguientes decaen aún más
+    rápido: el corte no se nota frente a ningún error de esta página.
+    """
+)
+```
+
 ## Esquemas
 
 Con $T_i^n\approx T(i\,\Delta x,\,n\,\Delta t)$ y el número
@@ -63,10 +75,25 @@ T_i^{n+1}=T_i^n+r\left(T_{i-1}^n-2T_i^n+T_{i+1}^n\right).
 $$
 
 Para el modo de Fourier de número de onda $k$, cada paso lo multiplica por
-$1-4r\sin^2(k\Delta x/2)$. El modo más oscilante ($k\Delta x=\pi$) se multiplica
-por $1-4r$, que tiene módulo mayor que 1 si $r>1/2$: ese modo crece en cada
-paso. El esquema es estable sólo para $r\le1/2$, y con $r=1/2$ el modo más
-oscilante no decae.
+$1-4r\sin^2(k\Delta x/2)$. Cuando $k\Delta x\to\pi$ el factor tiende a $1-4r$,
+que tiene módulo mayor que 1 si $r>1/2$, así que el esquema es estable sólo para
+$r\le1/2$. Con los extremos fijos, los modos de la malla son $k_n\Delta x =
+n\pi/N$ con $n=1,\dots,N-1$, y el más oscilante es $n=N-1$.
+
+```python hidden
+def factor_explicito(r, n):
+    return 1 - 4 * r * np.sin(n * np.pi / (2 * (NODOS - 1))) ** 2
+
+
+md(
+    rf"""
+    Aquí $N={NODOS - 1}$. A ese modo, $r=1/2$ lo multiplica por
+    {factor_explicito(0.5, NODOS - 2):.4f} en cada paso: cambia de signo y
+    decae despacio. Con $r=0.6$ el factor es
+    {factor_explicito(0.6, NODOS - 2):.3f}, y el modo crece.
+    """
+)
+```
 
 **Crank–Nicolson** promedia el laplaciano entre $n$ y $n+1$:
 
@@ -184,14 +211,16 @@ P.figure(
 ```python hidden
 t_inestable, T_inestable = explicitos[0.6]
 t_sale = t_inestable[np.argmax(np.abs(T_inestable).max(axis=1) > 120)]
+pasos_medio = len(explicitos[0.5][0]) - 1
 md(
     f"""
-    Con $r=0.4$ el perfil sigue a la solución exacta. Con $r=0.5$ también, pero
-    en el límite de estabilidad: el modo más oscilante no decae y conserva el
-    ruido que el salto inicial en el borde le entrega. Con $r=0.6$ ese modo se
-    multiplica por $1-4r={1 - 4 * 0.6:.1f}$ en cada paso, y el perfil que se ve
-    es sólo la oscilación de nodo a nodo, muchos órdenes de magnitud mayor que
-    la temperatura física.
+    Con $r=0.4$ el perfil sigue a la solución de Fourier. Con $r=0.5$ también,
+    pero el modo más oscilante, que el salto inicial en el borde excita, sólo
+    se reduce a {abs(factor_explicito(0.5, NODOS - 2)) ** pasos_medio:.2f} de su
+    amplitud en los {pasos_medio} pasos hasta $t={T_FINAL}$. Con $r=0.6$ ese modo
+    se multiplica por {factor_explicito(0.6, NODOS - 2):.3f} en cada paso, y el
+    perfil que se ve es sólo la oscilación de nodo a nodo, muchos órdenes de
+    magnitud mayor que la temperatura física.
 
     La animación sigue a $r=0.4$ y $r=0.6$ cada $0.03$ de tiempo. La oscilación
     de $r=0.6$ aparece junto al borde caliente, donde está el salto inicial, se
@@ -255,6 +284,9 @@ corridas = [
     *[("Crank–Nicolson", r, *cn[r]) for r in cn],
 ]
 errores = [error_en_el_tiempo(t, T) for _, _, t, T in corridas]
+t_peor = [
+    t[1:][np.argmax(e[1:])] for (_, _, t, _), e in zip(corridas, errores, strict=True)
+]
 
 P.figure(
     *[
@@ -286,7 +318,8 @@ md(
         [
             f"Resultados hasta $t={T_FINAL}$ (la solución física está entre 0 y 100). "
             f"El error final es el de $t={T_FINAL}$; el error máximo es el mayor "
-            "en todo el tiempo y ocurre en los primeros pasos: la "
+            "en todo el tiempo. Salvo en el explícito con $r=0.6$, el máximo "
+            f"ocurre a más tardar en $t={max(t_peor[:2] + t_peor[3:]):.2f}$: la "
             "condición inicial es discontinua en la esquina $(x=L,\\,t=0)$ y "
             "ningún esquema la representa con pocos pasos.",
             "",
@@ -329,18 +362,50 @@ P.figure(
 ```
 
 ```python hidden
+def implicito(r, t_final):
+    """Máximo interior de Euler implícito, (I - r δ²) Tⁿ⁺¹ = Tⁿ, en todo el tiempo."""
+    dt = r * dx**2 / ALFA
+    pasos = round(t_final / dt)
+    n = NODOS - 2
+    izquierda = (
+        np.diag((1 + 2 * r) * np.ones(n))
+        - r * np.diag(np.ones(n - 1), 1)
+        - r * np.diag(np.ones(n - 1), -1)
+    )
+    T = condicion_inicial()
+    maximo = 0.0
+    for _ in range(pasos):
+        b = T[1:-1].copy()
+        b[-1] += r * T_BORDE
+        T[1:-1] = np.linalg.solve(izquierda, b)
+        maximo = max(maximo, T[1:-1].max())
+    return maximo
+
+
+def factor_cn(r, n):
+    s = 2 * r * np.sin(n * np.pi / (2 * (NODOS - 1))) ** 2
+    return (1 - s) / (1 + s)
+
+
 error_final = {r: error_en_el_tiempo(*cn[r])[-1] for r in cn}
+menor = min(e[-1] for e in errores) == error_final[0.6]
+implicitos = {r: implicito(r, T_FINAL) for r in (5.0, 20.0)}
 md(
     f"""
     Crank–Nicolson no se desestabiliza para ningún $r$. Con $r=0.6$ su error en
-    $t=1.5$ es {error_final[0.6]:.2g}, el menor de la tabla. Con $r=5$ el paso
-    es {5.0 / 0.6:.1f} veces mayor y el error no crece sin cota. Pero la
-    condición inicial es discontinua en $x=L$, y los modos de alta frecuencia
-    casi no se amortiguan cuando $r$ es grande: con $r=5$ y $r=20$ aparecen
-    valores de hasta {cn[5.0][1].max():.0f} y {cn[20.0][1].max():.0f}, por
-    encima de $T_b$, que la solución física nunca alcanza. Para pasos grandes
-    conviene un esquema completamente implícito, o arrancar Crank–Nicolson con
-    unos pasos pequeños.
+    $t=1.5$ es {error_final[0.6]:.2g}{", el menor de la tabla" if menor else ""}.
+    Con $r=5$ el paso es {5.0 / 0.6:.1f} veces mayor y el error no crece sin
+    cota. Pero la condición inicial es discontinua en $x=L$, y cuando $r$ es
+    grande el factor de los modos de alta frecuencia se acerca a $-1$: con
+    $r=20$ el modo $n={NODOS - 2}$ se multiplica por
+    {factor_cn(20.0, NODOS - 2):.3f} en cada paso. Por eso con $r=5$ y $r=20$
+    aparecen valores de hasta {cn[5.0][1].max():.0f} y
+    {cn[20.0][1].max():.0f}, por encima de $T_b$, que la solución física nunca
+    alcanza. Euler implícito, $(1-r\\delta^2)T^{{n+1}}=T^n$, tiene factor
+    $1/(1+4r\\sin^2(k\\Delta x/2))$, positivo y menor que 1. Con los mismos
+    pasos, ningún nodo interior pasa de {implicitos[5.0]:.1f} con $r=5$ ni de
+    {implicitos[20.0]:.1f} con $r=20$: no hay oscilación, a cambio de un error
+    de truncamiento $O(\\Delta t)$.
     """
 )
 ```
