@@ -210,12 +210,24 @@ P.figure(
 )
 ```
 
-Euler suma energía en cada paso, desde el primero: la deriva ya es de unos 2 J
-tras un segundo y supera varias veces $\lvert E_0\rvert$ antes de los 25 s, así
-que su trayectoria deja de representar al péndulo. RK4 con el paso fino conserva
-$E$ a $10^{-4}$ J. Con un paso cinco veces mayor la deriva llega a varios julios
-en 500 s: RK4 no es simpléctico, el error no queda acotado, y el paso debe
-elegirse según el tiempo que se quiere simular.
+```python hidden
+E0 = energy(Y0)
+euler_1s = deriva_euler[np.searchsorted(t_fino, 1.0)]
+grueso_100s = deriva_rk4_grueso[np.searchsorted(t_grueso, 100.0)]
+md(
+    rf"""
+    La energía inicial es $E_0 = {E0:.1f}$ J. Euler suma energía desde el primer
+    paso: la deriva es de {euler_1s:.1f} J tras un segundo y llega a
+    {deriva_euler.max() / abs(E0):.0f} veces $\lvert E_0\rvert$ a los 25 s, así
+    que su trayectoria deja de representar al péndulo. RK4 con el paso fino
+    conserva $E$ a {deriva_rk4.max():.1e} J. Con un paso cinco veces mayor la
+    deriva es de {grueso_100s:.1f} J a los 100 s y de
+    {deriva_rk4_grueso.max():.1f} J a los 500 s. RK4 no es simpléctico, su error
+    de energía crece con el tiempo, y el paso se elige según el tiempo que se
+    quiere simular.
+    """
+)
+```
 
 ## Exponente de Lyapunov máximo
 
@@ -325,11 +337,22 @@ P.grid(
 )
 ```
 
-Para ángulos grandes $\lambda>0$: una diferencia de una millonésima en la
-condición inicial alcanza el tamaño del espacio de fases en pocos segundos, y el
-tiempo en que se puede predecir la trayectoria crece sólo como
-$\ln(1/d_0)/\lambda$. La gráfica de la derecha muestra que la separación sin
-renormalizar sigue esa exponencial hasta saturar.
+```python hidden
+t_uno = t_sep[np.argmax(d_sep >= 1.0)]
+md(
+    rf"""
+    Para ángulos grandes $\lambda \approx {lam_grande:.2f}$ 1/s: una diferencia
+    de $10^{{-6}}$ en la condición inicial alcanza una distancia de 1 en el
+    espacio de fases a los {t_uno:.1f} s. La exponencial con ese $\lambda$ da
+    $\ln(10^6)/\lambda = {np.log(1 / D0) / lam_grande:.1f}$ s: $\lambda$ es un
+    promedio sobre 100 s, y en los primeros segundos de esta trayectoria la
+    separación crece más rápido que ese promedio. Aun así, el tiempo en que se
+    puede predecir la trayectoria crece sólo como $\ln(1/d_0)/\lambda$: mejorar
+    $d_0$ mil veces lo alarga {np.log(1000) / lam_grande:.1f} s. La gráfica de la
+    derecha compara la separación sin renormalizar con esa exponencial.
+    """
+)
+```
 
 Para ángulos pequeños el movimiento es casi lineal y el estimador cae hacia cero
 al crecer $T$. En el caso moderado también decrece con $T$, lo que es
