@@ -112,10 +112,10 @@ def barrer_temperaturas(L, temperaturas, replicas, barridos, semilla):
 
 ## Observables y cumulante de Binder
 
-La rejilla de temperaturas es fina alrededor de la temperatura crítica esperada,
-$T_c\approx4.51$. Cada réplica parte de la red ordenada y descarta los primeros
-barridos como termalización. Las barras de error son la desviación estándar de
-la media entre réplicas.
+La rejilla de temperaturas es fina alrededor de la temperatura crítica de la red
+cúbica infinita, $T_c\approx4.5115$ (Hasenbusch 2010). Cada réplica parte de la
+red ordenada y descarta los primeros barridos como termalización. Las barras de
+error son la desviación estándar de la media entre réplicas.
 
 ```python
 TAMANOS = (4, 6, 8, 10, 12)
@@ -287,8 +287,9 @@ md(
 La figura calienta una red de $L=32$ desde la red ordenada en $T=3$, en pasos de
 $0.05$. Cada valor muestra el plano $z=0$ después de 300 barridos a esa
 temperatura, que parten de la red del valor anterior. Por debajo de $T_c$ domina
-un solo signo, cerca de $T_c$ aparecen dominios de ambos signos de todos los
-tamaños, y por encima los espines son casi independientes.
+un solo signo. Cerca de $T_c$ aparecen dominios de ambos signos de muchos
+tamaños, hasta el de la red. Por encima de $T_c$ la longitud de correlación
+disminuye al subir $T$, y los dominios se achican con ella.
 
 ```python
 @njit
@@ -341,5 +342,8 @@ P.figure(
 )
 ```
 
-Con $L\le 12$ las curvas de arriba tienen efectos de tamaño finito marcados, y
-la comparación con el $T_c$ del límite termodinámico es cualitativa.
+## Referencia
+
+M. Hasenbusch, «Finite size scaling study of lattice models in the
+three-dimensional Ising universality class», Phys. Rev. B **82**, 174433 (2010),
+doi:10.1103/PhysRevB.82.174433.
