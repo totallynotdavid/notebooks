@@ -1,151 +1,151 @@
 [site]
-title = "Notebooks"
-description = "Computational physics notebooks in Spanish: numerical methods, dynamical systems, statistical physics, remote sensing and geophysics."
+title = "Física computacional"
+description = "Artículos de física computacional: métodos numéricos, sistemas dinámicos, física estadística, teledetección y geofísica."
 repository = "https://github.com/totallynotdavid/notebooks"
 branch = "master"
 
 [[topics]]
 id = "numerical-methods"
-title = "Numerical methods"
+title = "Métodos numéricos"
 
 [[topics.notebooks]]
 id = "floating-point"
-title = "Floating-point error"
+title = "Error de punto flotante"
 file = "punto_flotante.md"
-summary = "Binary representation with float.hex, machine epsilon from numpy.finfo, and how float32 and float64 differ when adding, subtracting and accumulating."
+summary = "La representación binaria con float.hex, el épsilon de máquina con numpy.finfo, y cómo difieren float32 y float64 al sumar, restar y acumular."
 
 [[topics.notebooks]]
 id = "numerical-differentiation"
-title = "Numerical differentiation"
+title = "Derivación numérica"
 file = "derivacion_numerica.md"
-summary = "Forward, backward and central differences, the error against h with its order and rounding floor, and Richardson extrapolation."
+summary = "Diferencias hacia adelante, hacia atrás y centradas, el error frente a h con su orden y su piso de redondeo, y la extrapolación de Richardson."
 
 [[topics.notebooks]]
 id = "root-finding"
-title = "Solving nonlinear equations"
+title = "Solución de ecuaciones no lineales"
 file = "raices.md"
-summary = "Bisection, false position and Newton's method with their convergence plots, the observed order, and the multiple-root case."
+summary = "Bisección, falsa posición y el método de Newton con sus curvas de convergencia, el orden observado y el caso de una raíz múltiple."
 
 [[topics.notebooks]]
 id = "interpolation"
-title = "Polynomial interpolation"
+title = "Interpolación polinomial"
 file = "interpolacion.md"
-summary = "Lagrange, Newton divided differences and finite differences, and Runge's phenomenon with equispaced and Chebyshev nodes."
+summary = "Lagrange, diferencias divididas de Newton y diferencias finitas, y el fenómeno de Runge con nodos equiespaciados y de Chebyshev."
 
 [[topics.notebooks]]
 id = "monte-carlo"
-title = "Monte Carlo integration"
+title = "Integración de Monte Carlo"
 file = "monte_carlo.md"
-summary = "The Monte Carlo estimator in NumPy, its error falling as 1/sqrt(N), and variance reduction by importance sampling."
+summary = "El estimador de Monte Carlo en NumPy, su error que cae como 1/sqrt(N), y la reducción de varianza por muestreo de importancia."
 
 [[topics]]
 id = "dynamics"
-title = "Dynamics and differential equations"
+title = "Dinámica y ecuaciones diferenciales"
 
 [[topics.notebooks]]
 id = "simple-pendulum"
-title = "Simple pendulum"
+title = "Péndulo simple"
 file = "pendulo_simple.md"
-summary = "The exact period from the complete elliptic integral against small oscillations, and energy drift under velocity Verlet and RK4."
+summary = "El período exacto con la integral elíptica completa frente a las oscilaciones pequeñas, y la deriva de energía con Verlet de velocidades y RK4."
 
 [[topics.notebooks]]
 id = "three-springs"
-title = "Two masses and three springs"
+title = "Dos masas y tres resortes"
 file = "tres_resortes.md"
-summary = "Normal modes from an eigenvalue decomposition, and the RK4 time series that shows them."
+summary = "Los modos normales desde un problema de autovalores, y la serie temporal con RK4 que los muestra."
 
 [[topics.notebooks]]
 id = "double-pendulum"
-title = "Double pendulum"
+title = "Péndulo doble"
 file = "pendulo_doble.md"
-summary = "A chaotic double pendulum with Euler and RK4, the energy drift of each method, and a Lyapunov exponent from two nearby trajectories."
+summary = "Un péndulo doble caótico con Euler y RK4, la deriva de energía de cada método, y un exponente de Lyapunov a partir de dos trayectorias cercanas."
 
 [[topics.notebooks]]
 id = "lorenz-attractor"
-title = "Lorenz attractor"
+title = "Atractor de Lorenz"
 file = "atractor_de_lorenz.md"
-summary = "The Lorenz system integrated with RK4: the attractor, its largest Lyapunov exponent, the map of z maxima, and the bifurcation in rho."
+summary = "El sistema de Lorenz integrado con RK4: el atractor, su mayor exponente de Lyapunov, el mapa de los máximos de z y la bifurcación en rho."
 
 [[topics.notebooks]]
 id = "heat-equation"
-title = "The heat equation in one dimension"
+title = "Ecuación de calor en una dimensión"
 file = "edp_calor.md"
-summary = "The 1D heat equation with finite differences: the explicit scheme at r = 0.4, 0.5 and 0.6 (unstable), Crank-Nicolson, and the Fourier solution."
+summary = "La ecuación de calor 1D con diferencias finitas: el esquema explícito con r = 0.4, 0.5 y 0.6 (inestable), Crank-Nicolson y la solución de Fourier."
 
 [[topics]]
 id = "statistical-physics"
-title = "Statistical and molecular physics"
+title = "Física estadística y molecular"
 
 [[topics.notebooks]]
 id = "hypersphere-volume"
-title = "Volume of a hypersphere"
+title = "Volumen de la hiperesfera"
 file = "volumen_hiperesfera.md"
-summary = "Rejection Monte Carlo for the volume of the unit ball against the exact formula, and why the acceptance rate collapses as the dimension grows."
+summary = "Monte Carlo por rechazo para el volumen de la bola unitaria frente a la fórmula exacta, y por qué la tasa de aceptación se desploma al crecer la dimensión."
 
 [[topics.notebooks]]
 id = "ising-model"
-title = "3D Ising model"
+title = "Modelo de Ising 3D"
 file = "modelo_de_ising.md"
-summary = "Metropolis sampling of the 3D Ising model on several lattice sizes: magnetization, energy, susceptibility, specific heat, and the Binder cumulant crossing that locates the critical temperature."
+summary = "Muestreo de Metropolis del modelo de Ising 3D en varias redes: magnetización, energía, susceptibilidad, calor específico y el cruce del cumulante de Binder que ubica la temperatura crítica."
 
 [[topics.notebooks]]
 id = "argon-and-potassium"
-title = "Liquid argon and potassium clusters"
+title = "Argón líquido y cúmulos de potasio"
 file = "argon_y_potasio.md"
-summary = "Lennard-Jones with velocity Verlet and periodic boundaries: energy, temperature, g(r) and diffusion, then a tight-binding potential for K clusters."
+summary = "Lennard-Jones con Verlet de velocidades y condiciones periódicas: energía, temperatura, g(r) y difusión; luego un potencial de enlace fuerte para cúmulos de K."
 
 [[topics]]
 id = "remote-sensing"
-title = "Radiation and remote sensing"
+title = "Radiación y teledetección"
 
 [[topics.notebooks]]
 id = "planck-curve"
-title = "Planck's law"
+title = "Curva de Planck"
 file = "curva_de_planck.md"
-summary = "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displacement law, and the Stefan-Boltzmann law by numerical integration."
+summary = "La ley de Planck con sus límites de Rayleigh-Jeans y de Wien, la ley de desplazamiento de Wien, y la ley de Stefan-Boltzmann por integración numérica."
 
 [[topics.notebooks]]
 id = "radiative-transfer-6s"
-title = "Radiative transfer with 6S"
+title = "Transferencia radiativa con 6S"
 file = "transferencia_radiativa_6s.md"
-summary = "Atmospheric radiative transfer with the 6S model through Py6S."
+summary = "Transferencia radiativa en la atmósfera con el modelo 6S a través de Py6S."
 
 [[topics.notebooks]]
 id = "earth-engine-peru"
-title = "Earth Engine over Peru"
+title = "Earth Engine en el Perú"
 file = "earth_engine_peru.md"
-summary = "SRTM elevation, MODIS land cover and land surface temperature over Lima, Cusco and Iquitos with Google Earth Engine."
+summary = "Elevación SRTM, cobertura del suelo y temperatura de superficie MODIS sobre Lima, Cusco e Iquitos con Google Earth Engine."
 
 [[topics.notebooks]]
 id = "landsat-rasterio"
-title = "Landsat rasters with rasterio"
+title = "Lectura de un raster Landsat con rasterio"
 file = "landsat_rasterio.md"
-summary = "Reading a Landsat scene with rasterio: metadata, bands, and masking NoData values."
+summary = "Una escena Landsat con rasterio: metadatos, bandas y el enmascarado de los valores NoData."
 
 [[topics.notebooks]]
 id = "gaofen1-atmospheric-correction"
-title = "GaoFen-1 atmospheric correction"
+title = "Corrección atmosférica de GaoFen-1"
 file = "gaofen1/correccion_atmosferica_gaofen1.md"
-summary = "Atmospheric correction of GaoFen-1 images with 6S and rasterio."
+summary = "Corrección atmosférica de imágenes GaoFen-1 con 6S y rasterio."
 
 [[topics]]
 id = "geophysics"
-title = "Solid Earth and hazards"
+title = "Tierra sólida y peligros"
 
 [[topics.notebooks]]
 id = "sac-processing"
-title = "Processing SAC records with ObsPy"
+title = "Registros SAC con ObsPy"
 file = "procesamiento_sac.md"
-summary = "Records of the 2007 Pisco earthquake: a record section by distance, spectra, and P-wave picking with STA/LTA."
+summary = "Registros del sismo de Pisco de 2007: una sección de registros por distancia, espectros y la detección de la onda P con STA/LTA."
 
 [[topics.notebooks]]
 id = "fault-to-tsunami"
-title = "Tsunami initial condition"
+title = "Condición inicial de un tsunami"
 file = "deformacion_tsunami.md"
-summary = "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, and the sea surface it lifts through the Kajiura filter."
+summary = "El levantamiento del fondo marino con el modelo de Okada para el sismo de Pisco de 2007, y la superficie del mar que levanta a través del filtro de Kajiura."
 
 [[topics.notebooks]]
 id = "ancash-landslides"
-title = "Mass movements in Ancash"
+title = "Movimientos en masa en Áncash"
 file = "peligros_geologicos_ancash.md"
-summary = "INGEMMET's geological hazard inventory for Ancash: types of mass movement, the most affected provinces, a map, and the factors behind debris flows."
+summary = "El inventario de peligros geológicos del INGEMMET para Áncash: tipos de movimiento en masa, las provincias más afectadas, un mapa y los factores detrás de los flujos de detritos."

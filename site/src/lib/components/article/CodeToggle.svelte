@@ -17,7 +17,7 @@
 
 <button type="button" class="toggle" class:toggle--on={shown} onclick={toggle}>
 	<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4" /></svg>
-	<span class="toggle__label">{shown ? 'Hide code' : 'Show code'}</span>
+	<span class="toggle__label">{shown ? 'Ocultar código' : 'Mostrar código'}</span>
 </button>
 
 <style>

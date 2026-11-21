@@ -26,6 +26,10 @@ under `packages/`, and each `[[topics.notebooks]]` entry gives a notebook's id,
 title, file and summary. A notebook's slug is `topic-id/notebook-id`. The site
 publishes every notebook in the catalog.
 
+Everything a reader sees is Spanish: articles, catalog titles and summaries,
+and the site's interface. Identifiers stay English: package names, slugs, and
+code.
+
 [`scripts/notebooks_manifest.py`](../scripts/notebooks_manifest.py) reads the
 catalog, checks ids, paths and packages, and writes the typed frontend data to
 [`site/src/lib/catalog.generated.ts`](../site/src/lib/catalog.generated.ts).

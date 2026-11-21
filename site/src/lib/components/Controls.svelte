@@ -15,7 +15,7 @@
 
 <form class="controls" role="search" onsubmit={(event) => event.preventDefault()}>
 	<div class="controls__field controls__field--search">
-		<label class="controls__label" for="nb-search">Search</label>
+		<label class="controls__label" for="nb-search">Buscar</label>
 		<input
 			id="nb-search"
 			name="q"
@@ -29,7 +29,7 @@
 		<kbd class="controls__hint" aria-hidden="true">/</kbd>
 	</div>
 	<div class="controls__field">
-		<label class="controls__label" for="nb-topic">Topic</label>
+		<label class="controls__label" for="nb-topic">Tema</label>
 		<select
 			id="nb-topic"
 			name="topic"
@@ -37,7 +37,7 @@
 			value={filters.topicId}
 			onchange={(event) => onchange({ ...filters, topicId: event.currentTarget.value })}
 		>
-			<option value="">All topics</option>
+			<option value="">Todos los temas</option>
 			{#each topics as topic (topic.id)}
 				<option value={topic.id}>{topic.title}</option>
 			{/each}

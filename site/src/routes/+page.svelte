@@ -69,18 +69,18 @@
 		<Controls {filters} {topics} onchange={update} />
 	</Navbar>
 
-	<h1 class="sr-only">Computational physics notebooks</h1>
+	<h1 class="sr-only">{site.title}</h1>
 
 	<main class="main">
 		{#if filtered.length === 0}
 			<div class="empty">
-				<p class="empty__message">No notebook matches these filters.</p>
+				<p class="empty__message">Ningún artículo coincide con estos filtros.</p>
 				<button
 					class="empty__reset"
 					type="button"
 					onclick={() => update(EMPTY_FILTERS)}
 				>
-					Clear filters
+					Quitar filtros
 				</button>
 			</div>
 		{:else}
@@ -96,7 +96,16 @@
 </div>
 
 <style>
+	/* The main column grows so a short, filtered list keeps the footer at the bottom. */
+	.page {
+		display: flex;
+		flex-direction: column;
+		min-height: 100dvh;
+	}
+
 	.main {
+		flex: 1 0 auto;
+		width: 100%;
 		max-width: var(--layout-width);
 		margin: 0 auto;
 		padding: 2.5rem var(--gutter) var(--gutter);

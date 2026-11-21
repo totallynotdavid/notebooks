@@ -75,7 +75,7 @@
 	{#if parameter !== undefined}
 		<span class="player__name">{name}</span>
 	{:else}
-		<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
+		<button type="button" class="player__toggle" onclick={toggle} aria-label={playing ? 'Pausar' : 'Reproducir'}>
 			{#if playing}
 				<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
 			{:else}
@@ -96,7 +96,7 @@
 		onpointerdown={() => parameter !== undefined && page.hold(parameter)}
 		onpointerup={() => parameter !== undefined && page.release(parameter)}
 		onpointercancel={() => parameter !== undefined && page.release(parameter)}
-		aria-label={name ?? 'Frame'}
+		aria-label={name ?? 'Cuadro'}
 		aria-valuetext={labels[position]}
 	/>
 	<output class="player__label">{labels[position]}</output>

@@ -6,18 +6,8 @@
 
 <footer class="footer">
 	<div class="footer__inner">
-		<div class="footer__about">
-			<p class="footer__lead">
-				Computational physics notebooks in Spanish, each published as a page of its results.
-			</p>
-			<p>
-				Your browser runs no Python. To rerun a notebook with other parameters, clone the repository
-				and build it with <a href="{site.repository}#readme" rel="external noopener">one command</a>.
-			</p>
-		</div>
-
-		<nav class="footer__column" aria-label="Topics">
-			<h2 class="footer__heading">Topics</h2>
+		<nav class="footer__column" aria-label="Temas">
+			<h2 class="footer__heading">Temas</h2>
 			<ul>
 				{#each topics as topic (topic.id)}
 					<li><a href="?topic={topic.id}">{topic.title}</a></li>
@@ -25,12 +15,12 @@
 			</ul>
 		</nav>
 
-		<nav class="footer__column" aria-label="Project">
-			<h2 class="footer__heading">Project</h2>
+		<nav class="footer__column" aria-label="Proyecto">
+			<h2 class="footer__heading">Proyecto</h2>
 			<ul>
-				<li><a href={site.repository} rel="external noopener">Source on GitHub ↗</a></li>
-				<li><a href="{site.repository}/issues" rel="external noopener">Report a problem ↗</a></li>
-				<li><a href="{site.repository}/blob/HEAD/LICENSE" rel="external noopener">MIT license ↗</a></li>
+				<li><a href={site.repository} rel="external noopener">Código en GitHub ↗</a></li>
+				<li><a href="{site.repository}/issues" rel="external noopener">Reportar un problema ↗</a></li>
+				<li><a href="{site.repository}/blob/HEAD/LICENSE" rel="external noopener">Licencia MIT ↗</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -51,26 +41,6 @@
 		margin: 0 auto;
 		padding: 0 var(--gutter);
 	}
-	.footer__about {
-		max-width: 26rem;
-	}
-	.footer__about p {
-		margin: 0;
-		text-wrap: pretty;
-	}
-	.footer__about p + p {
-		margin-top: 0.75rem;
-	}
-	.footer__lead {
-		color: var(--content);
-		font-size: var(--text-body);
-	}
-	.footer__about a {
-		color: var(--content);
-		text-decoration: underline;
-		text-decoration-color: var(--content-secondary);
-		text-underline-offset: 0.2em;
-	}
 	.footer__heading {
 		margin: 0 0 1rem;
 		color: var(--content-secondary);
@@ -89,14 +59,13 @@
 		color: var(--content);
 		transition: color 150ms ease-out;
 	}
-	.footer__about a:hover,
 	.footer__column a:hover {
 		color: var(--accent);
 	}
 
 	@media (min-width: 768px) {
 		.footer__inner {
-			grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr);
+			grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
 		}
 	}
 </style>

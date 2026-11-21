@@ -23,48 +23,48 @@ export interface Site {
 }
 
 export const site: Site = {
-  "title": "Notebooks",
-  "description": "Computational physics notebooks in Spanish: numerical methods, dynamical systems, statistical physics, remote sensing and geophysics.",
+  "title": "Física computacional",
+  "description": "Artículos de física computacional: métodos numéricos, sistemas dinámicos, física estadística, teledetección y geofísica.",
   "repository": "https://github.com/totallynotdavid/notebooks"
 };
 
 export const topics: Topic[] = [
   {
     "id": "numerical-methods",
-    "title": "Numerical methods",
+    "title": "Métodos numéricos",
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/numerical-methods",
     "notebooks": [
       {
-        "title": "Floating-point error",
-        "summary": "Binary representation with float.hex, machine epsilon from numpy.finfo, and how float32 and float64 differ when adding, subtracting and accumulating.",
+        "title": "Error de punto flotante",
+        "summary": "La representación binaria con float.hex, el épsilon de máquina con numpy.finfo, y cómo difieren float32 y float64 al sumar, restar y acumular.",
         "slug": "numerical-methods/floating-point",
         "path": "packages/numerical-methods/punto_flotante.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/punto_flotante.md"
       },
       {
-        "title": "Numerical differentiation",
-        "summary": "Forward, backward and central differences, the error against h with its order and rounding floor, and Richardson extrapolation.",
+        "title": "Derivación numérica",
+        "summary": "Diferencias hacia adelante, hacia atrás y centradas, el error frente a h con su orden y su piso de redondeo, y la extrapolación de Richardson.",
         "slug": "numerical-methods/numerical-differentiation",
         "path": "packages/numerical-methods/derivacion_numerica.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/derivacion_numerica.md"
       },
       {
-        "title": "Solving nonlinear equations",
-        "summary": "Bisection, false position and Newton's method with their convergence plots, the observed order, and the multiple-root case.",
+        "title": "Solución de ecuaciones no lineales",
+        "summary": "Bisección, falsa posición y el método de Newton con sus curvas de convergencia, el orden observado y el caso de una raíz múltiple.",
         "slug": "numerical-methods/root-finding",
         "path": "packages/numerical-methods/raices.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/raices.md"
       },
       {
-        "title": "Polynomial interpolation",
-        "summary": "Lagrange, Newton divided differences and finite differences, and Runge's phenomenon with equispaced and Chebyshev nodes.",
+        "title": "Interpolación polinomial",
+        "summary": "Lagrange, diferencias divididas de Newton y diferencias finitas, y el fenómeno de Runge con nodos equiespaciados y de Chebyshev.",
         "slug": "numerical-methods/interpolation",
         "path": "packages/numerical-methods/interpolacion.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/interpolacion.md"
       },
       {
-        "title": "Monte Carlo integration",
-        "summary": "The Monte Carlo estimator in NumPy, its error falling as 1/sqrt(N), and variance reduction by importance sampling.",
+        "title": "Integración de Monte Carlo",
+        "summary": "El estimador de Monte Carlo en NumPy, su error que cae como 1/sqrt(N), y la reducción de varianza por muestreo de importancia.",
         "slug": "numerical-methods/monte-carlo",
         "path": "packages/numerical-methods/monte_carlo.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/numerical-methods/monte_carlo.md"
@@ -73,40 +73,40 @@ export const topics: Topic[] = [
   },
   {
     "id": "dynamics",
-    "title": "Dynamics and differential equations",
+    "title": "Dinámica y ecuaciones diferenciales",
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/dynamics",
     "notebooks": [
       {
-        "title": "Simple pendulum",
-        "summary": "The exact period from the complete elliptic integral against small oscillations, and energy drift under velocity Verlet and RK4.",
+        "title": "Péndulo simple",
+        "summary": "El período exacto con la integral elíptica completa frente a las oscilaciones pequeñas, y la deriva de energía con Verlet de velocidades y RK4.",
         "slug": "dynamics/simple-pendulum",
         "path": "packages/dynamics/pendulo_simple.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_simple.md"
       },
       {
-        "title": "Two masses and three springs",
-        "summary": "Normal modes from an eigenvalue decomposition, and the RK4 time series that shows them.",
+        "title": "Dos masas y tres resortes",
+        "summary": "Los modos normales desde un problema de autovalores, y la serie temporal con RK4 que los muestra.",
         "slug": "dynamics/three-springs",
         "path": "packages/dynamics/tres_resortes.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/tres_resortes.md"
       },
       {
-        "title": "Double pendulum",
-        "summary": "A chaotic double pendulum with Euler and RK4, the energy drift of each method, and a Lyapunov exponent from two nearby trajectories.",
+        "title": "Péndulo doble",
+        "summary": "Un péndulo doble caótico con Euler y RK4, la deriva de energía de cada método, y un exponente de Lyapunov a partir de dos trayectorias cercanas.",
         "slug": "dynamics/double-pendulum",
         "path": "packages/dynamics/pendulo_doble.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/pendulo_doble.md"
       },
       {
-        "title": "Lorenz attractor",
-        "summary": "The Lorenz system integrated with RK4: the attractor, its largest Lyapunov exponent, the map of z maxima, and the bifurcation in rho.",
+        "title": "Atractor de Lorenz",
+        "summary": "El sistema de Lorenz integrado con RK4: el atractor, su mayor exponente de Lyapunov, el mapa de los máximos de z y la bifurcación en rho.",
         "slug": "dynamics/lorenz-attractor",
         "path": "packages/dynamics/atractor_de_lorenz.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/atractor_de_lorenz.md"
       },
       {
-        "title": "The heat equation in one dimension",
-        "summary": "The 1D heat equation with finite differences: the explicit scheme at r = 0.4, 0.5 and 0.6 (unstable), Crank-Nicolson, and the Fourier solution.",
+        "title": "Ecuación de calor en una dimensión",
+        "summary": "La ecuación de calor 1D con diferencias finitas: el esquema explícito con r = 0.4, 0.5 y 0.6 (inestable), Crank-Nicolson y la solución de Fourier.",
         "slug": "dynamics/heat-equation",
         "path": "packages/dynamics/edp_calor.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/dynamics/edp_calor.md"
@@ -115,26 +115,26 @@ export const topics: Topic[] = [
   },
   {
     "id": "statistical-physics",
-    "title": "Statistical and molecular physics",
+    "title": "Física estadística y molecular",
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/statistical-physics",
     "notebooks": [
       {
-        "title": "Volume of a hypersphere",
-        "summary": "Rejection Monte Carlo for the volume of the unit ball against the exact formula, and why the acceptance rate collapses as the dimension grows.",
+        "title": "Volumen de la hiperesfera",
+        "summary": "Monte Carlo por rechazo para el volumen de la bola unitaria frente a la fórmula exacta, y por qué la tasa de aceptación se desploma al crecer la dimensión.",
         "slug": "statistical-physics/hypersphere-volume",
         "path": "packages/statistical-physics/volumen_hiperesfera.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/volumen_hiperesfera.md"
       },
       {
-        "title": "3D Ising model",
-        "summary": "Metropolis sampling of the 3D Ising model on several lattice sizes: magnetization, energy, susceptibility, specific heat, and the Binder cumulant crossing that locates the critical temperature.",
+        "title": "Modelo de Ising 3D",
+        "summary": "Muestreo de Metropolis del modelo de Ising 3D en varias redes: magnetización, energía, susceptibilidad, calor específico y el cruce del cumulante de Binder que ubica la temperatura crítica.",
         "slug": "statistical-physics/ising-model",
         "path": "packages/statistical-physics/modelo_de_ising.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/modelo_de_ising.md"
       },
       {
-        "title": "Liquid argon and potassium clusters",
-        "summary": "Lennard-Jones with velocity Verlet and periodic boundaries: energy, temperature, g(r) and diffusion, then a tight-binding potential for K clusters.",
+        "title": "Argón líquido y cúmulos de potasio",
+        "summary": "Lennard-Jones con Verlet de velocidades y condiciones periódicas: energía, temperatura, g(r) y difusión; luego un potencial de enlace fuerte para cúmulos de K.",
         "slug": "statistical-physics/argon-and-potassium",
         "path": "packages/statistical-physics/argon_y_potasio.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/statistical-physics/argon_y_potasio.md"
@@ -143,40 +143,40 @@ export const topics: Topic[] = [
   },
   {
     "id": "remote-sensing",
-    "title": "Radiation and remote sensing",
+    "title": "Radiación y teledetección",
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/remote-sensing",
     "notebooks": [
       {
-        "title": "Planck's law",
-        "summary": "Planck's law with its Rayleigh-Jeans and Wien limits, Wien's displacement law, and the Stefan-Boltzmann law by numerical integration.",
+        "title": "Curva de Planck",
+        "summary": "La ley de Planck con sus límites de Rayleigh-Jeans y de Wien, la ley de desplazamiento de Wien, y la ley de Stefan-Boltzmann por integración numérica.",
         "slug": "remote-sensing/planck-curve",
         "path": "packages/remote-sensing/curva_de_planck.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/curva_de_planck.md"
       },
       {
-        "title": "Radiative transfer with 6S",
-        "summary": "Atmospheric radiative transfer with the 6S model through Py6S.",
+        "title": "Transferencia radiativa con 6S",
+        "summary": "Transferencia radiativa en la atmósfera con el modelo 6S a través de Py6S.",
         "slug": "remote-sensing/radiative-transfer-6s",
         "path": "packages/remote-sensing/transferencia_radiativa_6s.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/transferencia_radiativa_6s.md"
       },
       {
-        "title": "Earth Engine over Peru",
-        "summary": "SRTM elevation, MODIS land cover and land surface temperature over Lima, Cusco and Iquitos with Google Earth Engine.",
+        "title": "Earth Engine en el Perú",
+        "summary": "Elevación SRTM, cobertura del suelo y temperatura de superficie MODIS sobre Lima, Cusco e Iquitos con Google Earth Engine.",
         "slug": "remote-sensing/earth-engine-peru",
         "path": "packages/remote-sensing/earth_engine_peru.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/earth_engine_peru.md"
       },
       {
-        "title": "Landsat rasters with rasterio",
-        "summary": "Reading a Landsat scene with rasterio: metadata, bands, and masking NoData values.",
+        "title": "Lectura de un raster Landsat con rasterio",
+        "summary": "Una escena Landsat con rasterio: metadatos, bandas y el enmascarado de los valores NoData.",
         "slug": "remote-sensing/landsat-rasterio",
         "path": "packages/remote-sensing/landsat_rasterio.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/landsat_rasterio.md"
       },
       {
-        "title": "GaoFen-1 atmospheric correction",
-        "summary": "Atmospheric correction of GaoFen-1 images with 6S and rasterio.",
+        "title": "Corrección atmosférica de GaoFen-1",
+        "summary": "Corrección atmosférica de imágenes GaoFen-1 con 6S y rasterio.",
         "slug": "remote-sensing/gaofen1-atmospheric-correction",
         "path": "packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/remote-sensing/gaofen1/correccion_atmosferica_gaofen1.md"
@@ -185,26 +185,26 @@ export const topics: Topic[] = [
   },
   {
     "id": "geophysics",
-    "title": "Solid Earth and hazards",
+    "title": "Tierra sólida y peligros",
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/geophysics",
     "notebooks": [
       {
-        "title": "Processing SAC records with ObsPy",
-        "summary": "Records of the 2007 Pisco earthquake: a record section by distance, spectra, and P-wave picking with STA/LTA.",
+        "title": "Registros SAC con ObsPy",
+        "summary": "Registros del sismo de Pisco de 2007: una sección de registros por distancia, espectros y la detección de la onda P con STA/LTA.",
         "slug": "geophysics/sac-processing",
         "path": "packages/geophysics/procesamiento_sac.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/procesamiento_sac.md"
       },
       {
-        "title": "Tsunami initial condition",
-        "summary": "Seafloor uplift from the Okada model for the 2007 Pisco earthquake, and the sea surface it lifts through the Kajiura filter.",
+        "title": "Condición inicial de un tsunami",
+        "summary": "El levantamiento del fondo marino con el modelo de Okada para el sismo de Pisco de 2007, y la superficie del mar que levanta a través del filtro de Kajiura.",
         "slug": "geophysics/fault-to-tsunami",
         "path": "packages/geophysics/deformacion_tsunami.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/deformacion_tsunami.md"
       },
       {
-        "title": "Mass movements in Ancash",
-        "summary": "INGEMMET's geological hazard inventory for Ancash: types of mass movement, the most affected provinces, a map, and the factors behind debris flows.",
+        "title": "Movimientos en masa en Áncash",
+        "summary": "El inventario de peligros geológicos del INGEMMET para Áncash: tipos de movimiento en masa, las provincias más afectadas, un mapa y los factores detrás de los flujos de detritos.",
         "slug": "geophysics/ancash-landslides",
         "path": "packages/geophysics/peligros_geologicos_ancash.md",
         "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/peligros_geologicos_ancash.md"

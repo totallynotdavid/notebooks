@@ -44,7 +44,7 @@
 
 <div class="plot" bind:clientWidth={width}>
 	{#if zoomedIn}
-		<button type="button" class="plot__reset" onclick={() => (zoom = {})}>Reset zoom</button>
+		<button type="button" class="plot__reset" onclick={() => (zoom = {})}>Restablecer zoom</button>
 	{/if}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div

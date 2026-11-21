@@ -46,7 +46,7 @@
 
 <!-- A new article is a new tree: the values attach to its own prose. -->
 {#key data.notebook.slug}
-<main class="article" lang="es" {@attach attachValues(page)}>
+<main class="article" {@attach attachValues(page)}>
 	{#each data.blocks as block, i (i)}
 		{#if block.type === 'html'}
 			<!-- Rendered at build time from the article's own Markdown. -->
@@ -64,9 +64,9 @@
 			{/each}
 		{/if}
 	{/each}
-	<footer class="source" lang="en">
-		<a href={data.notebook.sourceUrl}>Article source on GitHub</a>
-		<a href={resolve('/')}>All notebooks</a>
+	<footer class="source">
+		<a href={data.notebook.sourceUrl}>Fuente del artículo en GitHub</a>
+		<a href={resolve('/')}>Todos los artículos</a>
 	</footer>
 </main>
 {/key}

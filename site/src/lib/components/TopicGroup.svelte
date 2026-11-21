@@ -8,7 +8,7 @@
 <section class="topic" id={topic.id}>
 	<div class="topic__head">
 		<h2 class="topic__title">{topic.title}</h2>
-		<a class="topic__folder" href={topic.folderUrl} target="_blank" rel="external noopener">Source on GitHub ↗</a>
+		<a class="topic__folder" href={topic.folderUrl} target="_blank" rel="external noopener">Código en GitHub ↗</a>
 	</div>
 
 	<div class="cards">
