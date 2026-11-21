@@ -16,6 +16,11 @@ T(x,0)=0\ \ (0\le x<L).
 \end{gathered}
 $$
 
+La barra empieza fría y su extremo derecho se calienta de golpe a $T_b$. La
+página resuelve el problema con dos esquemas de diferencias finitas, mide su
+error contra la solución exacta y muestra cuándo y por qué uno de ellos se
+vuelve inestable.
+
 Hay una solución analítica. Con $T=T_b\,x/L+u$, $u$ cumple la ecuación con
 extremos en cero y condición inicial $u(x,0)=-T_b\,x/L$, y el desarrollo en
 senos da
@@ -68,17 +73,21 @@ $$
 r=\frac{\alpha\,\Delta t}{\Delta x^2}
 $$
 
-el **esquema explícito** (FTCS) es
+el **esquema explícito** FTCS (_forward time, centered space_: diferencia hacia
+adelante en el tiempo y centrada en el espacio) es
 
 $$
 T_i^{n+1}=T_i^n+r\left(T_{i-1}^n-2T_i^n+T_{i+1}^n\right).
 $$
 
-Para el modo de Fourier de número de onda $k$, cada paso lo multiplica por
-$1-4r\sin^2(k\Delta x/2)$. Cuando $k\Delta x\to\pi$ el factor tiende a $1-4r$,
-que tiene módulo mayor que 1 si $r>1/2$, así que el esquema es estable sólo para
-$r\le1/2$. Con los extremos fijos, los modos de la malla son $k_n\Delta x =
-n\pi/N$ con $n=1,\dots,N-1$, y el más oscilante es $n=N-1$.
+La estabilidad se lee en un modo de Fourier, $T_i^n=G^n e^{ik\,i\Delta x}$ con
+número de onda $k$. Sustituirlo en el esquema da el **factor de amplificación**
+$G$, el número por el que cada paso multiplica la amplitud del modo:
+$G=1-4r\sin^2(k\Delta x/2)$. Cuando $k\Delta x\to\pi$, $G$ tiende a $1-4r$, que
+tiene módulo mayor que 1 si $r>1/2$, así que el esquema es estable sólo para
+$r\le1/2$. Con $N$ intervalos de malla y los extremos fijos, los modos de la
+malla son $k_n\Delta x = n\pi/N$ con $n=1,\dots,N-1$, y el más oscilante es
+$n=N-1$.
 
 ```python hidden
 def factor_explicito(r, n):
@@ -104,10 +113,15 @@ T_i^{n+1}-\tfrac r2\,\delta^2T_i^{n+1} &= T_i^{n}+\tfrac r2\,\delta^2T_i^{n},\\
 \end{aligned}
 $$
 
-Cada paso resuelve un sistema tridiagonal. El factor de amplificación
-$\dfrac{1-2r\sin^2(k\Delta x/2)}{1+2r\sin^2(k\Delta x/2)}$ tiene módulo menor
+Cada paso resuelve un sistema tridiagonal. Su factor de amplificación,
+$G=\dfrac{1-2r\sin^2(k\Delta x/2)}{1+2r\sin^2(k\Delta x/2)}$, tiene módulo menor
 que 1 para todo $r$, y el error de truncamiento es $O(\Delta t^2+\Delta x^2)$ en
-lugar de $O(\Delta t+\Delta x^2)$.
+lugar del $O(\Delta t+\Delta x^2)$ del explícito.
+
+**Euler implícito** evalúa el laplaciano solo en $n+1$,
+$(1-r\delta^2)T^{n+1}=T^n$, y su factor es $G=1/(1+4r\sin^2(k\Delta x/2))$,
+positivo y menor que 1 para todo $r$. Es estable como Crank–Nicolson pero de
+primer orden en el tiempo. Sirve de contraste al final de la página.
 
 ```python
 def condicion_inicial():
@@ -401,9 +415,8 @@ md(
     {factor_cn(20.0, NODOS - 2):.3f} en cada paso. Por eso con $r=5$ y $r=20$
     aparecen valores de hasta {cn[5.0][1].max():.0f} y
     {cn[20.0][1].max():.0f}, por encima de $T_b$, que la solución física nunca
-    alcanza. Euler implícito, $(1-r\\delta^2)T^{{n+1}}=T^n$, tiene factor
-    $1/(1+4r\\sin^2(k\\Delta x/2))$, positivo y menor que 1. Con los mismos
-    pasos, ningún nodo interior pasa de {implicitos[5.0]:.1f} con $r=5$ ni de
+    alcanza. Con Euler implícito, cuyo factor es positivo, y los mismos pasos,
+    ningún nodo interior pasa de {implicitos[5.0]:.1f} con $r=5$ ni de
     {implicitos[20.0]:.1f} con $r=20$: no hay oscilación, a cambio de un error
     de truncamiento $O(\\Delta t)$.
     """
