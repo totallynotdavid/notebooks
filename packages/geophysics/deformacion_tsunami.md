@@ -214,9 +214,11 @@ md(
 
 ## El terremoto de Pisco de 2007
 
-Jiménez et al. (2012) obtuvieron la fuente por inversión de mareogramas: ocho
+Jiménez et al. (2012) obtuvieron la fuente por inversión de nueve registros
+mareográficos, con mínimos cuadrados no negativos sobre los minutos 20 a 60 de
+cada registro. El área de ruptura, de 180 km por 90 km, se divide en ocho
 subfallas cuadradas de 45 km, cuatro a lo largo del rumbo y dos a lo largo del
-buzamiento, cada una con su propio deslizamiento.
+buzamiento, cada una con su propio deslizamiento (su tabla 3).
 
 ```python
 subfallas = subfaults_from_inversion(
@@ -243,10 +245,12 @@ area = sum(f.length * f.width for f in subfallas)
 momento = 4.0e10 * sum(f.length * f.width * f.slip for f in subfallas)
 mw_fuente = (np.log10(momento) - 9.1) / 1.5
 primera = subfallas[0]
+profundidades = sorted({f.depth / 1e3 for f in subfallas})
+buzamiento_tabla = np.degrees(np.arcsin((profundidades[1] - profundidades[0]) / 45))
 tabla(
     ["subfalla", "lon (°)", "lat (°)", "profundidad (km)", "deslizamiento (m)"],
     [
-        [k + 1, f"{f.lon:.3f}", f"{f.lat:.3f}", f"{f.depth / 1e3:.2f}", f"{f.slip:.1f}"]
+        [k + 1, f"{f.lon:.3f}", f"{f.lat:.3f}", f"{f.depth / 1e3:.2f}", f"{f.slip:.2f}"]
         for k, f in enumerate(subfallas)
     ],
 )
@@ -256,9 +260,16 @@ tabla(
 md(
     f"""
     Todas tienen rumbo {primera.strike:.0f}°, buzamiento {primera.dip:.0f}° y
-    ángulo de deslizamiento {primera.rake:.0f}°. El área total es
-    {area / 1e6:.0f} km² y el momento, {momento:.2e} N m, equivalente a
-    Mw {mw_fuente:.2f}.
+    ángulo de deslizamiento {primera.rake:.0f}°. Jiménez et al. dicen tomar el
+    mecanismo del catálogo Global CMT, que para el plano de bajo ángulo da
+    321°, 28° y 63°, pero las profundidades de su tabla corresponden a otro
+    buzamiento. Las subfallas están a {profundidades[0]:.2f} y
+    {profundidades[1]:.2f} km y miden 45 km a lo largo del buzamiento, así que
+    $\\delta = \\arcsin({profundidades[1] - profundidades[0]:.2f}/45) = {buzamiento_tabla:.1f}°$.
+    El área total es {area / 1e6:.0f} km² y, con $\\mu = 4 \\times 10^{{10}}$
+    Pa como en el artículo, el momento es {momento:.2e} N m, equivalente a
+    Mw {mw_fuente:.2f}. Jiménez et al. dan $1.99 \\times 10^{{21}}$ N m y
+    Mw 8.1.
     """
 )
 ```
@@ -283,6 +294,7 @@ md(
     costa es la curva de elevación 0 m y las líneas grises, las isóbatas de
     200, 2000, 4000 y 6000 m. Sobre el mar, el levantamiento máximo es de
     {uplift[mar].max():.2f} m y el descenso máximo, de {-uplift[mar].min():.2f} m.
+    Jiménez et al. dan un máximo de 1.53 m para la componente vertical inicial.
     """
 )
 ```
