@@ -347,8 +347,10 @@ md(
 
 Cuando $f$ está tabulada con paso constante $h$ se arma la tabla de diferencias
 $\Delta^i f_j$ ($\Delta f_j=f_{j+1}-f_j$,
-$\Delta^{i}f_j=\Delta^{i-1}f_{j+1}-\Delta^{i-1}f_j$). Como $hD=\ln(1+\Delta)$,
-la derivada en $x_j$ es la serie
+$\Delta^{i}f_j=\Delta^{i-1}f_{j+1}-\Delta^{i-1}f_j$). Sea $E$ el operador que
+avanza un paso, $Ef(x)=f(x+h)$, de modo que $\Delta=E-1$. Por Taylor, $Ef=\sum_k
+\frac{h^k}{k!}f^{(k)}=e^{h\,d/dx}f$, así que $h\,\frac{d}{dx}=\ln
+E=\ln(1+\Delta)$. Desarrollar el logaritmo da la derivada en $x_j$ como la serie
 
 $$
 f'(x_j)\approx\frac1h\sum_{i=1}^{t}\frac{(-1)^{i+1}}{i}\,\Delta^i f_j ,
