@@ -9,22 +9,47 @@ from quire import plot as P
 
 # Modelo de Ising 3D
 
-Hamiltoniano sin campo externo, con $J=1$ y $k_B=1$:
+Cada sitio de una red cúbica tiene un espín $s_i=\pm1$, y cada par de vecinos
+$\langle i,j\rangle$ aporta $-J$ a la energía si sus espines coinciden y $+J$ si
+no:
 
 $$
 H(\sigma) = -J\sum_{\langle i,j \rangle} s_i s_j,
 \qquad s_i \in \{-1,+1\}.
 $$
 
-Regla de aceptación de Metropolis para un cambio local con $\Delta E$:
+Usamos $J=1$, $k_B=1$ y ningún campo externo. A baja temperatura casi todos los
+espines apuntan igual; a alta temperatura el signo de cada uno es casi
+aleatorio. En la red infinita el cambio ocurre en una temperatura crítica $T_c$
+que no tiene forma cerrada. La página la estima con redes finitas y la compara
+con el valor de referencia.
+
+## Muestreo de Metropolis
+
+En equilibrio a temperatura $T=1/\beta$, una configuración $\sigma$ aparece con
+probabilidad $\pi(\sigma)\propto e^{-\beta H(\sigma)}$. Con $N$ espines hay
+$2^N$ configuraciones, así que los promedios no se suman término a término: se
+estiman con configuraciones sorteadas según $\pi$. Es el muestreo por
+importancia del final de [Monte Carlo](../../numerical-methods/monte-carlo/),
+con $p$ igual al factor de Boltzmann. Metropolis las produce como una cadena:
+propone invertir un espín, lo que cambia la energía en $\Delta E$, y acepta el
+cambio con
 
 $$
 P_{\text{aceptar}} = \min\left(1, e^{-\beta \Delta E}\right).
 $$
 
-Para cada tamaño $L$ se simula una red cúbica de $N=L^3$ espines con condiciones
-de frontera periódicas, a muchas temperaturas, y se estiman, con $m=\sum_i
-s_i/N$ y $e=E/N$,
+Si $\sigma'$ tiene más energía que $\sigma$, el paso $\sigma\to\sigma'$ se
+acepta con probabilidad $e^{-\beta\Delta E}$ y el inverso siempre, de modo que
+$\pi(\sigma)P(\sigma\to\sigma')=\pi(\sigma')P(\sigma'\to\sigma)$. Con esa
+igualdad, el balance detallado, un paso de la cadena no cambia $\pi$, y la
+cadena, que puede llegar a cualquier configuración, converge a ella.
+
+## Observables
+
+Para cada tamaño $L$ se simula una red de $N=L^3$ espines con condiciones de
+frontera periódicas, a muchas temperaturas. Con la magnetización por espín
+$m=\sum_i s_i/N$ y la energía por espín $e=E/N$ se estiman
 
 $$
 \begin{gathered}
@@ -32,13 +57,28 @@ $$
 \chi = \beta N\note{la varianza de $|m|$}{\left(\langle m^2\rangle -
 \langle |m|\rangle^2\right)},\\
 C = \beta^2 N\note{la varianza de $e$}{\left(\langle e^2\rangle -
-\langle e\rangle^2\right)},
+\langle e\rangle^2\right)}.
 \end{gathered}
 $$
 
+En una red finita sin campo los dos signos de $m$ son igual de probables y
+$\langle m\rangle=0$; por eso se promedia $|m|$. La susceptibilidad $\chi$ mide
+cuánto cambia $m$ ante un campo pequeño, y el calor específico $C$ cuánto cambia
+$e$ con $T$. Las dos son varianzas porque derivar un promedio de Boltzmann
+respecto del campo o de $\beta$ baja un factor $m$ o $e$ del exponente. Las dos
+tienen un pico cerca de $T_c$ que crece con $L$.
+
+El **cumulante de Binder**
+
 $$
-U_4 = 1 - \frac{\langle m^4\rangle}{3\langle m^2\rangle^2}.
+U_4 = 1 - \frac{\langle m^4\rangle}{3\langle m^2\rangle^2}
 $$
+
+compara la distribución de $m$ con una gaussiana. Por encima de $T_c$, $m$ suma
+muchas regiones independientes, su distribución tiende a una gaussiana centrada
+en cero, $\langle m^4\rangle=3\langle m^2\rangle^2$ y $U_4\to0$. Por debajo, $m$
+se concentra en $\pm m_0$ y $U_4\to2/3$. En $T_c$ tiende a un valor intermedio
+que no depende de $L$, y eso permite localizar $T_c$ con redes pequeñas.
 
 ## Metropolis secuencial
 
@@ -110,7 +150,7 @@ def barrer_temperaturas(L, temperaturas, replicas, barridos, semilla):
     return e, m
 ```
 
-## Observables y cumulante de Binder
+## $T_c$ desde los cruces de $U_4$
 
 La rejilla de temperaturas es fina alrededor de la temperatura crítica de la red
 cúbica infinita, $T_c\approx4.5115$ (Hasenbusch 2010). Cada réplica parte de la
