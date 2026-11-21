@@ -9,18 +9,66 @@ from quire import plot as P
 Una masa en el extremo de una varilla rígida de longitud $\ell$ obedece
 
 $$
-\ddot\theta + \omega_0^2\sin\theta = 0,\qquad \omega_0^2=\frac{g}{\ell},
+\ddot\theta + \omega_0^2\sin\theta = 0,\qquad \omega_0^2=\frac{g}{\ell}.
 $$
 
-con energía por unidad de masa y de $\ell^2$
+Para ángulos pequeños $\sin\theta\approx\theta$, la ecuación es lineal y el
+período es $T_0=2\pi/\omega_0$, independiente de la amplitud. La página responde
+dos preguntas: cuánto falla esa aproximación al crecer la amplitud, y qué método
+numérico conviene para integrar la ecuación no lineal durante mucho tiempo.
+
+El péndulo no pierde energía. Dividida entre $m\ell^2$, su energía es
 
 $$
-E = \tfrac12\dot\theta^2 + \omega_0^2\,(1-\cos\theta).
+E = \tfrac12\dot\theta^2 + \omega_0^2\,(1-\cos\theta),
 $$
 
-Para ángulos pequeños $\sin\theta\approx\theta$ y el período es
-$T_0=2\pi/\omega_0$, independiente de la amplitud. Esta página mide cuánto falla
-esa aproximación y qué integrador numérico conserva mejor la energía.
+y se mantiene constante en el movimiento exacto. Esa constante sirve dos veces:
+de ella sale el período exacto, y mide cuánto se aparta un método numérico del
+movimiento real.
+
+## Dos integradores
+
+Un integrador avanza el estado $y=(\theta,\dot\theta)$ un paso $\Delta t$ a la
+vez. Esta página compara dos.
+
+**RK4** (Runge–Kutta de cuarto orden) evalúa la derivada $f(y)=(\dot\theta,
+-\omega_0^2\sin\theta)$ cuatro veces dentro del paso y las promedia:
+
+$$
+\begin{aligned}
+k_1&=f(y_n),\quad k_2=f\!\left(y_n+\tfrac{\Delta t}{2}k_1\right),\\
+k_3&=f\!\left(y_n+\tfrac{\Delta t}{2}k_2\right),\quad
+k_4=f(y_n+\Delta t\,k_3),\\
+y_{n+1}&=y_n+\tfrac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right).
+\end{aligned}
+$$
+
+Su error global, tras un tiempo fijo, es $O(\Delta t^4)$: dividir el paso entre
+2 divide el error entre 16.
+
+**Velocity Verlet** usa que la aceleración $a(\theta)=-\omega_0^2\sin\theta$
+depende solo de la posición. Da medio paso a la velocidad, un paso entero a la
+posición y otro medio paso a la velocidad:
+
+$$
+\begin{aligned}
+\dot\theta_{n+1/2}&=\dot\theta_n+\tfrac{\Delta t}{2}\,a(\theta_n),\\
+\theta_{n+1}&=\theta_n+\Delta t\,\dot\theta_{n+1/2},\\
+\dot\theta_{n+1}&=\dot\theta_{n+1/2}+\tfrac{\Delta t}{2}\,a(\theta_{n+1}).
+\end{aligned}
+$$
+
+Es de segundo orden y evalúa la fuerza una vez por paso. Cada una de las tres
+líneas cambia una sola coordenada en una cantidad que depende solo de la otra, y
+eso no cambia el área de una región del plano $(\theta,\dot\theta)$. El paso
+completo conserva el área, como el movimiento exacto. Un integrador con esa
+propiedad se llama **simpléctico**. RK4 no lo es, y la diferencia se ve en la
+energía, más abajo.
+
+RK4 vuelve en [los resortes](../three-springs/), el
+[péndulo doble](../double-pendulum/) y [Lorenz](../lorenz-attractor/), y Verlet
+en el [argón líquido](../../statistical-physics/argon-and-potassium/).
 
 ## Período exacto
 
@@ -36,8 +84,10 @@ m &= \note{va de 0 en reposo a 1 con el péndulo invertido}{\sin^2\frac{\theta_0
 \end{aligned}
 $$
 
-Para $\theta_0\to0$, $K(0)=\pi/2$ y se recupera $T_0$. Calculamos $K$ con la
-media aritmético-geométrica,
+Para $\theta_0\to0$, $K(0)=\pi/2$ y se recupera $T_0$. El primer término de la
+corrección sale de $K(m)=\tfrac\pi2\left(1+\tfrac m4+\cdots\right)$ y de
+$m\approx\theta_0^2/4$: $T\approx T_0\left(1+\theta_0^2/16\right)$. Calculamos
+$K$ con la media aritmético-geométrica,
 $K(m)=\pi/\left[2\,\mathrm{AGM}(1,\sqrt{1-m})\right]$, que converge en pocas
 iteraciones. Como comprobación independiente, integramos la ecuación no lineal
 con RK4 ($\Delta t=10^{-3}$ s) y medimos el período como cuatro veces el tiempo
@@ -262,17 +312,17 @@ P.figure(
 
 ## Deriva de la energía: velocity Verlet y RK4
 
-El péndulo no tiene disipación, así que $E$ debe ser constante. Comparamos dos
-integradores con $\theta_0=2$ rad, $\dot\theta_0=0$ y $\Delta t=0.1$ s durante
-2000 s (unas 700 oscilaciones):
+$E$ es constante en el movimiento exacto, así que su cambio mide el error de
+cada integrador. Los dos parten de $\theta_0=2$ rad, $\dot\theta_0=0$, con
+$\Delta t=0.1$ s, durante 2000 s (unas 700 oscilaciones).
 
-- Velocity Verlet, de segundo orden y simpléctico: una evaluación de la fuerza
-  por paso. Su error de energía queda acotado por $C\,\Delta t^2$ durante
-  tiempos que crecen más rápido que cualquier potencia de $1/\Delta t$ (Hairer,
-  Lubich y Wanner, _Acta Numerica_ 12, 2003, teorema 5.1): el método conserva
-  una energía modificada que dista $O(\Delta t^2)$ de $E$.
-- RK4, de cuarto orden: cuatro evaluaciones por paso. Es más preciso en pocos
-  períodos, pero no es simpléctico, y la teoría anterior no se le aplica.
+Para un integrador simpléctico como Verlet, la teoría da una cota. El método
+conserva casi exactamente una energía modificada, una función del estado que
+difiere de $E$ en $O(\Delta t^2)$. Por eso su error en $E$ queda acotado por
+$C\,\Delta t^2$ durante tiempos que crecen más rápido que cualquier potencia de
+$1/\Delta t$ (Hairer, Lubich y Wanner, _Acta Numerica_ 12, 2003, teorema 5.1).
+RK4 no es simpléctico y no tiene esa garantía, aunque en pocos períodos es más
+preciso.
 
 ```python
 DURACION = 2000.0
