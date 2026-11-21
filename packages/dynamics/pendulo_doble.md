@@ -42,7 +42,10 @@ E ={}& \tfrac12(m_1+m_2)\ell_1^2\omega_1^2 + \tfrac12 m_2\ell_2^2\omega_2^2\\
 \end{aligned}
 $$
 
-es constante. Esa constante es la vara con que medimos a cada integrador.
+es constante. La página usa esa constante para comparar dos integradores, y
+después mide con el mejor de ellos una propiedad que el
+[péndulo simple](../simple-pendulum/) no tiene: dos movimientos que empiezan
+casi iguales se separan exponencialmente rápido.
 
 ```python
 M1, M2, L1, L2, G = 1.0, 2.0, 1.0, 1.0, 9.81
@@ -89,15 +92,9 @@ $$
 y_{n+1} = y_n + \Delta t\,f(y_n).
 $$
 
-RK4 evalúa la pendiente cuatro veces dentro del paso y las combina:
-
-$$
-y_{n+1} = y_n + \tfrac{\Delta t}{6}\left(k_1+2k_2+2k_3+k_4\right),
-$$
-
-con $k_1=f(y_n)$, $k_2=f(y_n+\tfrac{\Delta t}{2}k_1)$, $k_3=f(y_n+\tfrac{\Delta
-t}{2}k_2)$ y $k_4=f(y_n+\Delta t\,k_3)$. El error global de Euler es $O(\Delta
-t)$ y el de RK4 es $O(\Delta t^4)$.
+RK4, definido en el [péndulo simple](../simple-pendulum/), evalúa la pendiente
+cuatro veces dentro del paso y las promedia. El error global de Euler es
+$O(\Delta t)$ y el de RK4 es $O(\Delta t^4)$.
 
 ```python
 def step_euler(y, dt):
@@ -231,16 +228,18 @@ md(
 
 ## Exponente de Lyapunov máximo
 
-Una trayectoria de referencia $y(t)$ y otra que empieza a $d_0=10^{-6}$ de
-distancia en el espacio de fases evolucionan juntas. Cuando la separación $d(t)$
-crece como $d_0e^{\lambda t}$, $\lambda>0$ es el exponente de Lyapunov máximo.
-Para que $d$ no sature en el tamaño del espacio de fases, cada $n$ pasos se
-acerca la segunda trayectoria a la primera, sobre la misma dirección, hasta la
-distancia $d_0$. Skokos (2010, sec. 5) describe este procedimiento de dos
-órbitas vecinas como la forma original de calcular el exponente máximo; después
-se sustituyó por la evolución de un vector de desviación con las ecuaciones
-variacionales, que admite pasos mayores y no obliga a elegir $d_0$. El estimador
-es
+El espacio de fases es el de los estados $y=(\theta_1,\omega_1,\theta_2,
+\omega_2)$, y la distancia entre dos estados es la euclídea entre esos cuatro
+números. Una trayectoria de referencia $y(t)$ y otra que empieza a $d_0=10^{-6}$
+de ella, desplazada en $\theta_1$, evolucionan juntas. Cuando la separación
+$d(t)$ crece como $d_0e^{\lambda t}$, $\lambda>0$ es el exponente de Lyapunov
+máximo. Para que $d$ no sature en el tamaño del espacio de fases, cada 10 pasos
+(0.1 s) se acerca la segunda trayectoria a la primera, sobre la misma dirección,
+hasta la distancia $d_0$. Skokos (2010, sec. 5) describe este procedimiento de
+dos órbitas vecinas como la forma original de calcular el exponente máximo;
+después se sustituyó por la evolución de un vector de desviación con las
+ecuaciones variacionales, que admite pasos mayores y no obliga a elegir $d_0$.
+El estimador es
 
 $$
 \lambda(T) = \frac{1}{T}\sum_k \ln\frac{d_k}{d_0},

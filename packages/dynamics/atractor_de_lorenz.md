@@ -24,9 +24,14 @@ $\sigma$ es el número de Prandtl, $\rho$ es el número de Rayleigh dividido ent
 el de inicio de la convección, y $\beta = 4/(1 + a^2)$ depende de la razón de
 aspecto $a$ de las celdas. Tomamos los valores de Lorenz: $\sigma = 10$ y
 $\beta = 8/3$, y $\rho = 28$, algo por encima de $\rho_H = 470/19 \approx
-24.74$, donde la convección estacionaria deja de ser estable. Integramos con
-Runge–Kutta de cuarto orden (RK4) con el paso adimensional de Lorenz, $\Delta
-t = 0.01$.
+24.74$, donde la convección estacionaria deja de ser estable (la última sección
+deduce ese valor). Integramos con RK4, definido en el
+[péndulo simple](../simple-pendulum/), con el paso adimensional de Lorenz,
+$\Delta t = 0.01$.
+
+La página construye el atractor, comprueba el orden del integrador, mide cuán
+rápido se separan dos trayectorias vecinas, reduce el flujo a un mapa de una
+variable y sigue cómo cambia el movimiento con $\rho$.
 
 ```python
 SIGMA, RHO, BETA = 10.0, 28.0, 8.0 / 3.0
@@ -162,21 +167,16 @@ ya está cerca de 16.
 
 ## Mayor exponente de Lyapunov
 
-Dos trayectorias que empiezan a una distancia $d_0$ se separan como $d(t)
-\approx d_0\,e^{\lambda_1 t}$ mientras $d$ es pequeña. En el atractor $d$ satura
-en su tamaño, de modo que renormalizamos la separación: cada intervalo $\tau$
-medimos el factor $d/d_0$, acumulamos $\ln(d/d_0)$ y devolvemos la segunda
-trayectoria a distancia $d_0$ de la primera, en la misma dirección. Entonces
+El método es el del [péndulo doble](../double-pendulum/): dos trayectorias que
+empiezan a una distancia $d_0$ se separan como $d(t) \approx d_0\,e^{\lambda_1
+t}$ mientras $d$ es pequeña, y como en el atractor $d$ satura en su tamaño, cada
+intervalo $\tau$ se mide la separación $d_k$ y se devuelve la segunda
+trayectoria a distancia $d_0$ de la primera, en la misma dirección. Con $N$
+intervalos,
 
 $$
 \lambda_1 \approx \frac{1}{N\tau}\sum_{k=1}^{N} \ln\frac{d_k}{d_0}.
 $$
-
-Es el algoritmo del mayor exponente de Lyapunov que describe Skokos (_Lect.
-Notes Phys._ 790, 2010, doi 10.1007/978-3-642-04458-8_2, versión
-arXiv:0811.0882): el promedio de los coeficientes de expansión locales
-$\ln\alpha_k/\tau$, aquí con dos órbitas vecinas en lugar de las ecuaciones
-variacionales, alternativa que el mismo texto menciona.
 
 Partimos de 32 puntos del atractor (cada condición inicial evoluciona antes 30
 unidades de tiempo para llegar a él) con $d_0 = 10^{-8}$, $\tau = 0.5$ y $N =
