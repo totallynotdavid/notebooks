@@ -78,10 +78,18 @@ la calcula para el terremoto de Pisco de 2007 en tres pasos:
 ## Okada y Mansinha–Smylie
 
 Los dos modelos dan el desplazamiento de la superficie de un semiespacio
-elástico cuando una falla rectangular desliza. Mansinha y Smylie suponen un
-sólido de Poisson (λ = μ). Okada admite cualquier relación entre las constantes
-elásticas. Con un sólido de Poisson los dos deben dar el mismo campo. Abajo se
-mide también cuánto difieren con otra corteza.
+elástico cuando una falla rectangular desliza. Un medio elástico isótropo queda
+descrito por las dos constantes de Lamé: $\mu$, la rigidez o módulo de corte, y
+$\lambda$, que junto con $\mu$ fija la respuesta a un cambio de volumen.
+Mansinha y Smylie suponen un sólido de Poisson ($\lambda = \mu$, razón de
+Poisson 1/4). Okada admite cualquier relación entre las dos constantes. Con un
+sólido de Poisson los dos deben dar el mismo campo. Abajo se mide también cuánto
+difieren con otra corteza.
+
+La falla se orienta con tres ángulos: el rumbo, azimut de su traza medido desde
+el norte; el buzamiento, inclinación del plano respecto de la horizontal; y el
+ángulo de deslizamiento, dirección del movimiento dentro del plano (90° es una
+falla inversa pura).
 
 ```python
 largo, ancho, tope = 160e3, 70e3, 5e3
@@ -173,11 +181,14 @@ md(
 
 ## Tamaño de la ruptura
 
-Las relaciones de escala de Papazachos et al. (2004) para fallas inversas en
-zonas de subducción dan el largo y el ancho de la ruptura a partir de la
-magnitud, para 6.7 ≤ Mw ≤ 9.2: $\log L = 0.55M-2.19$ y $\log W = 0.31M-0.63$,
-con $L$ y $W$ en km. El deslizamiento sale de $M_0=\mu L W u$ con una rigidez
-$\mu = 4\times10^{10}$ N/m².
+El tamaño de un terremoto se mide con el momento sísmico $M_0=\mu L W u$, el
+producto de la rigidez, el área de la ruptura $L\times W$ y el deslizamiento
+medio $u$, en N m. La magnitud de momento es $M_w = (\log_{10} M_0 - 9.1)/1.5$:
+un grado más de magnitud es unas 32 veces más momento. Las relaciones de escala
+de Papazachos et al. (2004) para fallas inversas en zonas de subducción dan el
+largo y el ancho de la ruptura a partir de la magnitud, para 6.7 ≤ Mw ≤ 9.2:
+$\log L = 0.55M_w-2.19$ y $\log W = 0.31M_w-0.63$, con $L$ y $W$ en km. El
+deslizamiento sale de $M_0$ con una rigidez $\mu = 4\times10^{10}$ N/m².
 
 ```python hidden
 escalas = [(mw, papazachos_scaling(mw)) for mw in (7.0, 7.5, 8.0, 8.5, 9.0)]
@@ -244,6 +255,7 @@ contornos = [
 area = sum(f.length * f.width for f in subfallas)
 momento = 4.0e10 * sum(f.length * f.width * f.slip for f in subfallas)
 mw_fuente = (np.log10(momento) - 9.1) / 1.5
+escala_pisco = papazachos_scaling(mw_fuente)
 primera = subfallas[0]
 profundidades = sorted({f.depth / 1e3 for f in subfallas})
 buzamiento_tabla = np.degrees(np.arcsin((profundidades[1] - profundidades[0]) / 45))
@@ -269,7 +281,13 @@ md(
     El área total es {area / 1e6:.0f} km² y, con $\\mu = 4 \\times 10^{{10}}$
     Pa como en el artículo, el momento es {momento:.2e} N m, equivalente a
     Mw {mw_fuente:.2f}. Jiménez et al. dan $1.99 \\times 10^{{21}}$ N m y
-    Mw 8.1.
+    Mw 8.1. Para esa magnitud, las relaciones de Papazachos et al. dan una
+    ruptura de {escala_pisco.length_km:.0f} km por {escala_pisco.width_km:.0f} km
+    con {escala_pisco.slip_m:.1f} m de deslizamiento medio; la inversión usa
+    180 km por 90 km, con un deslizamiento medio de
+    {momento / (4.0e10 * area):.1f} m. El área de la relación global difiere de
+    la invertida en
+    {abs(escala_pisco.length_km * escala_pisco.width_km * 1e6 / area - 1):.0%}.
     """
 )
 ```
