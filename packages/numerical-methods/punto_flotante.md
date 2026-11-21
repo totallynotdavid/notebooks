@@ -11,8 +11,13 @@ from quire import plot as P
 # Error de punto flotante
 
 Un número real se guarda como $(-1)^s\,(1.m)_2\times2^{e}$: un signo, un
-exponente y una mantisa de longitud fija. Solo unos cuantos reales caben, y el
-resto se redondea al más cercano. De ahí salen todos los errores que siguen.
+exponente y una mantisa de longitud fija. El 1 inicial no se guarda: un número
+con esa forma se llama **normal**. Con el exponente mínimo la forma pasa a
+$(0.m)_2$, y esos números **subnormales** llegan más cerca de cero a cambio de
+perder cifras. Solo unos cuantos reales caben, y el resto se redondea al más
+cercano. Cuando un real cae justo a medio camino entre dos, IEEE 754 elige el
+que tiene el último bit de mantisa en 0: el **redondeo al par**. De ahí salen
+todos los errores que siguen.
 
 | tipo   | NumPy     | signo | exponente | sesgo | mantisa |
 | ------ | --------- | ----: | --------: | ----: | ------: |
