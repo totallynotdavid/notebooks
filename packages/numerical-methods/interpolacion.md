@@ -18,6 +18,10 @@ se actualizan cuando llega un punto nuevo.
 | Lagrange | $p(x)=\sum_i y_i L_i(x)$, $L_i(x)=\prod_{j\ne i}\dfrac{x-x_j}{x_i-x_j}$ | se recalcula todo    |
 | Newton   | $p(x)=\sum_k [x_0,\ldots,x_k]\prod_{j<k}(x-x_j)$                        | se agrega un término |
 
+En la forma de Newton, $[x_0,\ldots,x_k]$ es la diferencia dividida de orden
+$k$: $[x_0]=y_0$, $[x_0,x_1]=(y_1-y_0)/(x_1-x_0)$ es la pendiente de la secante,
+y la sección de Newton da la recurrencia para los órdenes mayores.
+
 ```python
 def lagrange(x, y, t):
     """Valor en t del polinomio de Lagrange que pasa por (x, y)."""
@@ -439,8 +443,27 @@ md(
 
 Con nodos equiespaciados el error en $[-1,1]$ crece con $n$ (las oscilaciones
 cerca de $x=\pm1$ de la gráfica izquierda), pero en el centro, $|x|\le0.5$,
-sigue bajando. Con nodos de Chebyshev el error baja geométricamente, con la
-razón $\rho^{-1}$ que fija la distancia de los polos de $f$ al intervalo. La
-causa está en los nodos, no en la función ni en la aritmética: interpolar con
-polinomios de grado alto en nodos equiespaciados es una mala idea aunque no haya
-error de redondeo.
+sigue bajando. Con nodos de Chebyshev el error baja geométricamente, como
+$\rho^{-n}$. La razón la fija la distancia de los polos de $f$ al intervalo:
+$\rho$ es la suma de semiejes de la elipse con focos $\pm1$ que pasa por los
+polos, $\rho=|z+\sqrt{z^2-1}|$ con $z=i/5$. Trefethen (_Approximation Theory and
+Approximation Practice_, 2013, teorema 8.2) lo demuestra para los puntos de
+Chebyshev de segunda especie; los de aquí son de primera especie, y la medida de
+abajo muestra la misma razón.
+
+```python hidden
+rapidos = GRADOS >= 10
+razon = np.exp(
+    -np.polyfit(GRADOS[rapidos], np.log(errores_runge["Chebyshev"][rapidos]), 1)[0]
+)
+md(
+    rf"""
+    Para $z=i/5$, $\rho=(1+\sqrt{{26}})/5={RHO:.4f}$. Una recta ajustada al
+    logaritmo del error de Chebyshev entre $n=10$ y $n={GRADOS[-1]}$ da una
+    razón de {razon:.4f} por grado. La causa de la divergencia está en los
+    nodos, no en la función ni en la aritmética: interpolar con polinomios de
+    grado alto en nodos equiespaciados es una mala idea aunque no haya error de
+    redondeo.
+    """
+)
+```
