@@ -19,18 +19,10 @@ Con $\lambda$ en metros, la fórmula da W/(m²·sr·m). En todo el artículo se 
 $10^{-9}$, de modo que valores, etiquetas y límites de los ejes comparten una
 sola unidad.
 
-Boyer obtiene esta forma solo con termodinámica aplicada a un oscilador armónico
-clásico, que es la forma de cada modo del campo. Las dos primeras leyes dan el
-teorema de desplazamiento de Wien: $U/\omega$ es función solo de $T/\omega$. Si
-la entropía es función analítica de $U/\omega$ y se exige la tercera ley, la
-energía del oscilador resulta
-$U=\tfrac{\hbar\omega}{2}\coth\!\left(\tfrac{\hbar\omega}{2kT}\right)$, que a
-alta temperatura tiende a la equipartición $kT$ (el límite de Rayleigh–Jeans) y
-a baja temperatura a la energía de punto cero $\hbar\omega/2$. Esa $U$ es la
-energía de Planck más $\hbar\omega/2$. La fórmula de arriba es la parte térmica,
-sin el punto cero, que es la que emite un cuerpo negro por encima del fondo
-(Boyer, _Eur. J. Phys._ 40, 025101, 2019, doi 10.1088/1361-6404/aaf45b; se leyó
-la versión arXiv:1809.09093).
+La página dibuja la curva y comprueba numéricamente las tres leyes que salen de
+ella: el desplazamiento de Wien, los dos límites que la precedieron y la ley de
+Stefan–Boltzmann. La última sección muestra que la forma de la curva también se
+obtiene con termodinámica sola.
 
 ```python
 # Constantes SI exactas.
@@ -102,9 +94,9 @@ P.grid(
 Derivando $B_\lambda$ respecto a $\lambda$ el máximo cumple $x = 5(1 - e^{-x})$
 con $x = hc/(\lambda_{\max} k T)$. De ahí $\lambda_{\max} T = b = hc/(k x)$.
 Aquí se halla el máximo de la curva directamente, con una búsqueda de la sección
-áurea sobre $B_\lambda$, y se compara con $b/T$. La forma $B_\lambda = T^5
-f(\lambda T)$ es la información que aporta el teorema de desplazamiento de Wien,
-que Boyer obtiene de las dos primeras leyes de la termodinámica.
+áurea sobre $B_\lambda$, y se compara con $b/T$. Que el máximo escale como $1/T$
+no depende de los detalles de la fórmula: basta la forma $B_\lambda = T^5
+f(\lambda T)$, que es lo que afirma el teorema de desplazamiento de Wien.
 
 ```python
 def maximo(f, a, b, iteraciones=200):
@@ -362,3 +354,18 @@ P.figure(
     height=320,
 )
 ```
+
+## La forma desde la termodinámica
+
+Cada modo del campo es un oscilador armónico, y Boyer obtiene la energía media
+de un oscilador clásico solo con termodinámica. Las dos primeras leyes dan el
+teorema de Wien, escrito para el oscilador: $U/\omega$ es función solo de
+$T/\omega$. Si además la entropía es función analítica de $U/\omega$ y se exige
+la tercera ley, la energía resulta
+$U=\tfrac{\hbar\omega}{2}\coth\!\left(\tfrac{\hbar\omega}{2kT}\right)$. A alta
+temperatura tiende a la equipartición $kT$, que da el límite de Rayleigh–Jeans,
+y a baja temperatura a la energía de punto cero $\hbar\omega/2$. Esa $U$ es la
+energía de Planck más $\hbar\omega/2$. La fórmula del inicio es la parte
+térmica, sin el punto cero, que es la que emite un cuerpo negro por encima del
+fondo (Boyer, _Eur. J. Phys._ 40, 025101, 2019, doi 10.1088/1361-6404/aaf45b; se
+leyó la versión arXiv:1809.09093).
