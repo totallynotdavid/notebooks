@@ -27,6 +27,11 @@ K &= \begin{pmatrix} k_1+k & -k\\ -k & k_2+k\end{pmatrix}.
 \end{aligned}
 $$
 
+El resorte central acopla las dos ecuaciones. La página busca los modos
+normales, los movimientos en que las dos masas oscilan con una sola frecuencia,
+y comprueba con una integración numérica que cualquier movimiento es una suma de
+ellos.
+
 ## Modos normales
 
 Buscamos soluciones $\mathbf x(t)=\mathbf v\cos(\omega t)$. Sustituir da el
@@ -94,8 +99,9 @@ md(
 ## Integración temporal con RK4
 
 Integramos el sistema de cuatro ecuaciones de primer orden $\dot{\mathbf
-x}=\mathbf v,\ \dot{\mathbf v}=-M^{-1}K\mathbf x$ con RK4 y paso $h=0.01$ s,
-partiendo del reposo con tres condiciones iniciales:
+x}=\mathbf v,\ \dot{\mathbf v}=-M^{-1}K\mathbf x$ con RK4, definido en el
+[péndulo simple](../simple-pendulum/), y paso $h=0.01$ s, partiendo del reposo
+con tres condiciones iniciales:
 
 1. $\mathbf x(0)$ igual al modo 1.
 2. $\mathbf x(0)$ igual al modo 2.
@@ -161,6 +167,44 @@ P.figure(
     grid=True,
     width=1000,
     height=300,
+)
+```
+
+Si el movimiento empieza en un modo, las dos masas oscilan con la misma
+frecuencia y con una relación de amplitudes fija. En la mezcla, cada masa
+muestra las dos frecuencias a la vez.
+
+```python hidden
+md(
+    "\n".join(
+        [
+            "| condición inicial | error máximo de RK4 frente a la solución analítica [m] |",
+            "|---|---:|",
+            *[f"| {n} | {e:.1e} |" for n, e in errores.items()],
+        ]
+    )
+)
+```
+
+```python hidden
+# Un paso de RK4 sobre q'' = -w^2 q multiplica la amplitud compleja por
+# R(z) = 1 + z + z^2/2 + z^3/6 + z^4/24 con z = i w h; la exacta es e^z.
+z = 1j * omega * H
+factor = 1 + z + z**2 / 2 + z**3 / 6 + z**4 / 24
+desfase = PASOS * (omega * H - np.angle(factor))
+perdida = 1 - np.abs(factor) ** PASOS
+md(
+    f"""
+Sobre un modo, que oscila como $q(t)=q_0\\cos\\omega t$, un paso de RK4
+multiplica la amplitud compleja $q-i\\dot q/\\omega$ por
+$R=1+z+z^2/2+z^3/6+z^4/24$ con $z=i\\omega h$, y el paso exacto por
+$e^{{z}}$. En los 20 s, $R$ atrasa la fase del modo 1 en
+{desfase[0]:.1e} rad y la del modo 2 en {desfase[1]:.1e} rad, y les quita
+una fracción {perdida[0]:.0e} y {perdida[1]:.1e} de su amplitud. El error es casi todo
+un desfase, del tamaño de la tabla, y crece como $(\\omega h)^5$: el modo 2
+tiene {omega[1] / omega[0]:.2f} veces la frecuencia del modo 1 y un desfase
+{desfase[1] / desfase[0]:.0f} veces mayor.
+"""
 )
 ```
 
@@ -237,23 +281,6 @@ P.figure(
     height=360,
 )
 ```
-
-```python hidden
-md(
-    "\n".join(
-        [
-            "| condición inicial | error máximo de RK4 frente a la solución analítica [m] |",
-            "|---|---:|",
-            *[f"| {n} | {e:.1e} |" for n, e in errores.items()],
-        ]
-    )
-)
-```
-
-El error de RK4 es un corrimiento de fase que se acumula durante los 20 s y es
-mayor en el modo de mayor frecuencia. Si el movimiento empieza en un modo, las
-dos masas oscilan con la misma frecuencia y con una relación de amplitudes fija.
-En la mezcla, cada masa muestra las dos frecuencias a la vez.
 
 ## Los modos en la serie temporal
 
