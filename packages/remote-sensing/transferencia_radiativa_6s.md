@@ -81,6 +81,25 @@ def run_6s(wavelength_um, aod=0.2, water=2.5, solar_z=40.0):
 
 ## Una corrida
 
+Las salidas que usa la página son estas:
+
+- La **reflectancia aparente** es $\rho^*=\pi L/(\mu_s E_s)$, con $L$ la
+  radiancia en el sensor, $E_s$ la irradiancia solar en el tope de la atmósfera
+  y $\mu_s$ el coseno del ángulo cenital solar. Es la reflectancia que se le
+  atribuiría a la superficie si no hubiera atmósfera.
+- La **transmitancia por dispersión** es la fracción de la luz que cruza la
+  atmósfera, directa o difusa, sin que la dispersión la desvíe fuera del camino.
+  El total de 6S es el producto de la de bajada y la de subida.
+- La **transmitancia gaseosa** es la fracción que no absorben los gases: ozono,
+  vapor de agua, oxígeno y otros.
+- El **albedo esférico** es la fracción de la luz que sube desde la superficie y
+  que la atmósfera devuelve hacia ella. Con él se cuentan los rebotes entre
+  suelo y atmósfera.
+
+La [corrección atmosférica de GaoFen-1](../gaofen1-atmospheric-correction/) usa
+estas cantidades para pasar de la radiancia medida a la reflectancia de la
+superficie.
+
 ```python hidden
 md(
     f"""

@@ -40,7 +40,8 @@ El sensor PMS del satélite chino GaoFen-1 mide cuatro bandas multiespectrales:
 azul, verde, rojo e infrarrojo cercano (NIR). Lo que mide es la radiancia en el
 techo de la atmósfera, que mezcla la luz reflejada por la superficie con la que
 la atmósfera dispersa hacia el sensor. La corrección atmosférica estima la
-reflectancia de la superficie quitando ese aporte con el modelo 6S.
+reflectancia de la superficie quitando ese aporte con el modelo 6S, presentado
+en [transferencia radiativa con 6S](../radiative-transfer-6s/).
 
 El artículo usa un recorte de 512 × 512 píxeles de una escena GF-1D sobre la
 Amazonía peruana, cerca de Iquitos. La escena completa está en una carpeta de
