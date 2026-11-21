@@ -7,12 +7,22 @@ from quire import plot as P
 
 # Argón líquido y cúmulos de potasio
 
-Un fluido de Lennard-Jones se integra con velocity Verlet en una caja cúbica
-periódica, siguiendo el método de Verlet (1967). Las fuerzas usan la convención
-de mínima imagen y las posiciones nunca se reflejan en las paredes, de modo que
-la fuerza y la frontera son coherentes. Al final se usa el mismo integrador con
-un segundo potencial, de enlace fuerte en segundo momento, para pequeños cúmulos
-de potasio.
+La dinámica molecular integra las ecuaciones de Newton de muchos átomos y lee
+las propiedades del líquido en sus trayectorias. Esta página repite un punto de
+la simulación de argón líquido de Verlet (1967), comprueba que la energía se
+conserva, y mide la temperatura, la estructura del líquido y su coeficiente de
+difusión. Al final usa el mismo integrador con otro potencial para pequeños
+cúmulos de potasio.
+
+Los átomos se mueven con velocity Verlet, definido en el
+[péndulo simple](../../dynamics/simple-pendulum/), dentro de una caja cúbica de
+lado $L$ repetida periódicamente en las tres direcciones: un átomo que sale por
+una cara entra por la opuesta, y no hay paredes. Cada átomo tiene entonces
+infinitas copias desplazadas en múltiplos de $L$. La convención de **mínima
+imagen** toma, para cada par, solo la copia más cercana: cada componente de la
+separación se lleva al intervalo $[-L/2, L/2]$. Como esa regla vale para
+cualquier posición, el código nunca devuelve los átomos a la caja, y las
+posiciones sin envolver dan directamente el desplazamiento que mide la difusión.
 
 El potencial de pares es
 
