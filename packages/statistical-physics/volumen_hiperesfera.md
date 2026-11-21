@@ -10,7 +10,8 @@ from quire import plot as P
 # Volumen de la hiperesfera en $n$ dimensiones
 
 La bola unitaria $B_n=\{x\in\mathbb{R}^n:\|x\|\le 1\}$ tiene un volumen conocido
-en forma cerrada. Aquí se estima con Monte Carlo por rechazo en el cubo
+en forma cerrada. Aquí se estima con
+[Monte Carlo](../../numerical-methods/monte-carlo/) por rechazo en el cubo
 $[-1,1]^n$ y se compara con esa fórmula. El método funciona en pocas dimensiones
 y deja de funcionar al crecer $n$, por una razón que se puede calcular.
 
@@ -24,7 +25,10 @@ $$
 \int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x = \pi^{n/2}.
 $$
 
-En coordenadas hiperesféricas,
+En coordenadas hiperesféricas el elemento de volumen es $r^{n-1}dr$ por el
+elemento de ángulo, y la integral angular da $S_{n-1}$, el área de la esfera
+unitaria $\{x:\|x\|=1\}$ en $\mathbb{R}^n$ ($S_1=2\pi$, $S_2=4\pi$). Como el
+integrando depende solo de $r$,
 
 $$ \begin{aligned}
 \int_{\mathbb{R}^n} e^{-\|x\|^2}\,d^n x
@@ -34,9 +38,11 @@ $$ \begin{aligned}
 de donde
 $$S_{n-1}=\frac{2\pi^{n/2}}{\Gamma(n/2)}.$$
 
-Integrando el área radialmente, el volumen de radio $R$ es
+La bola de radio $R$ suma cáscaras de área $S_{n-1}r^{n-1}$, y con
+$\tfrac n2\Gamma(\tfrac n2)=\Gamma(\tfrac n2+1)$,
 $$\begin{aligned}
-V_n(R) &= \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}R^n,\\
+V_n(R) &= \int_0^R S_{n-1}r^{n-1}\,dr = \frac{S_{n-1}}{n}R^n
+= \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}R^n,\\
 V_n(1) &= \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}.
 \end{aligned}$$
 
