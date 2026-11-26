@@ -37,7 +37,7 @@ all, with the export script and site tests:
 | `mise run test:numerical-methods`   | Runs the differentiation, root finding, interpolation and floating-point articles and checks their numbers |
 | `mise run test:statistical-physics` | The molecular dynamics modules, and the hypersphere and Ising articles                                     |
 | `mise run test:remote-sensing`      | The offline GaoFen-1 atmospheric correction                                                                |
-| `mise run test:geophysics`          | The `tsunamis` module and the INGEMMET hazard inventory download                                           |
+| `mise run test:geophysics`          | The `tsunamis` module, the INGEMMET hazard inventory download and the FDSN acquisition article             |
 | `mise run test:scripts`             | The catalog and export scripts                                                                             |
 
 A test runs an article with `quire.article_namespace` and reads the names its
