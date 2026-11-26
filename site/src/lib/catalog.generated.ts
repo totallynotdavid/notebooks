@@ -189,6 +189,13 @@ export const topics: Topic[] = [
     "folderUrl": "https://github.com/totallynotdavid/notebooks/tree/master/packages/geophysics",
     "notebooks": [
       {
+        "title": "Adquisición de registros sísmicos",
+        "summary": "Los servicios web FDSN desde obspy.clients.fdsn: metadatos StationXML y trazas miniSEED del sismo de Pisco de 2007, escritos como los registros SAC que procesa el siguiente artículo.",
+        "slug": "geophysics/fdsn-acquisition",
+        "path": "packages/geophysics/adquisicion_fdsn.md",
+        "sourceUrl": "https://github.com/totallynotdavid/notebooks/blob/master/packages/geophysics/adquisicion_fdsn.md"
+      },
+      {
         "title": "Registros SAC con ObsPy",
         "summary": "Registros del sismo de Pisco de 2007: una sección de registros por distancia, espectros y la detección de la onda P con STA/LTA.",
         "slug": "geophysics/sac-processing",

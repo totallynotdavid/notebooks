@@ -133,6 +133,12 @@ id = "geophysics"
 title = "Tierra sólida y peligros"
 
 [[topics.notebooks]]
+id = "fdsn-acquisition"
+title = "Adquisición de registros sísmicos"
+file = "adquisicion_fdsn.md"
+summary = "Los servicios web FDSN desde obspy.clients.fdsn: metadatos StationXML y trazas miniSEED del sismo de Pisco de 2007, escritos como los registros SAC que procesa el siguiente artículo."
+
+[[topics.notebooks]]
 id = "sac-processing"
 title = "Registros SAC con ObsPy"
 file = "procesamiento_sac.md"
