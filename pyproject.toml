@@ -22,5 +22,5 @@ dev = [
     { include-group = "lint" },
 ]
 lint = [
-    "ruff>=0.17.5",
+    "ruff>=0.17.6",
 ]

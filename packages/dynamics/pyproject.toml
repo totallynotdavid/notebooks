@@ -2,7 +2,7 @@
 name = "dynamics"
 version = "0.1.0"
 dependencies = [
-    "numpy>=2.5.4",
+    "numpy>=2.5.5",
     "quire",
 ]
 
