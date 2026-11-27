@@ -351,6 +351,7 @@ dependencies = [
     { name = "contourpy" },
     { name = "numpy" },
     { name = "obspy" },
+    { name = "quire" },
     { name = "requests" },
     { name = "shapely" },
 ]
@@ -361,6 +362,7 @@ requires-dist = [
     { name = "contourpy", specifier = ">=1.4.0" },
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "obspy", specifier = ">=1.5.1" },
+    { name = "quire", editable = "lib/quire" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "shapely", specifier = ">=2.2.0" },
 ]

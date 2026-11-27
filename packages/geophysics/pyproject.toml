@@ -6,9 +6,13 @@ dependencies = [
     "contourpy>=1.4.0",
     "numpy>=2.5.4",
     "obspy>=1.5.1",
+    "quire",
     "requests>=2.34.2",
     "shapely>=2.2.0",
 ]
+
+[tool.uv.sources]
+quire = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]
