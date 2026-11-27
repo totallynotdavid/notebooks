@@ -4,7 +4,7 @@ version = "0.1.0"
 dependencies = [
     "certifi>=2026.10.23",
     "contourpy>=1.4.0",
-    "numpy>=2.5.4",
+    "numpy>=2.5.5",
     "obspy>=1.5.1",
     "quire",
     "requests>=2.34.2",
